@@ -20,6 +20,7 @@ const config: Config = {
       colors: {
         primary: {
           500: "#00BF63",
+          400: "#20ce7a",
           50: "#FAF9F5",
         },
         secondary: {
@@ -40,7 +41,7 @@ const config: Config = {
           800: "#F4F6F8",
           850: "#FDFDFD",
           700: "#DCE3F1",
-          500: "#7B8EC8",
+          500: "#ffffff80",
           400: "#858EAD",
         },
       },
@@ -62,6 +63,10 @@ const config: Config = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      backgroundImage: {
+        "dark-gradient":
+          "linear-gradient(0deg, rgba(0, 0, 0, 0.70) 0%, rgba(0, 0, 0, 0.70) 100%)",
       },
     },
   },
