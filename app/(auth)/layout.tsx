@@ -1,10 +1,8 @@
-import Navbar from "@/components/shared/navbar/Navbar";
 import React from "react";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <main className="mx-auto h-screen max-w-[90rem] bg-primary-50">
-      <Navbar />
+    <main className="flex min-h-screen w-full items-center justify-center">
       {children}
     </main>
   );

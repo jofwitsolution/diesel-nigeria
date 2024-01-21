@@ -2,5 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: black;
+}
+
 @layer utilities {
+  .max-width {
+    @apply max-w-[90rem] mx-auto px-[1.5rem] lg:px-[3.615rem];
+  }
 }

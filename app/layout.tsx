@@ -1,13 +1,20 @@
 import { ClerkProvider } from "@clerk/nextjs";
-import "./globals.css";
-import { Inter, Montserrat } from "next/font/google";
+import { Inter, Montserrat, Fraunces } from "next/font/google";
 import React from "react";
 import { Metadata } from "next";
+
+import "./globals.css";
 
 const inter = Inter({
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-inter",
+});
+
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-fraunces",
 });
 
 const MontSerrat = Montserrat({
@@ -32,7 +39,9 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <body className={`${MontSerrat.variable} ${inter.variable}`}>
+      <body
+        className={`${MontSerrat.variable} ${inter.variable} ${fraunces.variable}`}
+      >
         <html lang="en">
           <body>{children}</body>
         </html>

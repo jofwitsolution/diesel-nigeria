@@ -3,10 +3,9 @@ import type { Config } from "tailwindcss";
 const config: Config = {
   darkMode: ["class"],
   content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   prefix: "",
   theme: {
@@ -20,16 +19,35 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          500: "00BF63",
+          500: "#00BF63",
+          50: "#FAF9F5",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          white: "#FFF",
+        },
+        black: {
+          100: "#002112",
+        },
+        dark: {
+          100: "#000000",
+          200: "#0F1117",
+          300: "#151821",
+          400: "#212734",
+          500: "#101012",
+        },
+        light: {
+          900: "#FFFFFF",
+          800: "#F4F6F8",
+          850: "#FDFDFD",
+          700: "#DCE3F1",
+          500: "#7B8EC8",
+          400: "#858EAD",
         },
       },
       fontFamily: {
         montserrat: ["var(--font-montserrat)"],
         inter: ["var(--font-inter)"],
+        fraunces: ["var(--font-fraunces)"],
       },
       keyframes: {
         "accordion-down": {
