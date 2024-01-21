@@ -5,8 +5,8 @@ import Link from "next/link";
 
 const HomeHero = () => {
   return (
-    <header className="max-width mt-[2.1rem] md:mt-[4.25rem]">
-      <section className="relative h-dvh w-full">
+    <header className="max-width py-[2.1rem] md:py-[4.25rem]">
+      <section className="relative h-[47rem] w-full">
         <div className="absolute z-[2] flex size-full items-center justify-center rounded-[3.5rem] bg-dark-gradient">
           <div className="flex flex-col items-center gap-[1.5rem] px-[1rem]">
             <h1 className="mx-auto max-w-[44.5rem] text-center font-fraunces text-[2rem] font-normal leading-[2.5rem] tracking-[-1px] text-light-900 md:text-[4.04rem] md:leading-[5rem]">
