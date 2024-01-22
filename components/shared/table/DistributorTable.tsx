@@ -116,6 +116,8 @@ const DistributorTable = () => {
           ))}
         </tbody>
       </table>
+
+      <div className="my-8 flex justify-center">Pagination</div>
     </div>
   );
 };

@@ -26,6 +26,6 @@ body {
   }
 
   .dist-table-style {
-    @apply p-[0.6rem] xs:p-[1rem];
+    @apply p-[0.6rem] xs:py-[0.725rem] xs:p-[1rem];
   }
 }
