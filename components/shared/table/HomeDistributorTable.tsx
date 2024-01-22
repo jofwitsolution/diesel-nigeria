@@ -80,39 +80,34 @@ const HomeDistributorTable = () => {
     <div className="">
       <table className="overflow-hidden rounded-[10px]">
         <thead className="">
-          <tr className="bg-light-900 text-left text-[0.655rem] font-medium text-gray-50">
-            <th className="dist-table-align w-[24.625rem] border-r">Company</th>
-            <th className="dist-table-align hidden w-[12.9375rem] border-r xs:table-cell">
-              State
-            </th>
-            <th className="dist-table-align w-[8.375rem] border-r">
+          <tr className="bg-light-900 text-left text-[0.53rem] font-medium text-gray-50 xs:text-[0.655rem]">
+            <th className="dist-table-style w-[24.625rem] border-r">Company</th>
+            <th className="dist-table-style w-[12.9375rem] border-r">State</th>
+            <th className="dist-table-style w-[8.375rem] border-r">
               AGO Price
             </th>
-            <th className="dist-table-align w-[8.375rem]"></th>
+            <th className="dist-table-style w-[8.375rem]"></th>
           </tr>
         </thead>
         <tbody className="bg-light-gradient">
           {sellers.map((seller, index) => (
             <tr
               key={seller._id + index}
-              className="text-[0.88rem] text-light-900"
+              className="text-[0.6rem] text-light-900 xs:text-[0.88rem]"
             >
-              <td className="line-clamp-1 flex items-center gap-4 px-[1rem] py-[0.75rem]">
+              <td className="dist-table-style line-clamp-1 flex items-center gap-2 xs:gap-4">
                 <Image
-                  src="/images/icons/honeywell.svg"
+                  src={seller.logoUrl}
                   width={31}
                   height={31}
                   alt="icon"
-                  sizes="(max-width: 600px) 18px"
                   className="w-[20px] xs:w-[initial]"
                 />{" "}
                 <span className="line-clamp-1">{seller.company}</span>
               </td>
-              <td className="hidden px-[1rem] py-[0.75rem] xs:table-cell">
-                Lagos
-              </td>
-              <td className="px-[1rem] py-[0.75rem]">{formatPrice(940.0)}</td>
-              <td className="px-[1rem] py-[0.75rem]">
+              <td className="dist-table-style">{seller.state}</td>
+              <td className="dist-table-style">{formatPrice(seller.price)}</td>
+              <td className="dist-table-style">
                 <span className="cursor-pointer border-b-[2px] border-primary-500 text-primary-500">
                   Buy
                 </span>

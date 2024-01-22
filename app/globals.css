@@ -25,7 +25,7 @@ body {
     @apply focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important;
   }
 
-  .dist-table-align {
-    @apply py-[1rem] pl-[1rem];
+  .dist-table-style {
+    @apply p-[0.6rem] xs:p-[1rem];
   }
 }

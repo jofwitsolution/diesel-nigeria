@@ -2,8 +2,8 @@ import Image from "next/image";
 import React from "react";
 // import { Button } from "../ui/button";
 // import Link from "next/link";
-import SearchDistributor from "../shared/search/SearchDistributor";
-import HomeDistributorTable from "../shared/table/HomeDistributorTable";
+import SearchDistributor from "../../shared/search/SearchDistributor";
+import HomeDistributorTable from "../../shared/table/HomeDistributorTable";
 
 const HomeHero = () => {
   return (
@@ -15,7 +15,10 @@ const HomeHero = () => {
               Welcome to the Future of Diesel Procurement!
             </h1>
             <div className="mx-auto flex max-w-[40.9375rem] flex-col items-center gap-[1.5rem] bg-transparent">
-              <SearchDistributor />
+              <SearchDistributor
+                inputStyle="text-light-900"
+                wrapperStyle="bg-[rgba(255,255,255,0.20)]"
+              />
               <HomeDistributorTable />
             </div>
             <span className="text-center text-[1.125rem] font-medium text-light-900">

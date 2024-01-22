@@ -10,6 +10,10 @@ export const navbarLinks: NavbarLink[] = [
     label: "About",
   },
   {
+    route: "/market",
+    label: "Market",
+  },
+  {
     route: "/contact",
     label: "Contact",
   },

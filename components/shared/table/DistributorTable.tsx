@@ -1,3 +1,4 @@
+import { formatPrice } from "@/lib/utils";
 import Image from "next/image";
 import React from "react";
 
@@ -77,35 +78,36 @@ const sellers = [
 const DistributorTable = () => {
   return (
     <div className="">
-      <table className="shadow-md">
+      <table className="overflow-hidden rounded-[10px]">
         <thead>
-          <tr className="bg-light-900 text-left text-[0.815rem] font-medium text-gray-50">
-            <th className="dist-table-align w-[24.625rem] border-r">Company</th>
-            <th className="dist-table-align w-[12.9375rem] border-r">State</th>
-            <th className="dist-table-align w-[8.375rem] border-r">
+          <tr className="bg-light-900 text-left text-[0.53rem] font-medium text-gray-50 xs:text-[0.8125rem]">
+            <th className="dist-table-style w-[24.625rem] border-r">Company</th>
+            <th className="dist-table-style w-[12.9375rem] border-r">State</th>
+            <th className="dist-table-style w-[8.375rem] border-r">
               AGO Price
             </th>
-            <th className="dist-table-align w-[8.375rem]"></th>
+            <th className="dist-table-style w-[8.375rem]"></th>
           </tr>
         </thead>
         <tbody className="">
           {sellers.map((seller, index) => (
             <tr
               key={seller._id + index}
-              className="text-[0.88rem] text-light-900"
+              className="border-b bg-light-800 text-[0.6rem] text-gray-50 xs:text-[0.88rem] md:text-[1.125rem]"
             >
-              <td className="flex items-center gap-4 px-[1rem] py-[0.75rem]">
+              <td className="dist-table-style flex items-center gap-2 font-medium text-gray-700 xs:gap-4">
                 <Image
-                  src="/images/icons/honeywell.svg"
+                  src={seller.logoUrl}
                   width={31}
                   height={31}
                   alt="icon"
+                  className="w-[20px] xs:w-[initial]"
                 />{" "}
-                Honeywell Petroleum
+                <span className="line-clamp-1">{seller.company}</span>
               </td>
-              <td className="px-[1rem] py-[0.75rem]">Lagos</td>
-              <td className="px-[1rem] py-[0.75rem]">940.00</td>
-              <td className="px-[1rem] py-[0.75rem]">
+              <td className="dist-table-style">{seller.state}</td>
+              <td className="dist-table-style">{formatPrice(seller.price)}</td>
+              <td className="dist-table-style">
                 <span className="cursor-pointer border-b-[2px] border-primary-500 text-primary-500">
                   Buy
                 </span>

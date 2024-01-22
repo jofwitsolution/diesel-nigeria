@@ -40,14 +40,16 @@ const config: Config = {
           500: "#101012",
         },
         light: {
-          900: "#FFFFFF",
+          500: "#ffffff90",
+          600: "#ECECEC",
+          700: "#DCE3F1",
           800: "#F4F6F8",
           850: "#FDFDFD",
-          700: "#DCE3F1",
-          500: "#ffffff80",
+          900: "#FFFFFF",
         },
         gray: {
           50: "#5F6D7E",
+          700: "#272D37",
         },
         Neutral: {
           600: "#EAEBF0",
