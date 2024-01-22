@@ -18,6 +18,14 @@ body {
 
 @layer utilities {
   .max-width {
-    @apply max-w-[90rem] mx-auto px-[1.5rem] lg:px-[3.615rem];
+    @apply max-w-[90rem] mx-auto px-[1.2rem] lg:px-[3.615rem];
+  }
+
+  .no-focus {
+    @apply focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important;
+  }
+
+  .dist-table-align {
+    @apply py-[1rem] pl-[1rem];
   }
 }

@@ -17,6 +17,9 @@ const config: Config = {
       },
     },
     extend: {
+      screens: {
+        xs: "480px",
+      },
       colors: {
         primary: {
           500: "#00BF63",
@@ -42,7 +45,12 @@ const config: Config = {
           850: "#FDFDFD",
           700: "#DCE3F1",
           500: "#ffffff80",
-          400: "#858EAD",
+        },
+        gray: {
+          50: "#5F6D7E",
+        },
+        Neutral: {
+          600: "#EAEBF0",
         },
       },
       fontFamily: {
@@ -67,6 +75,8 @@ const config: Config = {
       backgroundImage: {
         "dark-gradient":
           "linear-gradient(0deg, rgba(0, 0, 0, 0.70) 0%, rgba(0, 0, 0, 0.70) 100%)",
+        "light-gradient":
+          "linear-gradient(0deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.15) 100%)",
       },
     },
   },
