@@ -28,4 +28,26 @@ body {
   .dist-table-style {
     @apply p-[0.6rem] xs:py-[0.725rem] xs:p-[1rem];
   }
+
+  .padding-top {
+    @apply pt-[2rem] md:pt-[3.5rem];
+  }
+  .padding-bottom {
+    @apply pt-[2rem] md:pt-[3.5rem];
+  }
+  .feature-btn {
+    @apply btn-shadow flex justify-center rounded-[4.375rem] bg-light-900 px-4 text-[#1E3A4D] max-xs:py-1 max-xs:text-[0.7rem] md:h-[3.25rem] md:w-[16.25rem];
+  }
+
+  .feature-btn-mobile {
+    @apply btn-shadow flex justify-center rounded-[4.375rem] bg-light-900 text-[#1E3A4D] h-[3.25rem] w-[16.25rem];
+  }
+}
+
+@layer utilities {
+  .btn-shadow {
+    box-shadow:
+      0px 3px 6px 0px rgba(0, 0, 0, 0.23),
+      0px 3px 6px -4px rgba(0, 0, 0, 0.16);
+  }
 }

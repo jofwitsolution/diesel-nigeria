@@ -12,7 +12,7 @@ const Navbar = () => {
   const pathname = usePathname();
 
   return (
-    <nav className="max-width flex h-[4.0625rem] items-center justify-between text-black-100 shadow">
+    <nav className="max-width flex h-[4.0625rem] items-center justify-between text-dark-500 shadow">
       <Link href="/">
         <Image
           src="/images/icons/site-logo.svg"
