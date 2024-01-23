@@ -1,3 +1,4 @@
+import Contributions from "@/components/pages/home/Contributions";
 import Features from "@/components/pages/home/Features";
 import HomeHero from "@/components/pages/home/HomeHero";
 
@@ -6,6 +7,7 @@ const Page = () => {
     <div>
       <HomeHero />
       <Features />
+      <Contributions />
     </div>
   );
 };
