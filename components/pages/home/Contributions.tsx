@@ -11,7 +11,7 @@ const Contributions = () => {
           <h3 className="mb-4 font-medium text-[#FFDE59] sm:mb-6">
             Contributions
           </h3>
-          <h4 className="mb-[1.2rem] font-fraunces text-[2rem] leading-[2.5rem] text-light-900 sm:mb-[1.8rem] md:text-[3.796rem] md:leading-[11]">
+          <h4 className="mb-[1.2rem] font-fraunces text-[2rem] leading-[2.5rem] text-light-900 sm:mb-[1.8rem] md:text-[3.796rem] md:leading-[4.5rem]">
             Indurstries We Serve
           </h4>
           <p className="mb-[1.8rem] max-w-[29.125rem] text-light-900 md:leading-[1.57rem]">
