@@ -10,17 +10,14 @@ const Footer = () => {
       <div className="max-width">
         <div className="relative mx-auto h-[40.5625rem] max-w-[70rem]">
           <div className="absolute z-[2] size-full bg-dark-gradient pt-[3.5rem] md:pt-[8.5rem]">
-            <div className="flex w-full flex-col gap-y-8 md:flex-row md:justify-between">
-              <div className="flex flex-col gap-[2rem] text-light-900 md:items-center md:gap-[2.5rem]">
+            <div className="flex w-full flex-col gap-y-14 md:flex-row md:justify-between">
+              <div className="flex flex-col items-center gap-[2rem] text-light-900 md:gap-[2.5rem]">
                 <p className="max-w-[23.9375rem] text-center font-fraunces md:text-[1.3rem] lg:text-[1.5rem]">
                   We are revolutionizing the diesel retail industry, ensuring
                   ease and integrity in transactions, and efficiency in
                   operations.
                 </p>
-                <Link
-                  href="mailto: +2349031105298"
-                  className="hidden md:inline-block"
-                >
+                <Link href="mailto: +2349031105298" className="">
                   +234-903-110-5298
                 </Link>
               </div>
@@ -142,13 +139,13 @@ const Footer = () => {
               </div>
             </div>
 
-            <div className="mt-8 flex flex-col-reverse items-center gap-y-6 pb-2 text-light-500 md:mt-16 md:flex-row md:justify-between">
+            <div className="mt-12 flex flex-col-reverse items-center gap-y-10 pb-2 text-light-500 md:mt-16 md:flex-row md:justify-between">
               <div className="">2024© DieselNg. All rights reserved.</div>
               <div className="text-[0.86rem]">
                 <Link href="#">DIESELLING</Link> |
                 <Link href="#"> Terms & Conditions with Disclaimer</Link> |
                 <Link href="#"> Privacy Policy</Link> |
-                <Link href="#"> Recruitment</Link> |
+                <Link href="#"> Recruitment</Link>
               </div>
             </div>
           </div>
