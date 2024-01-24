@@ -33,7 +33,7 @@ body {
     @apply pt-[2rem] md:pt-[3.5rem];
   }
   .padding-bottom {
-    @apply pt-[2rem] md:pt-[3.5rem];
+    @apply pb-[2rem] md:pb-[3.5rem];
   }
   .feature-btn {
     @apply btn-shadow flex justify-center rounded-[4.375rem] bg-light-900 px-4 text-[#1E3A4D] max-xs:py-1 max-xs:text-[0.7rem] md:h-[3.25rem] md:w-[16.25rem];
