@@ -42,6 +42,18 @@ body {
   .feature-btn-mobile {
     @apply btn-shadow flex justify-center rounded-[4.375rem] bg-light-900 text-[#1E3A4D] h-[3.25rem] w-[16.25rem];
   }
+
+  .numbers-card {
+    @apply flex flex-col items-start justify-center gap-[2.31rem] rounded-[12px] bg-[#004540] py-[1.5rem] pl-[2.5rem] pr-[5rem] text-light-900 xs:pl-[3.5rem] xs:pr-[8.88rem];
+  }
+
+  .numbers-card-number {
+    @apply font-fraunces text-[3rem] leading-[1.2rem] xs:text-[5rem] xs:leading-[3.5rem];
+  }
+
+  .contactboard-card {
+    @apply flex max-w-[33.31rem] flex-col gap-[1.148rem] rounded-xl bg-[#1F1F1F] px-[2.039rem] pb-[3.575rem] pt-[2.575rem];
+  }
 }
 
 @layer utilities {
