@@ -12,13 +12,16 @@
 }
 
 body {
-  background-color: black;
   font-family: "Montserrat", "Inter", sans-serif;
 }
 
 @layer utilities {
   .max-width {
     @apply max-w-[90rem] mx-auto px-[1.2rem] lg:px-[3.615rem];
+  }
+
+  .top-padding {
+    @apply pt-[4.0625rem];
   }
 
   .no-focus {

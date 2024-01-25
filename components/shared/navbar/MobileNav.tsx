@@ -48,12 +48,12 @@ const MobileNav = () => {
           className="invert md:hidden"
         />
       </SheetTrigger>
-      <SheetContent side="left" className="bg-primary-50">
-        <Link href="/" className="mt-[-1rem] flex items-center gap-1">
+      <SheetContent side="left" className="z-[1000] bg-primary-50">
+        <Link href="/" className="mt-[-0.5rem] flex items-center gap-1">
           <Image
             src="/images/icons/site-logo.svg"
-            width={80}
-            height={43}
+            width={90}
+            height={48}
             alt="Diesel NG"
           />
         </Link>

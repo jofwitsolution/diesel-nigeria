@@ -8,7 +8,7 @@ const Footer = () => {
   return (
     <footer className="bg-black">
       <div className="max-width">
-        <div className="relative mx-auto h-[40.5625rem] max-w-[70rem]">
+        <div className="relative mx-auto h-[52rem] max-w-[70rem] md:h-[45rem] lg:h-[43.5625rem]">
           <div className="absolute z-[2] size-full bg-dark-gradient pt-[3.5rem] md:pt-[8.5rem]">
             <div className="flex w-full flex-col gap-y-14 md:flex-row md:justify-between">
               <div className="flex flex-col items-center gap-[2rem] text-light-900 md:gap-[2.5rem]">
@@ -139,7 +139,7 @@ const Footer = () => {
               </div>
             </div>
 
-            <div className="mt-12 flex flex-col-reverse items-center gap-y-10 pb-2 text-light-500 md:mt-16 md:flex-row md:justify-between">
+            <div className="mt-12 flex flex-col-reverse items-center gap-y-10 text-light-500 md:mt-16 md:flex-row md:justify-between">
               <div className="">2024© DieselNg. All rights reserved.</div>
               <div className="text-[0.86rem]">
                 <Link href="#">DIESELLING</Link> |

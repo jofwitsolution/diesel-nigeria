@@ -23,3 +23,45 @@ export function formatPrice(price: number) {
   const formattedPrice = formatter.format(price);
   return formattedPrice;
 }
+
+export function getCurrentDate() {
+  const daysOfWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const currentDate = new Date();
+  const dayOfWeek = daysOfWeek[currentDate.getDay()];
+  const dayOfMonth = currentDate.getDate();
+  const month = months[currentDate.getMonth()];
+  const year = currentDate.getFullYear();
+
+  // Function to get the ordinal suffix for the day of the month (e.g., 1st, 2nd, 3rd)
+  function getOrdinalSuffix(number: number) {
+    const suffixes = ["th", "st", "nd", "rd"];
+    const v = number % 100;
+    return number + (suffixes[(v - 20) % 10] || suffixes[v] || suffixes[0]);
+  }
+
+  const formattedDate = `${dayOfWeek}, ${month} ${getOrdinalSuffix(dayOfMonth)}, ${year}`;
+  return formattedDate;
+}

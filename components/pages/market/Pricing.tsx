@@ -1,6 +1,7 @@
 import React from "react";
 import SearchDistributor from "../../shared/search/SearchDistributor";
 import DistributorTable from "../../shared/table/DistributorTable";
+import { getCurrentDate } from "@/lib/utils";
 
 const Pricing = () => {
   return (
@@ -10,7 +11,7 @@ const Pricing = () => {
       </h2>
       <div className="mt-[1rem] flex flex-col items-center">
         <span className="text-center text-[1.2rem] font-medium text-primary-500">
-          Friday, January 19th, 2024
+          {getCurrentDate()}
         </span>
         <span className="mt-[2.5rem] text-center font-fraunces text-[1.3rem] font-normal tracking-[-1px] text-dark-100 md:text-[1.5rem]">
           Find the best price that suits your needs

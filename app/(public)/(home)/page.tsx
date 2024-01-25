@@ -5,7 +5,7 @@ import HomeHero from "@/components/pages/home/HomeHero";
 
 const Page = () => {
   return (
-    <div>
+    <div className="">
       <HomeHero />
       <Features />
       <Contributions />
