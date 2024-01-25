@@ -142,7 +142,7 @@ const Footer = () => {
             <div className="mt-12 flex flex-col-reverse items-center gap-y-10 text-light-500 md:mt-16 md:flex-row md:justify-between">
               <div className="">2024© DieselNg. All rights reserved.</div>
               <div className="text-[0.86rem]">
-                <Link href="#">DIESELLING</Link> |
+                <Link href="#">DIESELNG</Link> |
                 <Link href="#"> Terms & Conditions with Disclaimer</Link> |
                 <Link href="#"> Privacy Policy</Link> |
                 <Link href="#"> Recruitment</Link>

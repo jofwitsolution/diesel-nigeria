@@ -88,6 +88,12 @@ const Features = () => {
           </div>
         </div>
         <Image
+          src="/images/home/diesel-logo.png"
+          alt="fuel pump"
+          fill
+          className="object-contain"
+        />
+        <Image
           src="/images/home/fuel-pump.png"
           alt="fuel pump"
           fill

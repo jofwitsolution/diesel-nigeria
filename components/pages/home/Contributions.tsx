@@ -21,7 +21,7 @@ const Contributions = () => {
             your operations to new heights.
           </p>
 
-          <Link href="/">
+          <Link href="/about">
             <Button className="flex w-[9.5625rem] items-center justify-center rounded-[62.4375rem] bg-[#FFDE59] font-fraunces text-[#002112] hover:bg-[#fade6d]">
               Learn more
             </Button>

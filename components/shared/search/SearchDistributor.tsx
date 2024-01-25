@@ -23,7 +23,7 @@ const SearchDistributor = ({ inputStyle, wrapperStyle }: Props) => {
         </div>
         <Input
           type="text"
-          placeholder="Search for a distributor"
+          placeholder="Search for a distributor, state"
           className={`${inputStyle} no-focus border-none  bg-transparent shadow-none outline-none placeholder:text-[0.9rem]`}
         />
       </div>

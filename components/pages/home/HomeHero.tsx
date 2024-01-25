@@ -4,6 +4,7 @@ import Link from "next/link";
 import SearchDistributor from "../../shared/search/SearchDistributor";
 import HomeDistributorTable from "../../shared/table/HomeDistributorTable";
 import { Button } from "@/components/ui/button";
+import { getCurrentDate } from "@/lib/utils";
 
 const HomeHero = () => {
   return (
@@ -14,6 +15,9 @@ const HomeHero = () => {
             <h1 className="mx-auto max-w-[44.5rem] text-center font-fraunces text-[1.6rem] font-normal leading-[2.5rem] tracking-[-1px] text-dark-100 sm:text-light-900 md:text-[3.04rem] md:leading-[3rem]">
               Welcome to the Future of Diesel Procurement!
             </h1>
+            <span className="text-center text-[1.2rem] font-medium text-primary-500">
+              {getCurrentDate()}
+            </span>
             <div className="mx-auto flex max-w-[40.9375rem] flex-col items-center gap-[1.5rem] bg-transparent">
               <SearchDistributor
                 inputStyle="sm:text-light-900"
@@ -26,9 +30,9 @@ const HomeHero = () => {
             </span>
 
             <p className="mx-auto max-w-[44.9375rem] text-center text-[1.125rem] sm:text-light-500">
-              Experience the power of real-time purchases and track your
-              deliveries seamlessly. It&apos;s not just a service; it&apos;s a
-              revolution in efficiency.
+              Experience the power of real-time purchases, track your deliveries
+              seamlessly and bring efficiency to your corporate diesel
+              consumptions
             </p>
 
             <Link href="/market" className="sm:hidden">

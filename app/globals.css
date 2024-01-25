@@ -86,5 +86,7 @@ body {
     background: none !important;
     height: 400px;
     width: 100%;
+    border: 3px solid black;
+    border-radius: 30px;
   }
 }
