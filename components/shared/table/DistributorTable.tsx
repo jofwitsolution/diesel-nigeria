@@ -93,7 +93,7 @@ const DistributorTable = () => {
           {sellers.map((seller, index) => (
             <tr
               key={seller._id + index}
-              className="border-b bg-light-800 text-[0.6rem] text-gray-50 xs:text-[0.88rem] md:text-[1.125rem]"
+              className="border-b bg-light-800 text-[0.6rem] text-black max-xs:font-medium xs:text-[0.88rem] xs:text-gray-50 md:text-[1.125rem]"
             >
               <td className="dist-table-style flex items-center gap-2 font-medium text-gray-700 xs:gap-4">
                 <Image
