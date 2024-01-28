@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+// import { useState, useTransition } from "react";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -18,6 +18,7 @@ import {
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { PasswordInput } from "../ui/password-input";
 
 const SignInForm = () => {
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -75,18 +76,17 @@ const SignInForm = () => {
                     Password
                   </FormLabel>
                   <FormControl>
-                    <Input
+                    <PasswordInput
                       {...field}
                       placeholder="Enter password"
-                      type="password"
-                      className="mb-[-2rem] w-full rounded-[4px] border-[#9EA2B3] py-[0.75rem]"
+                      className="mb-[-0.6rem] w-full rounded-[4px] border-[#9EA2B3] py-[0.75rem]"
                     />
                   </FormControl>
                   <Button
                     size="sm"
                     variant="link"
                     asChild
-                    className="mt-[-2rem] flex w-full justify-end font-normal"
+                    className="flex w-full justify-end font-normal"
                   >
                     <Link href="/" className="text-[0.875rem] font-medium">
                       Forgot password?
