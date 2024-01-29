@@ -39,11 +39,11 @@ const Navbar = () => {
 
       <div className="flex justify-center gap-[2.5rem] font-inter text-[0.9375rem] leading-[1.41rem]">
         <SignedOut>
-          <Link href="/sign-up" className="hidden font-[600] md:inline">
+          <Link href="/auth/register" className="hidden font-[600] md:inline">
             Sign Up
           </Link>
           <Link
-            href="/sign-in"
+            href="/auth/login"
             className="hidden items-center gap-1 px-2 font-[600] md:flex"
           >
             Log in

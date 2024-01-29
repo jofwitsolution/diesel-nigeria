@@ -8,3 +8,29 @@ export const LoginSchema = z.object({
     message: "Password is required",
   }),
 });
+
+export const IndividualSignUpSchema = z
+  .object({
+    name: z
+      .string()
+      .min(3, {
+        message: "Name is required",
+      })
+      .max(50, { message: "Name cannot exceed 50 char." }),
+    email: z.string().email({
+      message: "Email is required",
+    }),
+    password: z
+      .string()
+      .min(8, {
+        message: "Password cannot be less than 8 char.",
+      })
+      .max(20, {
+        message: "Password cannot exceed 20 char.",
+      }),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"], // path of error
+  });

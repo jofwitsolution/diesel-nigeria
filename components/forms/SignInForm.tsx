@@ -39,7 +39,7 @@ const SignInForm = () => {
       backButton={false}
       footerText="Don't have an account?"
       footerHrefLabel="Sign Up"
-      footerHref="/sign-up"
+      footerHref="/auth/register/individual"
     >
       <Form {...form}>
         <form

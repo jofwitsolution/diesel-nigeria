@@ -82,13 +82,13 @@ const MobileNav = () => {
           <div className="mt-12 flex justify-center gap-6 font-inter text-[0.9375rem] leading-[1.41rem]">
             <SignedOut>
               <SheetClose asChild>
-                <Link href="/sign-up" className="font-[600]">
+                <Link href="/auth/register" className="font-[600]">
                   Sign Up
                 </Link>
               </SheetClose>
               <SheetClose>
                 <Link
-                  href="/sign-in"
+                  href="/auth/login"
                   className="flex items-center gap-1 px-2 font-[600]"
                 >
                   Log in
