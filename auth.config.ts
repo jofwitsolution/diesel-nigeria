@@ -1,13 +1,16 @@
 import type { NextAuthConfig } from "next-auth";
 import bcrypt from "bcryptjs";
 import Credentials from "next-auth/providers/credentials";
-import { getUserByEmail } from "./lib/helpers/user";
-import { LoginSchema } from "./lib/validations";
+import { getUserByEmail } from "@/lib/helpers/user";
+import { LoginSchema } from "@/lib/validations";
+// import { connectToDatabase } from "./lib/mongoose";
 
 export default {
   providers: [
     Credentials({
       async authorize(credentials) {
+        // connectToDatabase();
+
         const validatedFields = LoginSchema.safeParse(credentials);
 
         if (validatedFields.success) {
