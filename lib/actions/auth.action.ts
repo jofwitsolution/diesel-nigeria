@@ -3,11 +3,11 @@
 import * as z from "zod";
 import bcrypt from "bcryptjs";
 import { IndividualSignUpSchema, LoginSchema } from "../validations";
-import User from "@/database/user.model";
 import { getUserByEmail } from "../helpers/user";
 import { signIn } from "@/auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { AuthError } from "next-auth";
+import { db } from "../db";
 
 export const registerIndividual = async (
   values: z.infer<typeof IndividualSignUpSchema>
@@ -22,13 +22,15 @@ export const registerIndividual = async (
     const { email, password, name } = validatedFields.data;
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const existingUser = await User.findOne({ email });
+    const existingUser = await getUserByEmail(email);
 
     if (existingUser) {
       return { error: "Email already in use!" };
     }
 
-    await User.create({ name, email, password: hashedPassword });
+    await db.user.create({
+      data: { name, email, password: hashedPassword },
+    });
 
     // TODO: Send email verification
 
