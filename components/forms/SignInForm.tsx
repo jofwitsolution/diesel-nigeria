@@ -1,6 +1,7 @@
 "use client";
 
-// import { useState, useTransition } from "react";
+import { useState, useTransition } from "react";
+import { useSearchParams } from "next/navigation";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -17,10 +18,18 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import Link from "next/link";
 import { PasswordInput } from "../ui/password-input";
+import { FormSuccess } from "./FormSuccess";
+import { FormError } from "./FormError";
+import { login } from "@/lib/actions/auth.action";
 
 const SignInForm = () => {
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl");
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
+  const [isPending, startTransition] = useTransition();
+
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -30,7 +39,19 @@ const SignInForm = () => {
   });
 
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
-    console.log(values);
+    setError("");
+    setSuccess("");
+
+    startTransition(() => {
+      login(values, callbackUrl)
+        .then((data) => {
+          if (data?.error) {
+            form.reset();
+            setError(data.error);
+          }
+        })
+        .catch(() => setError("Something went wrong"));
+    });
   };
 
   return (
@@ -46,7 +67,7 @@ const SignInForm = () => {
           onSubmit={form.handleSubmit(onSubmit)}
           className="w-[18.75rem] space-y-5 xs:w-[25rem]"
         >
-          <div className="w-full space-y-4">
+          <div className="w-full space-y-3">
             <FormField
               control={form.control}
               name="email"
@@ -58,12 +79,13 @@ const SignInForm = () => {
                   <FormControl>
                     <Input
                       {...field}
+                      disabled={isPending}
                       placeholder="Enter email address"
                       type="email"
                       className="w-full rounded-[4px] border-[#9EA2B3] py-[0.75rem]"
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-400 max-xs:text-[0.7rem]" />
                 </FormItem>
               )}
             />
@@ -78,27 +100,20 @@ const SignInForm = () => {
                   <FormControl>
                     <PasswordInput
                       {...field}
+                      disabled={isPending}
                       placeholder="Enter password"
-                      className="mb-[-0.6rem] w-full rounded-[4px] border-[#9EA2B3] py-[0.75rem]"
+                      className="w-full rounded-[4px] border-[#9EA2B3] py-[0.75rem]"
                     />
                   </FormControl>
-                  <Button
-                    size="sm"
-                    variant="link"
-                    asChild
-                    className="flex w-full justify-end font-normal"
-                  >
-                    <Link href="/" className="text-[0.875rem] font-medium">
-                      Forgot password?
-                    </Link>
-                  </Button>
-                  <FormMessage />
+                  <FormMessage className="text-red-400 max-xs:text-[0.7rem]" />
                 </FormItem>
               )}
             />
           </div>
+          <FormError message={error} />
+          <FormSuccess message={success} />
           <Button
-            disabled={false}
+            disabled={isPending}
             type="submit"
             className="h-[3rem] w-full rounded-[4px] bg-primary-500 font-fraunces text-light-900"
           >

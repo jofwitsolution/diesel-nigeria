@@ -3,9 +3,9 @@
 import * as z from "zod";
 import bcrypt from "bcryptjs";
 import { IndividualSignUpSchema, LoginSchema } from "../validations";
-import { getUserByEmail } from "../helpers/user";
+import { getLoginRoute, getUserByEmail } from "../helpers/user";
 import { signIn } from "@/auth";
-import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+// import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { AuthError } from "next-auth";
 import { db } from "../db";
 
@@ -63,7 +63,7 @@ export const login = async (
     await signIn("credentials", {
       email,
       password,
-      redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
+      redirectTo: callbackUrl || getLoginRoute(existingUser.role),
     });
   } catch (error) {
     if (error instanceof AuthError) {

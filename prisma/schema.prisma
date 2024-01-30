@@ -13,9 +13,9 @@ datasource db {
 }
 
 enum UserRole {
-  ADMIN
-  SELLER
-  BUYER
+  admin
+  seller
+  buyer
 }
 
 model User {
@@ -23,7 +23,7 @@ model User {
   name          String
   email         String   @unique
   password      String?
-  role          UserRole @default(BUYER)
+  role          UserRole @default(buyer)
   accounts      Account[]
 }
 
