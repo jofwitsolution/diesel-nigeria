@@ -1,12 +1,17 @@
 import type { NextAuthConfig } from "next-auth";
 import bcrypt from "bcryptjs";
 import Credentials from "next-auth/providers/credentials";
+import Google from "next-auth/providers/google";
 import { getUserByEmail } from "@/lib/helpers/user";
 import { LoginSchema } from "@/lib/validations";
 // import { connectToDatabase } from "./lib/mongoose";
 
 export default {
   providers: [
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
     Credentials({
       async authorize(credentials) {
         // connectToDatabase();

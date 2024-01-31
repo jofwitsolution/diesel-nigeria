@@ -21,8 +21,13 @@ import { PasswordInput } from "../ui/password-input";
 import { registerIndividual } from "@/lib/actions/auth.action";
 import { FormError } from "./FormError";
 import { FormSuccess } from "./FormSuccess";
+import Social from "./Social";
+import { useSearchParams } from "next/navigation";
 
 const IndividualSignUpForm = () => {
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl");
+
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
@@ -159,6 +164,9 @@ const IndividualSignUpForm = () => {
             Create an account
           </Button>
         </form>
+        <div className="mt-[3.5rem] w-[18.75rem] xs:w-[25rem]">
+          <Social callbackUrl={callbackUrl} />
+        </div>
       </Form>
     </AuthFormWrapper>
   );

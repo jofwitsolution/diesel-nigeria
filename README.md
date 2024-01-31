@@ -16,6 +16,8 @@ bun dev
 
 #openssl rand -hex 32
 
+# npx prisma migrate reset: to reset db
+
 # start prisma
 
 # npx prisma init

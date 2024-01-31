@@ -78,3 +78,27 @@ export const login = async (
     throw error;
   }
 };
+
+interface OAuthParams {
+  provider: "google" | "github";
+  callbackUrl: string | null;
+}
+
+export const OAuthLogin = async ({ provider, callbackUrl }: OAuthParams) => {
+  try {
+    await signIn(provider, {
+      redirectTo: callbackUrl || "/buyer/overview",
+    });
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return { error: "Invalid credentials!" };
+        default:
+          return { error: "Something went wrong!" };
+      }
+    }
+
+    throw error;
+  }
+};

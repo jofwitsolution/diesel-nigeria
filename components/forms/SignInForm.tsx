@@ -22,10 +22,15 @@ import { PasswordInput } from "../ui/password-input";
 import { FormSuccess } from "./FormSuccess";
 import { FormError } from "./FormError";
 import { login } from "@/lib/actions/auth.action";
+import Social from "./Social";
 
 const SignInForm = () => {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
+  const urlError =
+    searchParams.get("error") === "OAuthAccountNotLinked"
+      ? "Email already in use with different provider!"
+      : "";
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
@@ -110,7 +115,7 @@ const SignInForm = () => {
               )}
             />
           </div>
-          <FormError message={error} />
+          <FormError message={error || urlError} />
           <FormSuccess message={success} />
           <Button
             disabled={isPending}
@@ -120,6 +125,9 @@ const SignInForm = () => {
             Sign In
           </Button>
         </form>
+        <div className="mt-[3.5rem] w-[18.75rem] xs:w-[25rem]">
+          <Social callbackUrl={callbackUrl} />
+        </div>
       </Form>
     </AuthFormWrapper>
   );
