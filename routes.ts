@@ -39,6 +39,11 @@ export const apiAuthPrefix = "/api/auth";
  */
 export const DEFAULT_LOGIN_REDIRECT = "/";
 
+/**
+ * An object containing login routes for each user roles
+ * Each users will be redirected to these routes after login
+ * @type {object}
+ */
 export const loginRoutes: Record<string, string> = {
   admin: "/admin/overview",
   seller: "/seller/overview",

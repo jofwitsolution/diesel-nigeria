@@ -5,9 +5,10 @@ import bcrypt from "bcryptjs";
 import { IndividualSignUpSchema, LoginSchema } from "../validations";
 import { getLoginRoute, getUserByEmail } from "../helpers/user";
 import { signIn } from "@/auth";
-// import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { AuthError } from "next-auth";
 import { db } from "../db";
+// import { generateVerificationToken } from "../helpers/token";
+// import { sendVerificationEmail } from "../helpers/mail";
 
 export const registerIndividual = async (
   values: z.infer<typeof IndividualSignUpSchema>
@@ -32,7 +33,11 @@ export const registerIndividual = async (
       data: { name, email, password: hashedPassword },
     });
 
-    // TODO: Send email verification
+    // const verificationToken = await generateVerificationToken(email);
+    // await sendVerificationEmail(
+    //   verificationToken.email,
+    //   verificationToken.token
+    // );
 
     return { success: "Confirmation email sent!" };
   } catch (error) {
