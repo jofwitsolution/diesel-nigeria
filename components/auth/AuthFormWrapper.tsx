@@ -6,7 +6,7 @@ interface WrapperProps {
   children: React.ReactNode;
   backButton: boolean;
   backButtonHref?: string;
-  headerText: string;
+  headerText?: string;
   footerText: string;
   footerHrefLabel: string;
   footerHref: string;

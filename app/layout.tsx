@@ -1,8 +1,10 @@
-import { Inter, Montserrat, Fraunces } from "next/font/google";
 import React from "react";
+import { SessionProvider } from "next-auth/react";
 import { Metadata } from "next";
+import { Inter, Montserrat, Fraunces } from "next/font/google";
 
 import "./globals.css";
+import { auth } from "@/auth";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -31,18 +33,22 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth();
+
   return (
-    <body
-      className={`${MontSerrat.variable} ${inter.variable} ${fraunces.variable}`}
-    >
+    <SessionProvider session={session}>
       <html lang="en">
-        <body>{children}</body>
+        <body
+          className={`${MontSerrat.variable} ${inter.variable} ${fraunces.variable}`}
+        >
+          {children}
+        </body>
       </html>
-    </body>
+    </SessionProvider>
   );
 }
