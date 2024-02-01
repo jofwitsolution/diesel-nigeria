@@ -1,4 +1,3 @@
-import { ClerkProvider } from "@clerk/nextjs";
 import { Inter, Montserrat, Fraunces } from "next/font/google";
 import React from "react";
 import { Metadata } from "next";
@@ -38,14 +37,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
-      <body
-        className={`${MontSerrat.variable} ${inter.variable} ${fraunces.variable}`}
-      >
-        <html lang="en">
-          <body>{children}</body>
-        </html>
-      </body>
-    </ClerkProvider>
+    <body
+      className={`${MontSerrat.variable} ${inter.variable} ${fraunces.variable}`}
+    >
+      <html lang="en">
+        <body>{children}</body>
+      </html>
+    </body>
   );
 }
