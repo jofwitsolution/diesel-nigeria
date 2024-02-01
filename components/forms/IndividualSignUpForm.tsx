@@ -23,11 +23,13 @@ import { FormError } from "./FormError";
 import { FormSuccess } from "./FormSuccess";
 import Social from "./Social";
 import { useSearchParams } from "next/navigation";
+import DialogDemo from "../auth/AuthDialog";
 
 const IndividualSignUpForm = () => {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
 
+  const [dialogState, setDialogState] = useState(false);
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
@@ -50,125 +52,139 @@ const IndividualSignUpForm = () => {
       registerIndividual(values).then((data) => {
         setError(data.error);
         setSuccess(data.success);
+
+        if (data.success) {
+          setDialogState(true);
+        }
       });
     });
   };
 
   return (
-    <AuthFormWrapper
-      headerText="Sign Up"
-      backButton={true}
-      backButtonHref="/auth/register"
-      footerText="Already have an account?"
-      footerHrefLabel="Sign In"
-      footerHref="/auth/login"
-    >
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="w-[18.75rem] space-y-5 xs:w-[25rem]"
-        >
-          <div className="w-full space-y-3">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-[0.875rem] text-[#151515]">
-                    Full Name
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      disabled={isPending}
-                      placeholder="Enter full name"
-                      type="name"
-                      className="w-full rounded-[4px] border-[#9EA2B3] py-[0.75rem]"
-                    />
-                  </FormControl>
-                  <FormMessage className="text-red-400 max-xs:text-[0.7rem]" />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-[0.875rem] text-[#151515]">
-                    Email Address
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      disabled={isPending}
-                      placeholder="Enter email address"
-                      type="email"
-                      className="w-full rounded-[4px] border-[#9EA2B3] py-[0.75rem]"
-                    />
-                  </FormControl>
-                  <FormMessage className="text-red-400 max-xs:text-[0.7rem]" />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-[0.875rem] text-[#151515]">
-                    Password
-                  </FormLabel>
-                  <FormControl>
-                    <PasswordInput
-                      {...field}
-                      disabled={isPending}
-                      placeholder="Enter password"
-                      className="w-full rounded-[4px] border-[#9EA2B3] py-[0.75rem]"
-                    />
-                  </FormControl>
-
-                  <FormMessage className="text-red-400 max-xs:text-[0.7rem]" />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="confirmPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-[0.875rem] text-[#151515]">
-                    Confirm Password
-                  </FormLabel>
-                  <FormControl>
-                    <PasswordInput
-                      {...field}
-                      disabled={isPending}
-                      placeholder="Confirm password"
-                      className="w-full rounded-[4px] border-[#9EA2B3] py-[0.75rem]"
-                    />
-                  </FormControl>
-
-                  <FormMessage className="text-red-400 max-xs:text-[0.7rem]" />
-                </FormItem>
-              )}
-            />
-          </div>
-          <FormError message={error} />
-          <FormSuccess message={success} />
-          <Button
-            disabled={isPending}
-            type="submit"
-            className="h-[3rem] w-full rounded-[4px] bg-primary-500 font-fraunces text-light-900"
+    <>
+      <AuthFormWrapper
+        headerText="Sign Up"
+        backButton={true}
+        backButtonHref="/auth/register"
+        footerText="Already have an account?"
+        footerHrefLabel="Sign In"
+        footerHref="/auth/login"
+      >
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="w-[18.75rem] space-y-5 xs:w-[25rem]"
           >
-            Create an account
-          </Button>
-        </form>
-        <div className="mt-[3.5rem] w-[18.75rem] xs:w-[25rem]">
-          <Social callbackUrl={callbackUrl} />
-        </div>
-      </Form>
-    </AuthFormWrapper>
+            <div className="w-full space-y-3">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-[0.875rem] text-[#151515]">
+                      Full Name
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        disabled={isPending}
+                        placeholder="Enter full name"
+                        type="name"
+                        className="w-full rounded-[4px] border-[#9EA2B3] py-[0.75rem]"
+                      />
+                    </FormControl>
+                    <FormMessage className="text-red-400 max-xs:text-[0.7rem]" />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-[0.875rem] text-[#151515]">
+                      Email Address
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        disabled={isPending}
+                        placeholder="Enter email address"
+                        type="email"
+                        className="w-full rounded-[4px] border-[#9EA2B3] py-[0.75rem]"
+                      />
+                    </FormControl>
+                    <FormMessage className="text-red-400 max-xs:text-[0.7rem]" />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-[0.875rem] text-[#151515]">
+                      Password
+                    </FormLabel>
+                    <FormControl>
+                      <PasswordInput
+                        {...field}
+                        disabled={isPending}
+                        placeholder="Enter password"
+                        className="w-full rounded-[4px] border-[#9EA2B3] py-[0.75rem]"
+                      />
+                    </FormControl>
+                    <FormMessage className="text-red-400 max-xs:text-[0.7rem]" />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-[0.875rem] text-[#151515]">
+                      Confirm Password
+                    </FormLabel>
+                    <FormControl>
+                      <PasswordInput
+                        {...field}
+                        disabled={isPending}
+                        placeholder="Confirm password"
+                        className="w-full rounded-[4px] border-[#9EA2B3] py-[0.75rem]"
+                      />
+                    </FormControl>
+                    <FormMessage className="text-red-400 max-xs:text-[0.7rem]" />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <FormError message={error} />
+            <FormSuccess message={success} />
+            <Button
+              disabled={isPending}
+              type="submit"
+              className="h-[3rem] w-full rounded-[4px] bg-primary-500 font-fraunces text-light-900"
+            >
+              Create an account
+            </Button>
+          </form>
+          <div className="mt-[3.5rem] w-[18.75rem] xs:w-[25rem]">
+            <Social callbackUrl={callbackUrl} />
+          </div>
+        </Form>
+      </AuthFormWrapper>
+      <DialogDemo
+        open={dialogState}
+        handleOpen={() => setDialogState(!dialogState)}
+        title="Registration Successful"
+      >
+        <p className="text-center leading-[1.5rem] sm:my-6 sm:text-[1.13rem]">
+          Verification link sent to your email. Verify your email address and
+          log in.
+        </p>
+      </DialogDemo>
+    </>
   );
 };
 

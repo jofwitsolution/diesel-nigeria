@@ -8,7 +8,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { navbarLinks } from "@/constants";
-import { SignedIn, SignedOut } from "@clerk/nextjs";
+import { useCurrentUser } from "@/hooks/user";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -59,48 +59,52 @@ const MobileNav = () => {
         </Link>
 
         <div className="pt-16">
-          <SignedIn>
-            <SheetClose asChild>
-              <Link href="/" className="mb-6">
-                <Button className="flex justify-between gap-[0.63rem] rounded-[5px] bg-primary-500 pb-[0.5625rem] pl-[0.6875rem] pr-[4.6875rem] pt-[0.6875rem]">
-                  <Image
-                    src="/images/icons/menu-grid.svg"
-                    width={20}
-                    height={20}
-                    alt="menu grid"
-                  />
-                  <span className="text-white">Dashboard</span>
-                </Button>
-              </Link>
-            </SheetClose>
-          </SignedIn>
+          {useCurrentUser() && (
+            <>
+              <SheetClose asChild>
+                <Link href="/" className="mb-6">
+                  <Button className="flex justify-between gap-[0.63rem] rounded-[5px] bg-primary-500 pb-[0.5625rem] pl-[0.6875rem] pr-[4.6875rem] pt-[0.6875rem]">
+                    <Image
+                      src="/images/icons/menu-grid.svg"
+                      width={20}
+                      height={20}
+                      alt="menu grid"
+                    />
+                    <span className="text-white">Dashboard</span>
+                  </Button>
+                </Link>
+              </SheetClose>
+            </>
+          )}
 
           <SheetClose asChild>
             <NavContent />
           </SheetClose>
 
           <div className="mt-12 flex justify-center gap-6 font-inter text-[0.9375rem] leading-[1.41rem]">
-            <SignedOut>
-              <SheetClose asChild>
-                <Link href="/auth/register" className="font-[600]">
-                  Sign Up
-                </Link>
-              </SheetClose>
-              <SheetClose>
-                <Link
-                  href="/auth/login"
-                  className="flex items-center gap-1 px-2 font-[600]"
-                >
-                  Log in
-                  <Image
-                    src="/images/icons/arrow-right.svg"
-                    width={14}
-                    height={13}
-                    alt="arrow-right"
-                  />
-                </Link>
-              </SheetClose>
-            </SignedOut>
+            {!useCurrentUser() && (
+              <>
+                <SheetClose asChild>
+                  <Link href="/auth/register" className="font-[600]">
+                    Sign Up
+                  </Link>
+                </SheetClose>
+                <SheetClose>
+                  <Link
+                    href="/auth/login"
+                    className="flex items-center gap-1 px-2 font-[600]"
+                  >
+                    Log in
+                    <Image
+                      src="/images/icons/arrow-right.svg"
+                      width={14}
+                      height={13}
+                      alt="arrow-right"
+                    />
+                  </Link>
+                </SheetClose>
+              </>
+            )}
           </div>
         </div>
       </SheetContent>

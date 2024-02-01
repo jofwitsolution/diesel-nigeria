@@ -5,8 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { navbarLinks } from "@/constants";
 import { usePathname } from "next/navigation";
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import MobileNav from "./MobileNav";
+import { useCurrentUser } from "@/hooks/user";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -38,37 +38,27 @@ const Navbar = () => {
       </div>
 
       <div className="flex justify-center gap-[2.5rem] font-inter text-[0.9375rem] leading-[1.41rem]">
-        <SignedOut>
-          <Link href="/auth/register" className="hidden font-[600] md:inline">
-            Sign Up
-          </Link>
-          <Link
-            href="/auth/login"
-            className="hidden items-center gap-1 px-2 font-[600] md:flex"
-          >
-            Log in
-            <Image
-              src="/images/icons/arrow-right.svg"
-              width={14}
-              height={13}
-              alt="arrow-right"
-            />
-          </Link>
-        </SignedOut>
+        {!useCurrentUser() && (
+          <>
+            <Link href="/auth/register" className="hidden font-[600] md:inline">
+              Sign Up
+            </Link>
+            <Link
+              href="/auth/login"
+              className="hidden items-center gap-1 px-2 font-[600] md:flex"
+            >
+              Log in
+              <Image
+                src="/images/icons/arrow-right.svg"
+                width={14}
+                height={13}
+                alt="arrow-right"
+              />
+            </Link>
+          </>
+        )}
 
-        <SignedIn>
-          <UserButton
-            afterSignOutUrl="/"
-            appearance={{
-              elements: {
-                avatarBox: "h-10 w-10",
-              },
-              variables: {
-                colorPrimary: "#00bf63",
-              },
-            }}
-          />
-        </SignedIn>
+        {useCurrentUser() && <div>User Avatar</div>}
 
         <MobileNav />
       </div>
