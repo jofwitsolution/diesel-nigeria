@@ -18,6 +18,18 @@ enum UserRole {
   buyer
 }
 
+model Document {
+  id           String  @id @default(cuid())
+  url          String  
+  public_id    String  
+  user         User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Foreign key
+  userId    String  @unique
+
+  @@index([userId])
+}
+
 model User {
   id            String    @id @default(cuid())
   name          String
@@ -26,6 +38,12 @@ model User {
   image         String?
   role          UserRole @default(buyer)
   emailVerified DateTime?
+  businessName  String?   @unique
+  rcNumber      String?   @unique
+  address       String?
+  phoneNumber   String?   @unique
+
+  document      Document?
   accounts      Account[]
 }
 

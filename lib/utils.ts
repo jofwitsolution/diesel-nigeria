@@ -65,3 +65,9 @@ export function getCurrentDate() {
   const formattedDate = `${dayOfWeek}, ${month} ${getOrdinalSuffix(dayOfMonth)}, ${year}`;
   return formattedDate;
 }
+
+export function currentTimestamp() {
+  const timestamp = Math.round(new Date().getTime() / 1000);
+
+  return timestamp;
+}
