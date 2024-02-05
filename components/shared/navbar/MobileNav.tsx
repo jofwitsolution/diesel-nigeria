@@ -8,7 +8,8 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { navbarLinks } from "@/constants";
-import { useCurrentUser } from "@/hooks/user";
+import { useCurrentRole, useCurrentUser } from "@/hooks/user";
+import { getLoginRoute } from "@/lib/helpers/user";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -37,6 +38,8 @@ const NavContent = () => {
 };
 
 const MobileNav = () => {
+  const role = useCurrentRole();
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -62,7 +65,7 @@ const MobileNav = () => {
           {useCurrentUser() && (
             <>
               <SheetClose asChild>
-                <Link href="/" className="mb-6">
+                <Link href={getLoginRoute(role as string)!} className="mb-6">
                   <Button className="flex justify-between gap-[0.63rem] rounded-[5px] bg-primary-500 pb-[0.5625rem] pl-[0.6875rem] pr-[4.6875rem] pt-[0.6875rem]">
                     <Image
                       src="/images/icons/menu-grid.svg"

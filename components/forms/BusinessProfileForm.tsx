@@ -24,6 +24,7 @@ import { FormError } from "./FormError";
 import { FormSuccess } from "./FormSuccess";
 import DialogDemo from "../auth/AuthDialog";
 import FileInput from "./FileInput";
+import Overlay from "../Overlay";
 
 interface Props {
   signupData: z.infer<typeof IndividualSignUpSchema> | null;
@@ -206,6 +207,7 @@ const BusinessProfileForm = ({ signupData }: Props) => {
           proceed and log in.
         </p>
       </DialogDemo>
+      {isPending && <Overlay />}
     </>
   );
 };
