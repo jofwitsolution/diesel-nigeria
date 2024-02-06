@@ -108,6 +108,21 @@ const MobileNav = () => {
                 </SheetClose>
               </>
             )}
+            {useCurrentUser() && (
+              <SheetClose asChild>
+                <Button
+                  className={`flex w-[13.125rem] justify-start gap-[0.63rem] rounded-[5px] pb-[0.5625rem] pl-[0.6875rem] pt-[0.6875rem] text-[#808494]`}
+                >
+                  <Image
+                    src="/images/icons/logout.svg"
+                    width={20}
+                    height={20}
+                    alt="logout"
+                  />
+                  <span className="">Log Out</span>
+                </Button>
+              </SheetClose>
+            )}
           </div>
         </div>
       </SheetContent>
