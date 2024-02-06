@@ -12,9 +12,9 @@ const DBNavbar = () => {
     <div className="fixed inset-x-0 top-0 bg-light-900">
       <div className="h-[3.375rem] bg-white px-4 md:ml-[4rem] lg:ml-[15.0625rem]">
         <div className="flex size-full items-center justify-between">
-          <span className="font-semibold capitalize md:text-[1.125rem]">
+          <h1 className="font-semibold capitalize md:text-[1.125rem]">
             {role}- Dashboard
-          </span>
+          </h1>
           <div className="flex gap-[1.5rem]">
             <Image
               src="/images/icons/bell.svg"

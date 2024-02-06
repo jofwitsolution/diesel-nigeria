@@ -12,7 +12,7 @@ const Dashboard = ({ children }: Props) => {
       <DBNavbar />
       <div className="flex">
         <DBLeft />
-        <section className="ml-[1rem] pt-[4.375rem]">{children}</section>
+        <section className="mx-6 pt-[4.875rem]">{children}</section>
       </div>
     </div>
   );

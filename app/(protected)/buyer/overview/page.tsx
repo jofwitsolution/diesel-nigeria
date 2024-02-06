@@ -1,19 +1,40 @@
-import { auth } from "@/auth";
 import React from "react";
+import DBSearchDistributor from "@/components/shared/search/DBSearchDistributor";
+import TopSellers from "@/components/shared/TopSellers";
 
 const OverviewPage = async () => {
-  const session = await auth();
-
   return (
-    <div className="w-[40rem]">
-      {JSON.stringify(session)}
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe nobis at
-        assumenda non nam? Tenetur voluptates praesentium eius quod quis labore
-        ab porro a eveniet quae, rem debitis asperiores eum.
-      </p>
-      <div className="h-[30rem] w-full bg-red-300"></div>
-      <div className="h-[30rem] w-full bg-red-300"></div>
+    <div className="flex gap-6">
+      <div className="mx-auto space-y-6 md:w-[42.9375rem]">
+        <DBSearchDistributor />
+        <TopSellers />
+      </div>
+      <div className="hidden max-w-[28.0625rem] xl:block">
+        <p>
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi
+          repudiandae deleniti commodi neque nihil, iure, maxime voluptate quis
+          eligendi quibusdam id eveniet dolorum atque quia modi natus dolorem
+          ipsam exercitationem.
+        </p>
+        <p>
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi
+          repudiandae deleniti commodi neque nihil, iure, maxime voluptate quis
+          eligendi quibusdam id eveniet dolorum atque quia modi natus dolorem
+          ipsam exercitationem.
+        </p>
+        <p>
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi
+          repudiandae deleniti commodi neque nihil, iure, maxime voluptate quis
+          eligendi quibusdam id eveniet dolorum atque quia modi natus dolorem
+          ipsam exercitationem.
+        </p>
+        <p>
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi
+          repudiandae deleniti commodi neque nihil, iure, maxime voluptate quis
+          eligendi quibusdam id eveniet dolorum atque quia modi natus dolorem
+          ipsam exercitationem.
+        </p>
+      </div>
     </div>
   );
 };
