@@ -12,7 +12,7 @@ import {
   getUserByEmail,
   getVerificationTokenByToken,
 } from "../helpers/user";
-import { signIn } from "@/auth";
+import { signIn, signOut } from "@/auth";
 import { AuthError } from "next-auth";
 import { db } from "../db";
 import { cloudinary } from "../helpers/cloudinary";
@@ -177,6 +177,10 @@ export const login = async (
 
     throw error;
   }
+};
+
+export const logout = async () => {
+  await signOut();
 };
 
 export const checkExistingUser = async (email: string) => {

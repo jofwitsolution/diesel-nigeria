@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/sheet";
 import { navbarLinks } from "@/constants";
 import { useCurrentRole, useCurrentUser } from "@/hooks/user";
+import { logout } from "@/lib/actions/auth.action";
 import { getLoginRoute } from "@/lib/helpers/user";
 import Image from "next/image";
 import Link from "next/link";
@@ -39,6 +40,10 @@ const NavContent = () => {
 
 const MobileNav = () => {
   const role = useCurrentRole();
+
+  const logoutUser = () => {
+    logout();
+  };
 
   return (
     <Sheet>
@@ -111,6 +116,7 @@ const MobileNav = () => {
             {useCurrentUser() && (
               <SheetClose asChild>
                 <Button
+                  onClick={logoutUser}
                   className={`flex w-[13.125rem] justify-start gap-[0.63rem] rounded-[5px] pb-[0.5625rem] pl-[0.6875rem] pt-[0.6875rem] text-[#808494]`}
                 >
                   <Image

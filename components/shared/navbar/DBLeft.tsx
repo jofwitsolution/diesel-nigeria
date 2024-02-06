@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
+import { logout } from "@/lib/actions/auth.action";
 
 const DBLeft = () => {
   const role = useCurrentRole();
@@ -16,6 +17,10 @@ const DBLeft = () => {
     admin: buyerNavLinks,
     seller: buyerNavLinks,
     buyer: buyerNavLinks,
+  };
+
+  const logoutUser = () => {
+    logout();
   };
 
   return (
@@ -90,6 +95,7 @@ const DBLeft = () => {
         })}
 
         <Button
+          onClick={logoutUser}
           className={`flex justify-start gap-[0.63rem] rounded-[5px] pb-[0.5625rem] pl-[0.6875rem] pt-[0.6875rem] text-[#808494] hover:bg-primary-400 hover:text-light-900 lg:w-[13.125rem]`}
         >
           <Image
