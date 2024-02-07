@@ -24,6 +24,23 @@ export function formatPrice(price: number) {
   return formattedPrice;
 }
 
+export function formatPriceNGN(amount: number): string {
+  // Convert amount to string and split into integer and decimal parts
+  const strAmount: string = amount.toFixed(2);
+  const parts: string[] = strAmount.split(".");
+
+  // Extract integer part and format with commas
+  const integerPart: string = parts[0];
+  const integerPartWithCommas: string =
+    parseFloat(integerPart).toLocaleString("en");
+
+  // Join integer and decimal parts with a period
+  const formattedAmount: string = integerPartWithCommas + "." + parts[1];
+
+  // Return the currency format with NGN prefix
+  return "NGN " + formattedAmount;
+}
+
 export function getCurrentDate() {
   const daysOfWeek = [
     "Sunday",

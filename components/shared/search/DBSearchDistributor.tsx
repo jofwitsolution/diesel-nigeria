@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const DBSearchDistributor = () => {
   return (
-    <div className="relative max-w-[19.0625rem]">
+    <div className="max-w-[19.0625rem]">
       <div
         className={`flex h-[2.375rem] items-center rounded-[5px] bg-light-900 pl-1`}
       >

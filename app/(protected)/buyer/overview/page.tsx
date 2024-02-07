@@ -1,7 +1,8 @@
 import React from "react";
 import DBSearchDistributor from "@/components/shared/search/DBSearchDistributor";
 import TopSellers from "@/components/shared/TopSellers";
-import RecentTransactions from "@/components/shared/RecentTransactions";
+import RecentTransactions from "@/components/shared/table/RecentTransactions";
+import PurchaseAnalytics from "@/components/shared/PurchaseAnalytics";
 
 const OverviewPage = async () => {
   return (
@@ -10,6 +11,7 @@ const OverviewPage = async () => {
         <DBSearchDistributor />
         <TopSellers />
         <RecentTransactions />
+        <PurchaseAnalytics />
       </div>
       <div className="hidden max-w-[28.0625rem] xl:block">
         <p>
