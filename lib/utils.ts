@@ -89,7 +89,7 @@ export function currentTimestamp() {
   return timestamp;
 }
 
-export function formatDate(dateString: string) {
+export function formatDate(date: string | Date) {
   const months = [
     "Jan",
     "Feb",
@@ -104,9 +104,15 @@ export function formatDate(dateString: string) {
     "Nov",
     "Dec",
   ];
-  const date = new Date(dateString);
-  const day = date.getDate();
-  const month = months[date.getMonth()];
-  const year = date.getFullYear();
+
+  // Create a Date object from either a date string or a Date object
+  const dateObj = typeof date === "string" ? new Date(date) : date;
+
+  // Extract day, month, and year components
+  const day = dateObj.getDate();
+  const month = months[dateObj.getMonth()];
+  const year = dateObj.getFullYear();
+
+  // Return formatted date string
   return `${day} ${month} ${year}`;
 }

@@ -25,30 +25,6 @@ const OverviewPage = async () => {
           </Link>
         </div>
         <CalendarOrder />
-        <p>
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi
-          repudiandae deleniti commodi neque nihil, iure, maxime voluptate quis
-          eligendi quibusdam id eveniet dolorum atque quia modi natus dolorem
-          ipsam exercitationem.
-        </p>
-        <p>
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi
-          repudiandae deleniti commodi neque nihil, iure, maxime voluptate quis
-          eligendi quibusdam id eveniet dolorum atque quia modi natus dolorem
-          ipsam exercitationem.
-        </p>
-        <p>
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi
-          repudiandae deleniti commodi neque nihil, iure, maxime voluptate quis
-          eligendi quibusdam id eveniet dolorum atque quia modi natus dolorem
-          ipsam exercitationem.
-        </p>
-        <p>
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quasi
-          repudiandae deleniti commodi neque nihil, iure, maxime voluptate quis
-          eligendi quibusdam id eveniet dolorum atque quia modi natus dolorem
-          ipsam exercitationem.
-        </p>
       </div>
     </div>
   );
