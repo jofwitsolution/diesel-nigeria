@@ -58,10 +58,10 @@ const TopSellers = () => {
                 height={27}
                 alt="seller"
               />
-              <span className="font-medium">Honeywell Petroleum</span>
+              <span className="font-medium">{seller.businessName}</span>
             </span>
-            <span className="text-[#5F6D7E]">Lagos</span>
-            <span className="text-[#5F6D7E]">{formatPrice(940)}</span>
+            <span className="text-[#5F6D7E]">{seller.state}</span>
+            <span className="text-[#5F6D7E]">{formatPrice(seller.price)}</span>
           </div>
         ))}
       </div>

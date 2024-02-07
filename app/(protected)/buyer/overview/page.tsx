@@ -1,13 +1,15 @@
 import React from "react";
 import DBSearchDistributor from "@/components/shared/search/DBSearchDistributor";
 import TopSellers from "@/components/shared/TopSellers";
+import RecentTransactions from "@/components/shared/RecentTransactions";
 
 const OverviewPage = async () => {
   return (
     <div className="flex gap-6">
-      <div className="mx-auto space-y-6 md:w-[42.9375rem]">
+      <div className="mx-auto space-y-6 sm:w-[38rem] md:w-[42.9375rem]">
         <DBSearchDistributor />
         <TopSellers />
+        <RecentTransactions />
       </div>
       <div className="hidden max-w-[28.0625rem] xl:block">
         <p>
