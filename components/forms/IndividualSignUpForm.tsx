@@ -22,10 +22,11 @@ import { registerIndividual } from "@/lib/actions/auth.action";
 import { FormError } from "./FormError";
 import { FormSuccess } from "./FormSuccess";
 import Social from "./Social";
-import { useSearchParams } from "next/navigation";
-import DialogDemo from "../auth/AuthDialog";
+import { useRouter, useSearchParams } from "next/navigation";
+import AuthDialog from "../auth/AuthDialog";
 
 const IndividualSignUpForm = () => {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
 
@@ -55,6 +56,7 @@ const IndividualSignUpForm = () => {
 
         if (data.success) {
           setDialogState(true);
+          form.reset();
         }
       });
     });
@@ -174,16 +176,19 @@ const IndividualSignUpForm = () => {
           </div>
         </Form>
       </AuthFormWrapper>
-      <DialogDemo
+      <AuthDialog
         open={dialogState}
-        handleOpen={() => setDialogState(!dialogState)}
+        handleOpen={() => {
+          setDialogState(!dialogState);
+          router.replace("/auth/login");
+        }}
         title="Registration Successful"
       >
         <p className="text-center leading-[1.5rem] sm:my-6 sm:text-[1.13rem]">
           Verification link sent to your email. Verify your email address and
           log in.
         </p>
-      </DialogDemo>
+      </AuthDialog>
     </>
   );
 };

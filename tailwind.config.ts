@@ -6,6 +6,7 @@ const config: Config = {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./styles/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   prefix: "",
   theme: {
@@ -24,6 +25,7 @@ const config: Config = {
         primary: {
           500: "#00BF63",
           400: "#20ce7a",
+          100: "#b5f4d5",
           50: "#FAF9F5",
         },
         secondary: {

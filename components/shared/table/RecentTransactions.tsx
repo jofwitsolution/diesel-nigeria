@@ -1,4 +1,5 @@
 import { formatDate } from "@/lib/utils";
+import { statusBg } from "@/styles/utils";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -34,11 +35,6 @@ const transactions = [
 ];
 
 const RecentTransactions = () => {
-  const statusBg = (status: string) => {
-    if (status === "success") return "bg-primary-50 text-primary-500";
-    if (status === "progress") return "bg-yellow-200 text-yellow-500";
-    if (status === "failed") return "bg-red-200 text-red-500";
-  };
   return (
     <div className="w-full rounded-md bg-light-900 py-4">
       <div className="mb-6 flex w-full items-center justify-between px-3">
@@ -83,7 +79,7 @@ const RecentTransactions = () => {
                 <td className="max-sm:hidden">{transaction.orderNumber}</td>
                 <td className="pe-2">
                   <span
-                    className={`${statusBg(transaction.status)} rounded p-1 font-[700]`}
+                    className={`${statusBg(transaction.status)} rounded p-1 font-[700] capitalize`}
                   >
                     {transaction.status}
                   </span>

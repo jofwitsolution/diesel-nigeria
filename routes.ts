@@ -13,7 +13,7 @@ export const publicRoutes = [
 
 /**
  * An array of routes that are used for authentication
- * These routes will redirect logged in users to /auth/authorizing
+ * These routes will redirect logged in users to their various roles
  * @type {string[]}
  */
 export const authRoutes = [

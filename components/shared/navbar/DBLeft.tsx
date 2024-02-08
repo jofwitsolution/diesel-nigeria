@@ -24,7 +24,7 @@ const DBLeft = () => {
   };
 
   return (
-    <div className="custom-scrollbar sticky left-0 top-0 z-[10] flex h-screen flex-col overflow-y-auto bg-light-900 pb-4 max-lg:px-1 max-lg:shadow-sm max-md:hidden lg:w-[15rem]">
+    <div className="custom-scrollbar sticky left-0 top-0 z-[950] flex h-screen flex-col overflow-y-auto bg-light-900 pb-4 max-lg:px-1 max-lg:shadow-sm max-md:hidden lg:w-[15rem]">
       <div className="mt-4 flex w-full justify-center">
         <Link href="/">
           <Image

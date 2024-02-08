@@ -25,12 +25,15 @@ import { FormSuccess } from "./FormSuccess";
 import DialogDemo from "../auth/AuthDialog";
 import FileInput from "./FileInput";
 import Overlay from "../Overlay";
+import { useRouter } from "next/navigation";
 
 interface Props {
   signupData: z.infer<typeof IndividualSignUpSchema> | null;
 }
 
 const BusinessProfileForm = ({ signupData }: Props) => {
+  const router = useRouter();
+
   const [dialogState, setDialogState] = useState(false);
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
@@ -197,7 +200,10 @@ const BusinessProfileForm = ({ signupData }: Props) => {
       </AuthFormWrapper>
       <DialogDemo
         open={dialogState}
-        handleOpen={() => setDialogState(!dialogState)}
+        handleOpen={() => {
+          setDialogState(!dialogState);
+          router.replace("/");
+        }}
         title="Registration Successful"
       >
         <p className="text-center leading-[1.5rem] sm:my-6 sm:text-[1.13rem]">
