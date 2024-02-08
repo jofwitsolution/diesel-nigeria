@@ -3,7 +3,7 @@ export interface NavbarLink {
   label: string;
 }
 
-export interface BuyerNavLinks {
+export interface DashboardNavLinks {
   route: string;
   label: string;
   icon: string;

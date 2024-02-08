@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useCurrentRole } from "@/hooks/user";
-import { buyerNavLinks } from "@/constants";
+import { adminNavLinks, buyerNavLinks, sellerNavLinks } from "@/constants";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -14,8 +14,8 @@ const DBLeft = () => {
   const pathname = usePathname();
 
   const navLinks = {
-    admin: buyerNavLinks,
-    seller: buyerNavLinks,
+    admin: adminNavLinks,
+    seller: sellerNavLinks,
     buyer: buyerNavLinks,
   };
 

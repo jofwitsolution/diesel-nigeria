@@ -7,7 +7,7 @@ import {
   SheetClose,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { buyerNavLinks } from "@/constants";
+import { adminNavLinks, buyerNavLinks, sellerNavLinks } from "@/constants";
 import { useCurrentRole } from "@/hooks/user";
 import { logout } from "@/lib/actions/auth.action";
 import Image from "next/image";
@@ -19,8 +19,8 @@ const NavContent = () => {
   const pathname = usePathname();
 
   const navLinks = {
-    admin: buyerNavLinks,
-    seller: buyerNavLinks,
+    admin: adminNavLinks,
+    seller: sellerNavLinks,
     buyer: buyerNavLinks,
   };
 
