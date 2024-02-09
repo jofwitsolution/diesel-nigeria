@@ -40,7 +40,7 @@ export const registerIndividual = async (
     }
 
     await db.user.create({
-      data: { name, email, password: hashedPassword },
+      data: { name, email, password: hashedPassword, businessName: name },
     });
 
     // const verificationToken = await generateVerificationToken(email);

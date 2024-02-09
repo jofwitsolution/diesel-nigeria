@@ -1,16 +1,18 @@
-import { formatDate } from "@/lib/utils";
+import { formatDate, formatPrice } from "@/lib/utils";
 import { statusBg } from "@/styles/utils";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const transactions = [
+const recentOrders = [
   {
     id: "01",
     orderNumber: "23442",
     date: "2024-01-08T10:01:45.841+00:00",
+    deliveryDate: "2024-01-08T10:01:45.841+00:00",
+    amount: 45970,
     businessName: "Honeywell Petroleum",
-    status: "success",
+    status: "delivered",
     litre: 20,
     avatar: "/images/icons/honeywell.svg",
   },
@@ -18,8 +20,10 @@ const transactions = [
     id: "02",
     orderNumber: "23442",
     date: "2024-01-08T10:01:45.841+00:00",
+    deliveryDate: "2024-01-08T10:01:45.841+00:00",
+    amount: 45970,
     businessName: "Honeywell Petroleum",
-    status: "success",
+    status: "delivered",
     litre: 20,
     avatar: "/images/icons/honeywell.svg",
   },
@@ -27,6 +31,8 @@ const transactions = [
     id: "03",
     orderNumber: "23442",
     date: "2024-01-08T10:01:45.841+00:00",
+    deliveryDate: "2024-01-08T10:01:45.841+00:00",
+    amount: 45970,
     businessName: "Honeywell Petroleum",
     status: "progress",
     litre: 20,
@@ -37,7 +43,7 @@ const transactions = [
 const RecentOrders = () => {
   return (
     <div className="w-full rounded-md bg-light-900 py-4">
-      <div className="mb-6 flex w-full items-center justify-between px-3">
+      <div className="mb-4 flex w-full items-center justify-between px-3">
         <span className="font-semibold">Recent Orders</span>
         <Link
           href="#"
@@ -47,41 +53,44 @@ const RecentOrders = () => {
         </Link>
       </div>
       <div className="w-full">
-        <table className="w-full text-[0.8125rem] text-[#5F6D7E]">
+        <table className="w-full text-[0.55rem] text-[#5F6D7E] xs:text-[0.8125rem]">
           <thead className="font-medium">
-            <tr className="">
-              <th className="ps-3 text-start">Supplier</th>
-              <th className="text-start max-sm:hidden">Liter</th>
-              <th className="text-start">Date</th>
-              <th className="text-start max-sm:hidden">Order Number</th>
-              <th className="text-start">Status</th>
+            <tr className="border-y">
+              <th className="py-3 ps-3 text-start">Customer</th>
+              <th className="py-3 text-start max-sm:hidden">Liter</th>
+              <th className="py-3 text-start">Date</th>
+              <th className="line-clamp-1 py-3 text-start">Delivery Date</th>
+              <th className="py-3 text-start">Amount</th>
+              <th className="py-3 text-start max-sm:hidden">Order Number</th>
+              <th className="py-3 text-start">Status</th>
             </tr>
           </thead>
           <tbody>
-            {transactions.map((transaction) => (
+            {recentOrders.map((order) => (
               <tr
-                key={transaction.id}
-                className="border-b text-start text-[0.75rem]"
+                key={order.id}
+                className="border-b text-start text-[0.5rem] xs:text-[0.75rem]"
               >
                 <td className="flex items-center justify-start gap-[0.675rem] py-3 ps-3">
                   <Image
                     src={"/images/icons/honeywell.svg"}
                     width={27}
                     height={27}
-                    alt="transaction"
+                    alt={order.businessName}
+                    className="max-sm:hidden"
                   />
-                  <span className="font-medium">
-                    {transaction.businessName}
-                  </span>
+                  <span className="font-medium">{order.businessName}</span>
                 </td>
-                <td className="max-sm:hidden">{transaction.litre} Litres</td>
-                <td className="">{formatDate(transaction.date)}</td>
-                <td className="max-sm:hidden">{transaction.orderNumber}</td>
+                <td className="max-sm:hidden">{order.litre} Litres</td>
+                <td className="">{formatDate(order.date)}</td>
+                <td className="">{formatDate(order.deliveryDate)}</td>
+                <td className="">{formatPrice(order.amount)}</td>
+                <td className="max-sm:hidden">{order.orderNumber}</td>
                 <td className="pe-2">
                   <span
-                    className={`${statusBg(transaction.status)} rounded p-1 font-[700] capitalize`}
+                    className={`${statusBg(order.status)} rounded p-1 font-[700] capitalize`}
                   >
-                    {transaction.status}
+                    {order.status}
                   </span>
                 </td>
               </tr>
