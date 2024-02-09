@@ -59,7 +59,8 @@ const DBLeft = () => {
                     src={item.icon}
                     width={20}
                     height={20}
-                    alt="menu grid"
+                    alt="icon"
+                    className="invert"
                   />
                   <span className="max-lg:hidden">{item.label}</span>
                 </Button>
