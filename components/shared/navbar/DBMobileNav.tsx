@@ -39,7 +39,7 @@ const NavContent = () => {
           <SheetClose asChild key={item.label}>
             <Link key={item.label} href={item.route} className="">
               <Button
-                className={`${isActive ? "bg-primary-500 text-light-900" : "text-[#808494]"} flex w-[13.125rem] justify-start gap-[0.63rem] rounded-[5px] pb-[0.5625rem] pl-[0.6875rem] pt-[0.6875rem] hover:bg-primary-400 hover:text-light-900`}
+                className={`${isActive ? "bg-primary-500 text-light-900" : "text-[#808494]"} flex w-[10rem] justify-start gap-[0.63rem] rounded-[5px] pb-[0.5625rem] pl-[0.6875rem] pt-[0.6875rem] hover:bg-primary-400 hover:text-light-900 xs:w-[13.125rem]`}
               >
                 <Image src={item.icon} width={20} height={20} alt="menu grid" />
                 <span className="">{item.label}</span>

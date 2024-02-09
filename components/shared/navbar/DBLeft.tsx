@@ -24,7 +24,7 @@ const DBLeft = () => {
   };
 
   return (
-    <div className="custom-scrollbar sticky left-0 top-0 z-[950] flex h-screen flex-col overflow-y-auto bg-light-900 pb-4 max-lg:px-1 max-lg:shadow-sm max-md:hidden lg:w-[15rem]">
+    <div className="custom-scrollbar sticky left-0 top-0 z-[950] flex h-screen flex-col overflow-y-auto bg-light-900 pb-4 max-lg:px-1 max-lg:shadow-sm max-md:hidden lg:w-[14rem] xl:w-[15rem]">
       <div className="mt-4 flex w-full justify-center">
         <Link href="/">
           <Image
@@ -53,7 +53,7 @@ const DBLeft = () => {
             return (
               <Link key={item.label} href={item.route} className="">
                 <Button
-                  className={`${isActive ? "bg-primary-500 text-light-900" : "text-[#808494]"} flex justify-start gap-[0.63rem] rounded-[5px] pb-[0.5625rem] pl-[0.6875rem] pt-[0.6875rem] hover:bg-primary-400 hover:text-light-900 lg:w-[13.125rem]`}
+                  className={`${isActive ? "bg-primary-500 text-light-900" : "text-[#808494]"} flex justify-start gap-[0.63rem] rounded-[5px] pb-[0.5625rem] pl-[0.6875rem] pt-[0.6875rem] hover:bg-primary-400 hover:text-light-900 lg:w-[12.125rem] xl:w-[13.125rem]`}
                 >
                   <Image
                     src={item.icon}
