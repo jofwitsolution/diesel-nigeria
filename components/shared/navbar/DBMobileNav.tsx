@@ -85,7 +85,10 @@ const DBMobileNav = () => {
           className="invert md:hidden"
         />
       </SheetTrigger>
-      <SheetContent side="left" className="z-[1000] bg-primary-50">
+      <SheetContent
+        side="left"
+        className="z-[1000] overflow-y-auto bg-primary-50"
+      >
         <Link href="/" className="mt-[-0.5rem] flex items-center gap-1">
           <Image
             src="/images/icons/site-logo.svg"
