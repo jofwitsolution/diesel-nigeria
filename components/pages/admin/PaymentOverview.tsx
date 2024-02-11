@@ -12,7 +12,7 @@ const PaymentOverview = () => {
           Showing your transactions in the past hour
         </span>
       </div>
-      <div className="h-[400px] w-full max-sm:w-[70%]">
+      <div className="h-[400px] w-full max-sm:w-[90%]">
         <PaymentChart />
       </div>
     </div>

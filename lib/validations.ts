@@ -57,3 +57,29 @@ export const BusinessProfileSchema = z.object({
     message: "Please input phone number.",
   }),
 });
+
+export const NewSellerSchema = z.object({
+  businessName: z
+    .string()
+    .min(3, {
+      message: "Business name is required",
+    })
+    .max(50, { message: "Name cannot exceed 50 char." }),
+  rcNumber: z.string().min(1, {
+    message: "RC number is required",
+  }),
+  email: z.string().email({
+    message: "Email is required",
+  }),
+  address: z
+    .string()
+    .min(3, {
+      message: "Address is required.",
+    })
+    .max(100, {
+      message: "Address cannot exceed 100 char.",
+    }),
+  phoneNumber: z.string().min(1, {
+    message: "Please input phone number.",
+  }),
+});
