@@ -4,6 +4,8 @@ import { Metadata } from "next";
 import { Inter, Montserrat, Fraunces } from "next/font/google";
 
 import "./globals.css";
+import "@/styles/styles.css";
+
 import { auth } from "@/auth";
 
 const inter = Inter({

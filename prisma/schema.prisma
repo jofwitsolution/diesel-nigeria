@@ -18,16 +18,68 @@ enum UserRole {
   buyer
 }
 
+enum OrderStatus {
+  successful
+  delivered
+  pending
+  progress
+  failed
+  cancelled
+}
+
+enum TransactionCategory {
+  commision
+  settlement
+}
+
 model Document {
-  id           String  @id @default(cuid())
+  id           String  @id @default(cuid())  
   url          String  
   public_id    String  
-  user         User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User?    @relation(fields: [userId], references: [id])
 
   // Foreign key
-  userId    String  @unique
+  userId       String?  @unique
+}
 
-  @@index([userId])
+model IncorporationCertificate {
+  id           String  @id @default(cuid())  
+  url          String  
+  public_id    String  
+  user         User?    @relation(fields: [userId], references: [id])
+
+  // Foreign key
+  userId       String?  @unique
+}
+
+model CACForm {
+  id           String  @id @default(cuid())  
+  url          String  
+  public_id    String  
+  user         User?    @relation(fields: [userId], references: [id])
+
+  // Foreign key
+  userId       String?  @unique
+}
+
+model Avatar {
+  id           String  @id @default(cuid())  
+  url          String  
+  public_id    String  
+  user         User?    @relation(fields: [userId], references: [id])
+
+  // Foreign key
+  userId       String?  @unique
+}
+
+model ProductDensity {
+  id           String  @id @default(cuid())
+  value        Decimal   @unique
+  isStandard   Boolean
+
+  products      Product[]
+
+  updatedAt    DateTime    @updatedAt  
 }
 
 model User {
@@ -42,9 +94,106 @@ model User {
   rcNumber      String?   @unique
   address       String?
   phoneNumber   String?   @unique
+  businessDescription String?
+  isVerifiedSeller  Boolean @default(false)
+  isVerifiedBuyer  Boolean @default(false)
 
+  wallet        Wallet?
+  avatar        Avatar?
+  CACForm       CACForm?
+  incorporationCertificate      IncorporationCertificate?
   document      Document?
+  products      Product[]
   accounts      Account[]
+  buyerOrders   Order[] @relation("OrderToBuyer")
+  sellerOrders   Order[] @relation("OrderToSeller")
+  buyerTransactions  Transaction[] @relation("TransactionToBuyer")
+  sellerTransactions  Transaction[] @relation("TransactionToSeller")
+
+  updatedAt     DateTime    @updatedAt
+}
+
+model Product {
+  id            String        @id @default(cuid())
+  price         String
+  description   String?
+  isAvailable   Boolean
+  numberInStock Decimal
+
+  seller        User          @relation(fields: [sellerId], references: [id])
+  density       ProductDensity @relation(fields: [densityId], references: [id])
+
+  // Foreign key
+  sellerId      String
+  densityId     String
+
+  orders        Order[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Order {
+  id                    String      @id @default(cuid())
+  quantity              Decimal
+  amount                Decimal
+  orderNumber           String
+  orderDate             DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt
+  expectedDeliveryDate  DateTime
+  status                OrderStatus @default(pending)
+  deliveryAddress       String
+  isPaid                Boolean      @default(false)
+  businessName          String
+  email                 String
+  phoneNumber           String
+  message               String?
+  channel               String
+
+  seller                User        @relation("OrderToSeller", fields: [sellerId], references: [id])
+  buyer                 User        @relation("OrderToBuyer", fields: [buyerId], references: [id])
+  product               Product     @relation(fields: [productId], references: [id])
+
+  // Foreign keys
+  sellerId              String
+  buyerId               String
+  productId             String
+
+   @@index([productId])
+   @@index([buyerId])
+   @@index([sellerId])
+}
+
+model Transaction {
+  id                 String  @id @default(cuid())
+  channel            String
+  reference          String
+  orderNumber        String
+  amount             Decimal
+  quantity           Decimal
+  date               DateTime    @default(now())
+  category           TransactionCategory
+
+  buyer                 User?        @relation("TransactionToBuyer", fields: [buyerId], references: [id])
+  seller                User?        @relation("TransactionToSeller", fields: [sellerId], references: [id])
+
+  // Foreign keys
+  buyerId               String?
+  sellerId              String?
+
+  @@index([buyerId])
+  @@index([sellerId])
+}
+
+model Wallet {
+  id                 String     @id @default(cuid())
+  balance            Decimal
+
+  user               User?          @relation(fields: [userId], references: [id])
+
+  // Foreign Key
+  userId             String  @unique
+  
+  updatedAt          DateTime   @updatedAt
 }
 
 model Account {

@@ -53,29 +53,30 @@ const AddSellerForm = ({ dialogState, handleDialogState }: Props) => {
     // console.log(fileData);
     // console.log(signupData);
 
-    // startTransition(() => {
-    //   registerOrganization(fileData, values, signupData).then((data) => {
-    //     setError(data.error);
-    //     setSuccess(data.success);
+    startTransition(() => {
+      // registerOrganization(fileData, values, signupData).then((data) => {
+      //   setError(data.error);
+      //   setSuccess(data.success);
 
-    //     if (data.success) {
-    //       form.reset();
-    //     }
-    //   });
-    // });
+      //   if (data.success) {
+      //     form.reset();
+      //   }
+      // });
+      console.log("ee");
+    });
   };
 
   return (
     <Dialog open={dialogState}>
       <DialogOverlay className="z-[1300]">
-        <DialogContent className="z-[1500] max-w-[29.375rem] rounded-md bg-white py-8">
+        <DialogContent className="DialogContent z-[1500] max-w-[29.375rem] rounded-md bg-white py-8">
           <DialogHeader className="border-b pb-2">
             <DialogTitle>Add New Seller</DialogTitle>
           </DialogHeader>
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="mx-auto w-[18.75rem] space-y-5 xs:w-[25rem]"
+              className="mx-auto w-[90%] space-y-5 xs:w-[25rem]"
             >
               <div className="w-full space-y-3">
                 <FormField
@@ -92,7 +93,7 @@ const AddSellerForm = ({ dialogState, handleDialogState }: Props) => {
                           disabled={isPending}
                           placeholder="Enter business name"
                           type="name"
-                          className="w-full rounded-[4px] border-[#9EA2B3] py-[0.75rem]"
+                          className="w-full rounded-[4px] border-[#9EA2B3]"
                         />
                       </FormControl>
                       <FormMessage className="text-red-400 max-xs:text-[0.7rem]" />
@@ -113,7 +114,7 @@ const AddSellerForm = ({ dialogState, handleDialogState }: Props) => {
                           disabled={isPending}
                           placeholder="Enter Rc number"
                           type="text"
-                          className="w-full rounded-[4px] border-[#9EA2B3] py-[0.75rem]"
+                          className="w-full rounded-[4px] border-[#9EA2B3]"
                         />
                       </FormControl>
                       <FormMessage className="text-red-400 max-xs:text-[0.7rem]" />
@@ -134,7 +135,7 @@ const AddSellerForm = ({ dialogState, handleDialogState }: Props) => {
                           disabled={isPending}
                           placeholder="Enter email address"
                           type="email"
-                          className="w-full rounded-[4px] border-[#9EA2B3] py-[0.75rem]"
+                          className="w-full rounded-[4px] border-[#9EA2B3]"
                         />
                       </FormControl>
                       <FormMessage className="text-red-400 max-xs:text-[0.7rem]" />
@@ -156,7 +157,7 @@ const AddSellerForm = ({ dialogState, handleDialogState }: Props) => {
                           disabled={isPending}
                           placeholder="Enter phone number"
                           type="number"
-                          className="w-full rounded-[4px] border-[#9EA2B3] py-[0.75rem]"
+                          className="w-full rounded-[4px] border-[#9EA2B3]"
                         />
                       </FormControl>
                       <FormMessage className="text-red-400 max-xs:text-[0.7rem]" />
@@ -177,7 +178,7 @@ const AddSellerForm = ({ dialogState, handleDialogState }: Props) => {
                           disabled={isPending}
                           placeholder="Enter address"
                           type="text"
-                          className="w-full rounded-[4px] border-[#9EA2B3] py-[0.75rem]"
+                          className="w-full rounded-[4px] border-[#9EA2B3]"
                         />
                       </FormControl>
                       <FormMessage className="text-red-400 max-xs:text-[0.7rem]" />
@@ -190,6 +191,7 @@ const AddSellerForm = ({ dialogState, handleDialogState }: Props) => {
               <div className="flex w-full justify-end">
                 <div className="space-x-2">
                   <Button
+                    onClick={handleDialogState}
                     disabled={isPending}
                     type="submit"
                     className="h-[2rem] rounded-[4px] border border-primary-500 px-4 font-fraunces"

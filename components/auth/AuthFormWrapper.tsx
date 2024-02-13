@@ -7,9 +7,9 @@ interface WrapperProps {
   backButton: boolean;
   backButtonHref?: string;
   headerText?: string;
-  footerText: string;
-  footerHrefLabel: string;
-  footerHref: string;
+  footerText?: string;
+  footerHrefLabel?: string;
+  footerHref?: string;
 }
 
 const AuthFormWrapper = ({
@@ -19,7 +19,7 @@ const AuthFormWrapper = ({
   headerText,
   footerText,
   footerHrefLabel,
-  footerHref,
+  footerHref = "#",
 }: WrapperProps) => {
   return (
     <div className="flex h-[64rem] w-full">
@@ -53,15 +53,17 @@ const AuthFormWrapper = ({
             {headerText}
           </h1>
           <div className="">{children}</div>
-          <div className="mt-[5rem] flex w-full justify-center space-x-2">
-            <span>{footerText}</span>
-            <Link
-              href={footerHref}
-              className="font-fraunces text-primary-500 hover:underline"
-            >
-              {footerHrefLabel}
-            </Link>
-          </div>
+          {footerText && (
+            <div className="mt-[5rem] flex w-full justify-center space-x-2">
+              <span>{footerText}</span>
+              <Link
+                href={footerHref}
+                className="font-fraunces text-primary-500 hover:underline"
+              >
+                {footerHrefLabel}
+              </Link>
+            </div>
+          )}
         </div>
       </div>
       <div className="relative hidden h-full flex-[1] bg-primary-50 lg:block">

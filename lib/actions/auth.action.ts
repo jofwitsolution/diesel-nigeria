@@ -17,8 +17,8 @@ import { AuthError } from "next-auth";
 import { db } from "../db";
 import { cloudinary } from "../helpers/cloudinary";
 import { currentTimestamp } from "../utils";
-// import { generateVerificationToken } from "../helpers/token";
-// import { sendVerificationEmail } from "../helpers/mail";
+import { generateVerificationToken } from "../helpers/token";
+import { sendVerificationEmail } from "../helpers/mail";
 
 export const registerIndividual = async (
   values: z.infer<typeof IndividualSignUpSchema>
@@ -43,11 +43,11 @@ export const registerIndividual = async (
       data: { name, email, password: hashedPassword, businessName: name },
     });
 
-    // const verificationToken = await generateVerificationToken(email);
-    // await sendVerificationEmail(
-    //   verificationToken.email,
-    //   verificationToken.token
-    // );
+    const verificationToken = await generateVerificationToken(email);
+    await sendVerificationEmail(
+      verificationToken.email,
+      verificationToken.token
+    );
 
     return { success: "Confirmation email sent!" };
   } catch (error) {
@@ -146,18 +146,18 @@ export const login = async (
     return { error: "Email does not exist!" };
   }
 
-  // if (!existingUser.emailVerified) {
-  //   const verificationToken = await generateVerificationToken(
-  //     existingUser.email,
-  //   );
+  if (!existingUser.emailVerified) {
+    const verificationToken = await generateVerificationToken(
+      existingUser.email
+    );
 
-  //   await sendVerificationEmail(
-  //     verificationToken.email,
-  //     verificationToken.token,
-  //   );
+    await sendVerificationEmail(
+      verificationToken.email,
+      verificationToken.token
+    );
 
-  //   return { success: "Confirmation email sent!" };
-  // }
+    return { success: "Confirmation email sent!" };
+  }
 
   try {
     await signIn("credentials", {
