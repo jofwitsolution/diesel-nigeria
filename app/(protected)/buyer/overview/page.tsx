@@ -9,7 +9,7 @@ import CalendarOrder from "@/components/pages/buyer/CalendarOrder";
 
 const OverviewPage = async () => {
   return (
-    <div className="flex gap-6">
+    <div className="flex max-w-[73.125rem] gap-6">
       <div className="mx-auto space-y-6 sm:w-[38rem] md:w-[42.9375rem]">
         <DBSearchDistributor />
         <TopSellers />

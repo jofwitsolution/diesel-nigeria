@@ -6,8 +6,8 @@ import SalesAnalytics from "@/components/pages/seller/SalesAnalytics";
 
 const OverviewPage = async () => {
   return (
-    <div className="space-y-6">
-      <div className="flex max-w-[73.125rem] justify-between">
+    <div className="max-w-[73.125rem] space-y-6">
+      <div className="flex w-full justify-between">
         <div className="flex flex-col gap-2">
           <span className="font-medium md:text-[1.25rem]">Overview</span>
           <span className="text-[0.875rem]">

@@ -8,11 +8,11 @@ interface Props {
 
 const Dashboard = ({ children }: Props) => {
   return (
-    <div>
+    <div className="">
       <DBNavbar />
       <div className="flex">
         <DBLeft />
-        <section className="mx-3 pb-6 pt-[4.875rem] md:mx-6">
+        <section className="mx-3 w-full pb-6 pt-[4.875rem] md:mx-6">
           {children}
         </section>
       </div>
