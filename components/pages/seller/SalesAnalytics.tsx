@@ -1,11 +1,11 @@
 import React from "react";
-import AnalyticsCircle from "./chart/AnalyticsCircle";
+import AnalyticsCircle from "@/components/shared/chart/AnalyticsCircle";
 
-const PurchaseAnalytics = () => {
+const SalesAnalytics = () => {
   return (
     <div className="w-full rounded-md bg-light-900 px-10 py-6">
       <div className="mb-6 flex w-full flex-col gap-1">
-        <span className="font-semibold">Purchase Analytics</span>
+        <span className="font-semibold">Sales Analytics</span>
         <span className="text-[0.75rem] font-medium text-[#808494]">
           This month
         </span>
@@ -27,7 +27,7 @@ const PurchaseAnalytics = () => {
         <div className="flex justify-between">
           <div className="flex items-center gap-2">
             <span className="inline-block size-[10px] rounded-full bg-yellow-500"></span>
-            <span className="text-[#808494]">Branch Serviced :</span>
+            <span className="text-[#808494]">Buyers Serviced :</span>
           </div>
           <div>
             <span className="font-semibold">234213</span>
@@ -36,9 +36,7 @@ const PurchaseAnalytics = () => {
         <div className="flex justify-between">
           <div className="flex items-center gap-2">
             <span className="inline-block size-[10px] rounded-full bg-red-500"></span>
-            <span className="text-[#808494]">
-              Total Amount Spent on Diesel (₦)
-            </span>
+            <span className="text-[#808494]">Sales (₦)</span>
           </div>
           <div>
             <span className="font-semibold">234213</span>
@@ -49,4 +47,4 @@ const PurchaseAnalytics = () => {
   );
 };
 
-export default PurchaseAnalytics;
+export default SalesAnalytics;

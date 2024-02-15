@@ -25,3 +25,18 @@ export const sendVerificationEmail = async (email: string, token: string) => {
     html: `<p>Click <a href="${confirmLink}">here</a> to confirm email.</p>`,
   });
 };
+
+export const sendNewSellerEmail = async (email: string, password: string) => {
+  await resend.emails.send({
+    from: "hello@dieselng.com",
+    to: email,
+    subject: "Welcome to Diesel NG",
+    html: `
+    <h1>Welcome to Diesel Nigeria.</h1>
+    <p>You can log in with your email address and the following password; </p>
+    <p>${password}</p>
+    <p>Please, make sure you change your password.</p>
+    <p>Thank you</p>
+          `,
+  });
+};

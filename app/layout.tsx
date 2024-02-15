@@ -2,6 +2,7 @@ import React from "react";
 import { SessionProvider } from "next-auth/react";
 import { Metadata } from "next";
 import { Inter, Montserrat, Fraunces } from "next/font/google";
+import { Toaster } from "@/components/ui/sonner";
 
 import "./globals.css";
 import "@/styles/styles.css";
@@ -48,6 +49,7 @@ export default async function RootLayout({
         <body
           className={`${MontSerrat.variable} ${inter.variable} ${fraunces.variable}`}
         >
+          <Toaster />
           {children}
         </body>
       </html>

@@ -116,3 +116,48 @@ export function formatDate(date: string | Date) {
   // Return formatted date string
   return `${day} ${month} ${year}`;
 }
+
+export function generatePassword(length: number): string {
+  // Check if the length is at least 12, if not, set it to 12
+  length = Math.max(length, 12);
+
+  // Define character sets
+  const lowercaseChars: string = "abcdefghijklmnopqrstuvwxyz";
+  const uppercaseChars: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const specialChars: string = "!@#$%^&*()-_+=<>?";
+
+  // Initialize password string
+  let password: string = "";
+
+  // Function to get a random character from a given set
+  function getRandomChar(charSet: string): string {
+    const randomIndex: number = Math.floor(Math.random() * charSet.length);
+    return charSet.charAt(randomIndex);
+  }
+
+  // Ensure at least one uppercase, lowercase, and special character
+  password += getRandomChar(lowercaseChars);
+  password += getRandomChar(uppercaseChars);
+  password += getRandomChar(specialChars);
+
+  // Generate remaining characters
+  const remainingLength: number = length - 3; // Subtracting 3 because we already added 3 characters
+  for (let i: number = 0; i < remainingLength; i++) {
+    const randomSetIndex: number = Math.floor(Math.random() * 3); // Randomly choose a character set
+    if (randomSetIndex === 0) {
+      password += getRandomChar(lowercaseChars);
+    } else if (randomSetIndex === 1) {
+      password += getRandomChar(uppercaseChars);
+    } else {
+      password += getRandomChar(specialChars);
+    }
+  }
+
+  // Shuffle the password to randomize the order
+  password = password
+    .split("")
+    .sort(() => Math.random() - 0.5)
+    .join("");
+
+  return password;
+}

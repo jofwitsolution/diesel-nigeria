@@ -11,6 +11,26 @@ export const getUserByEmail = async (email: string) => {
   }
 };
 
+export const getUserByRcNumber = async (rcNumber: string) => {
+  try {
+    const user = await db.user.findUnique({ where: { rcNumber } });
+
+    return user;
+  } catch {
+    return null;
+  }
+};
+
+export const getUserByPhoneNumber = async (phoneNumber: string) => {
+  try {
+    const user = await db.user.findUnique({ where: { phoneNumber } });
+
+    return user;
+  } catch {
+    return null;
+  }
+};
+
 export const getUserById = async (id: string | undefined) => {
   try {
     const user = await db.user.findUnique({ where: { id } });

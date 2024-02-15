@@ -5,16 +5,12 @@ import Image from "next/image";
 import React, { useEffect, useRef } from "react";
 
 interface CircleProps {
-  volume: number;
-  branches: number;
-  amount: number;
+  a: number;
+  b: number;
+  c: number;
 }
 
-const AnalyticsCircle: React.FC<CircleProps> = ({
-  volume,
-  branches,
-  amount,
-}) => {
+const AnalyticsCircle: React.FC<CircleProps> = ({ a, b, c }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -33,31 +29,25 @@ const AnalyticsCircle: React.FC<CircleProps> = ({
       const borderWidth = radius * 0.13; // Adjust border width proportionally
 
       // Calculate angles for each section with a 5px gap between sections
-      const total = volume + branches + amount;
+      const total = a + b + c;
       const gap = (5 * Math.PI) / (2 * radius);
-      const volumeAngle = (volume / total) * (2 * Math.PI - 3 * gap);
-      const branchAngle = (branches / total) * (2 * Math.PI - 3 * gap);
-      const dieselAngle = (amount / total) * (2 * Math.PI - 3 * gap);
+      const aAngle = (a / total) * (2 * Math.PI - 3 * gap);
+      const bAngle = (b / total) * (2 * Math.PI - 3 * gap);
+      const cAngle = (c / total) * (2 * Math.PI - 3 * gap);
 
       // Clear canvas before drawing
       ctx.clearRect(0, 0, width, height);
 
       // Draw green section
       ctx.beginPath();
-      ctx.arc(centerX, centerY, radius, 0, volumeAngle);
+      ctx.arc(centerX, centerY, radius, 0, aAngle);
       ctx.lineWidth = borderWidth;
       ctx.strokeStyle = "green";
       ctx.stroke();
 
       // Draw yellow section
       ctx.beginPath();
-      ctx.arc(
-        centerX,
-        centerY,
-        radius,
-        volumeAngle + gap,
-        volumeAngle + gap + branchAngle
-      );
+      ctx.arc(centerX, centerY, radius, aAngle + gap, aAngle + gap + bAngle);
       ctx.lineWidth = borderWidth;
       ctx.strokeStyle = "yellow";
       ctx.stroke();
@@ -68,8 +58,8 @@ const AnalyticsCircle: React.FC<CircleProps> = ({
         centerX,
         centerY,
         radius,
-        volumeAngle + gap + branchAngle + gap,
-        volumeAngle + gap + branchAngle + gap + dieselAngle
+        aAngle + gap + bAngle + gap,
+        aAngle + gap + bAngle + gap + cAngle
       );
       ctx.lineWidth = borderWidth;
       ctx.strokeStyle = "red";
@@ -82,7 +72,7 @@ const AnalyticsCircle: React.FC<CircleProps> = ({
 
     // Cleanup event listener
     return () => window.removeEventListener("resize", drawCircle);
-  }, [volume, branches, amount]);
+  }, [a, b, c]);
 
   return (
     <div
@@ -113,7 +103,7 @@ const AnalyticsCircle: React.FC<CircleProps> = ({
             alt="nozzle"
           />
           <span className="text-[0.4rem] font-[700] xs:text-[0.6rem] md:text-[0.85rem]">
-            {formatPriceNGN(amount)}
+            {formatPriceNGN(c)}
           </span>
         </div>
       </div>

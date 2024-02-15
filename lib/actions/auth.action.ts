@@ -121,6 +121,12 @@ export const registerOrganization = async (
       },
     });
 
+    const verificationToken = await generateVerificationToken(email);
+    await sendVerificationEmail(
+      verificationToken.email,
+      verificationToken.token
+    );
+
     return { success: "Business Profile submitted." };
   } catch (error) {
     console.log(error);
