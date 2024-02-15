@@ -45,8 +45,8 @@ const CalendarOrder = () => {
             },
             row: { height: "25px" },
             // root: { width: "300px" },
-            cell: { padding: "0px 26px" },
-            head_cell: { padding: "0px 26px" },
+            // cell: { padding: "0px 26px" },
+            // head_cell: { padding: "0px 26px" },
             head: { display: "none" },
           }}
         />

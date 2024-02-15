@@ -6,7 +6,7 @@ const SellerSummaryCards = () => {
       <SumCard title="New Orders" icon="/images/icons/mail.svg">
         <span className="text-[1.125rem] font-medium">20</span>
       </SumCard>
-      <SumCard title="Completed Orders" icon="/images/icons/actions.svg">
+      <SumCard title="Total Gallons" icon="/images/icons/nozzle-black.svg">
         <span className="text-[1.125rem] font-medium">470</span>
       </SumCard>
       <SumCard title="Price update Alert" icon="/images/icons/tag.svg">
@@ -18,10 +18,10 @@ const SellerSummaryCards = () => {
       <SumCard title="Total Orders" icon="/images/icons/reserve-action.svg">
         <span className="text-[1.125rem] font-medium">470</span>
       </SumCard>
-      <SumCard title="Total Buyers" icon="/images/icons/reserve-action.svg">
-        <span className="text-[1.125rem] font-medium">470</span>
+      <SumCard title="Completed Orders" icon="/images/icons/actions.svg">
+        <span className="text-[1.125rem] font-medium">471</span>
       </SumCard>
-      <SumCard title="Total Sellers" icon="/images/icons/actions.svg">
+      <SumCard title="Pending Orders" icon="/images/icons/actions.svg">
         <span className="text-[1.125rem] font-medium">470</span>
       </SumCard>
     </div>

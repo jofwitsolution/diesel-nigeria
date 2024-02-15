@@ -72,16 +72,6 @@ model Avatar {
   userId       String?  @unique
 }
 
-model ProductDensity {
-  id           String  @id @default(cuid())
-  value        Decimal   @unique
-  isStandard   Boolean
-
-  products      Product[]
-
-  updatedAt    DateTime    @updatedAt  
-}
-
 model User {
   id            String    @id @default(cuid())
   name          String
@@ -115,17 +105,16 @@ model User {
 
 model Product {
   id            String        @id @default(cuid())
-  price         String
+  price         Decimal
   description   String?
   isAvailable   Boolean
   numberInStock Decimal
 
   seller        User          @relation(fields: [sellerId], references: [id])
-  density       ProductDensity @relation(fields: [densityId], references: [id])
+  density       Decimal
 
   // Foreign key
   sellerId      String
-  densityId     String
 
   orders        Order[]
   createdAt     DateTime    @default(now())

@@ -161,3 +161,27 @@ export function generatePassword(length: number): string {
 
   return password;
 }
+
+export function getTimeOfDay(input: string | Date | number): string {
+  let date: Date;
+
+  if (typeof input === "string") {
+    date = new Date(input);
+  } else if (input instanceof Date) {
+    date = input;
+  } else if (typeof input === "number") {
+    date = new Date(input);
+  } else {
+    throw new Error(
+      "Invalid input type. Please provide a string, Date object, or timestamp."
+    );
+  }
+
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const ampm = hours >= 12 ? "PM" : "AM";
+  const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+  const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+
+  return `${formattedHours}:${formattedMinutes}${ampm}`;
+}
