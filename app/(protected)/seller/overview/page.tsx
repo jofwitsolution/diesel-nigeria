@@ -1,6 +1,5 @@
 import React from "react";
 import CalendarOrder from "@/components/pages/seller/CalendarOrder";
-import UpdatePrice from "@/components/pages/seller/UpdatePrice";
 import SellerSummaryCards from "@/components/pages/seller/SellerSummaryCards";
 import SalesAnalytics from "@/components/pages/seller/SalesAnalytics";
 
@@ -13,9 +12,6 @@ const OverviewPage = async () => {
           <span className="text-[0.875rem]">
             Here’s an overview of your sales
           </span>
-        </div>
-        <div className="flex justify-end">
-          <UpdatePrice />
         </div>
       </div>
       <div className="flex gap-6">

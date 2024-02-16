@@ -1,6 +1,5 @@
-import AccountTabs from "@/components/pages/admin/AccountTabs";
-import UpdatePrice from "@/components/pages/seller/UpdatePrice";
 import React from "react";
+import AccountTabs from "@/components/pages/admin/AccountTabs";
 
 const AccountPage = () => {
   return (
@@ -12,7 +11,6 @@ const AccountPage = () => {
             Here’s an overview of your payments and withdrawals
           </span>
         </div>
-        <UpdatePrice />
       </div>
       <div>
         <AccountTabs />
