@@ -1,6 +1,12 @@
 import SellerSettingsTab from "@/components/pages/seller/SellerSettingsTab";
+import { getUser } from "@/lib/actions/user.action";
+import { getCurrentUser } from "@/lib/helpers/auth";
 
-const SettingsPage = () => {
+const SettingsPage = async () => {
+  const user = await getCurrentUser();
+  //   console.log("User info: ", user);
+  const result = await getUser(user!.id as string);
+
   return (
     <div className="max-w-[73.125rem] space-y-6">
       <div className="flex w-full justify-between">
@@ -12,7 +18,7 @@ const SettingsPage = () => {
         </div>
       </div>
       <div className="w-full">
-        <SellerSettingsTab />
+        <SellerSettingsTab user={result.user} />
       </div>
     </div>
   );

@@ -27,7 +27,7 @@ interface Props {
   user: User;
 }
 
-const SellerBusinessInfo = ({ user }: Props) => {
+const SellerBankDetails = ({ user }: Props) => {
   const pathname = usePathname();
   const [error, setError] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
@@ -216,4 +216,4 @@ const SellerBusinessInfo = ({ user }: Props) => {
   );
 };
 
-export default SellerBusinessInfo;
+export default SellerBankDetails;

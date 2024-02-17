@@ -16,7 +16,6 @@ import { signIn, signOut } from "@/auth";
 import { AuthError } from "next-auth";
 import { db } from "../db";
 import { cloudinary } from "../helpers/cloudinary";
-import { currentTimestamp } from "../utils";
 import { generateVerificationToken } from "../helpers/token";
 import { sendVerificationEmail } from "../helpers/mail";
 
@@ -110,7 +109,7 @@ export const registerOrganization = async (
     const result = await cloudinary.uploader.upload(fileData as string, {
       // resource_type: "raw",
       folder: "documents",
-      public_id: `doc-${currentTimestamp()}`,
+      public_id: `doc-${Date.now()}`,
     });
 
     await db.document.create({

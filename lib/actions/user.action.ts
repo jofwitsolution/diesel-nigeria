@@ -1,13 +1,24 @@
+import { exclude } from "@/prisma/pristma.utils";
 import { db } from "../db";
 
 export const getUser = async (id: string) => {
-  const user = await db.user.findUnique({
-    where: { id },
-    select: {
-      password: true,
-      document: true,
-    },
-  });
+  try {
+    const user = await db.user.findUnique({
+      where: { id },
+      include: {
+        wallet: true,
+        avatar: true,
+        document: true,
+        CACForm: true,
+        incorporationCertificate: true,
+      },
+    });
 
-  console.log(user);
+    const userWithoutPassword = exclude(user, ["password"]);
+
+    return { user: userWithoutPassword };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
 };

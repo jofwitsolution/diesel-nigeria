@@ -49,7 +49,7 @@ export default async function RootLayout({
         <body
           className={`${MontSerrat.variable} ${inter.variable} ${fraunces.variable}`}
         >
-          <Toaster />
+          <Toaster position="top-right" richColors className="z-[9500]" />
           {children}
         </body>
       </html>

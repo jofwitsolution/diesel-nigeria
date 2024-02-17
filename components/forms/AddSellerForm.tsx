@@ -61,7 +61,7 @@ const AddSellerForm = ({ dialogState, handleDialogState }: Props) => {
         if (data.success) {
           form.reset();
           handleDialogState();
-          toast("New Seller", {
+          toast.success("New Seller", {
             description: "Seller added successfuly.",
           });
         }
