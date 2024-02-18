@@ -88,6 +88,10 @@ model User {
   isVerifiedSeller  Boolean @default(false)
   isVerifiedBuyer  Boolean @default(false)
 
+  bank            String?   @default("")
+  accountNumber   String?   @default("")
+  accountName     String?   @default("")
+
   wallet        Wallet?
   avatar        Avatar?
   CACForm       CACForm?
@@ -175,7 +179,7 @@ model Transaction {
 
 model Wallet {
   id                 String     @id @default(cuid())
-  balance            String    @default(0)
+  balance            String    @default("0")
 
   user               User?          @relation(fields: [userId], references: [id])
 
