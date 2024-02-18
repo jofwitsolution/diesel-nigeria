@@ -27,7 +27,7 @@ interface Props {
   user: User;
 }
 
-const SellerBusinessInfo = ({ user }: Props) => {
+const SellerVerificationDocs = ({ user }: Props) => {
   const pathname = usePathname();
   const [error, setError] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
@@ -46,6 +46,8 @@ const SellerBusinessInfo = ({ user }: Props) => {
 
   const onSubmit = async (values: z.infer<typeof SellerBusinessInfoSchema>) => {
     setError("");
+
+    console.log(values);
 
     startTransition(() => {
       sellerUpdateBusinessInfo(values, imageData, pathname).then((data) => {
@@ -214,4 +216,4 @@ const SellerBusinessInfo = ({ user }: Props) => {
   );
 };
 
-export default SellerBusinessInfo;
+export default SellerVerificationDocs;

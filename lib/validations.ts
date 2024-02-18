@@ -93,9 +93,11 @@ export const SellerBusinessInfoSchema = z.object({
     .max(100, {
       message: "Address cannot exceed 100 char.",
     }),
-  businessDescription: z.string().min(50, {
-    message: "Description must be at least 50 char.",
-  }),
+  businessDescription: z
+    .string({ invalid_type_error: "Enter business description" })
+    .min(50, {
+      message: "Description must be at least 50 char.",
+    }),
   businessName: z.string().optional(),
   phoneNumber: z.string().optional(),
   email: z.string().optional(),
