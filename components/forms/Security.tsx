@@ -26,7 +26,7 @@ interface Props {
   user: User;
 }
 
-const SellerBankDetails = ({ user }: Props) => {
+const Security = ({ user }: Props) => {
   const pathname = usePathname();
   const [error, setError] = useState<string | undefined>("");
   const [isModify, setIsModify] = useState(false);
@@ -178,4 +178,4 @@ const SellerBankDetails = ({ user }: Props) => {
   );
 };
 
-export default SellerBankDetails;
+export default Security;

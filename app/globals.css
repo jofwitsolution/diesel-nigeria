@@ -95,6 +95,9 @@ body {
   .primary-btn-medium {
     @apply h-[2.1rem] rounded-[4px] bg-primary-500 font-fraunces text-light-900;
   }
+  .modify-btn {
+    @apply h-[1.3rem] w-[3.3rem] hover:text-white rounded-sm bg-slate-200 text-[0.75rem];
+  }
 }
 
 .custom-scrollbar::-webkit-scrollbar {

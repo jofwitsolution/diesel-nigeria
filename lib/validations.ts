@@ -107,3 +107,20 @@ export const SellerVerificationDocSchema = z.object({
   businessRegisteration: z.string({ invalid_type_error: "" }).optional(),
   rcNumber: z.string({ invalid_type_error: "" }).optional(),
 });
+
+export const BankDetailsSchema = z.object({
+  accountNumber: z
+    .string({ invalid_type_error: "Enter account number" })
+    .min(10, {
+      message: "Invalid account number",
+    })
+    .max(10, {
+      message: "Invalid account number",
+    }),
+  bank: z.string({ invalid_type_error: "Enter bank name" }).min(3, {
+    message: "Enter a valid bank",
+  }),
+  accountName: z.string({ invalid_type_error: "Enter account name" }).min(5, {
+    message: "Enter a valid name",
+  }),
+});

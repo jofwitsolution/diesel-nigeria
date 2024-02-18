@@ -48,8 +48,6 @@ const SellerVerificationDocs = ({ user }: Props) => {
   ) => {
     setError("");
 
-    console.log(values);
-
     startTransition(() => {
       sellerUploadVerificationDocs(incCertData, cacData, pathname).then(
         (data) => {

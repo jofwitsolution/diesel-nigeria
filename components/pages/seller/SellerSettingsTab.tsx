@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SellerBusinessInfo from "@/components/forms/SellerBusinessInfo";
 import SellerBankDetails from "@/components/forms/SellerBankDetails";
 import SellerVerificationDocs from "@/components/forms/SellerVerificationDocs";
+import Preferences from "@/components/forms/Preferences";
 
 interface Props {
   user: User;
@@ -50,7 +51,9 @@ const SellerSettingsTab = ({ user }: Props) => {
           </div>
         </TabsContent>
         <TabsContent value="preferences" className="w-full space-y-6">
-          <div>Preferences</div>
+          <div>
+            <Preferences />
+          </div>
         </TabsContent>
         <TabsContent value="security" className="w-full space-y-6">
           <div>Secuirty</div>
