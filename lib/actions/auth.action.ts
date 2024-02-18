@@ -191,7 +191,6 @@ export const logout = async () => {
 export const checkExistingUser = async (email: string) => {
   const existingUser = await getUserByEmail(email);
 
-  console.log(existingUser);
   if (existingUser) {
     return { error: "Email already in use!" };
   }

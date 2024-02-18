@@ -146,25 +146,6 @@ const SellerBankDetails = ({ user }: Props) => {
               >
                 {isPending ? "Saving..." : "Save changes"}
               </Button>
-
-              {/* {isModify ? (
-                <Button
-                  disabled={isPending}
-                  type="submit"
-                  className="primary-btn-medium"
-                >
-                  {isPending ? "Saving..." : "Save changes"}
-                </Button>
-              ) : (
-                <Button
-                  type="button"
-                
-                  onClick={() => setIsModify(true)}
-                  className="h-[1.35rem] w-[3.3rem] rounded-sm bg-slate-200 text-[0.75rem] text-gray-500 hover:text-white"
-                >
-                  Modify
-                </Button>
-              )} */}
             </div>
           </div>
           <div className="xs:w-[18.75rem] sm:w-[20rem]">

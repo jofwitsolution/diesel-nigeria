@@ -1,5 +1,12 @@
+"use server";
+
+import * as z from "zod";
+import bcrypt from "bcryptjs";
 import { exclude } from "@/prisma/pristma.utils";
 import { db } from "../db";
+import { ResetPasswordSchema } from "../validations";
+import { getCurrentUser } from "../helpers/auth";
+import { getUserById } from "../helpers/user";
 
 export const getUser = async (id: string) => {
   try {
@@ -17,6 +24,46 @@ export const getUser = async (id: string) => {
     const userWithoutPassword = exclude(user, ["password"]);
 
     return { user: userWithoutPassword };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const resetPassword = async (
+  values: z.infer<typeof ResetPasswordSchema>
+) => {
+  try {
+    const validatedFields = ResetPasswordSchema.safeParse(values);
+
+    if (!validatedFields.success) {
+      return { error: "Invalid fields!" };
+    }
+
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const user = await getUserById(currentUser.id);
+
+    const { currentPassword, newPassword } = validatedFields.data;
+    const isPasswordsMatch = await bcrypt.compare(
+      currentPassword,
+      user?.password!
+    );
+    if (!isPasswordsMatch) {
+      return { error: "Invalid current password" };
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    await db.user.update({
+      where: { id: user?.id! },
+      data: { password: hashedPassword },
+    });
+
+    return { success: "Password reset successfuly" };
   } catch (error) {
     console.log(error);
     return { error: "Something went wrong!" };

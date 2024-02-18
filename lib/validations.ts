@@ -35,6 +35,26 @@ export const IndividualSignUpSchema = z
     path: ["confirmPassword"], // path of error
   });
 
+export const ResetPasswordSchema = z
+  .object({
+    currentPassword: z.string({
+      required_error: "Current password cannot be empty",
+    }),
+    newPassword: z
+      .string()
+      .min(8, {
+        message: "Password cannot be less than 8 char.",
+      })
+      .max(20, {
+        message: "Password cannot exceed 20 char.",
+      }),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"], // path of error
+  });
+
 export const BusinessProfileSchema = z.object({
   name: z
     .string()
