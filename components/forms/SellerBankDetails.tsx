@@ -141,7 +141,7 @@ const SellerBankDetails = ({ user }: Props) => {
               <Button
                 disabled={isPending}
                 type="submit"
-                className="h-[2.5rem] rounded-[4px] bg-primary-500 font-fraunces text-light-900"
+                className="primary-btn-medium"
               >
                 {isPending ? "Saving..." : "Save changes"}
               </Button>

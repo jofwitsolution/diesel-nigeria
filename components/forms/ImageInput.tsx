@@ -51,7 +51,7 @@ function ImageInput({ handleFileData, isDisabled, currentLogo }: Props) {
                 alt="upload"
               />
               <p>
-                Drag and drop files, or{" "}
+                Drag and drop file, or{" "}
                 <span className="font-medium text-primary-500 underline">
                   Browse
                 </span>

@@ -91,6 +91,12 @@ body {
   }
 }
 
+@layer components {
+  .primary-btn-medium {
+    @apply h-[2.1rem] rounded-[4px] bg-primary-500 font-fraunces text-light-900;
+  }
+}
+
 .custom-scrollbar::-webkit-scrollbar {
   width: 3px;
   height: 3px;

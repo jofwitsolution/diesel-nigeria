@@ -134,12 +134,12 @@ const SellerBusinessInfo = ({ user }: Props) => {
               )}
             />
           </div>
-          <div className="flex flex-col-reverse gap-3 xs:w-[18.75rem] sm:w-[20rem] md:flex-col md:gap-6">
+          <div className="flex flex-col-reverse gap-3 xs:w-[18.75rem] sm:w-[20rem] md:flex-col md:gap-8">
             <div className="self-end md:mt-[-1rem]">
               <Button
                 disabled={isPending}
                 type="submit"
-                className="h-[2.5rem] rounded-[4px] bg-primary-500 font-fraunces text-light-900"
+                className="primary-btn-medium"
               >
                 {isPending ? "Saving..." : "Save changes"}
               </Button>

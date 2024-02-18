@@ -102,3 +102,8 @@ export const SellerBusinessInfoSchema = z.object({
   phoneNumber: z.string().optional(),
   email: z.string().optional(),
 });
+
+export const SellerVerificationDocSchema = z.object({
+  businessRegisteration: z.string({ invalid_type_error: "" }).optional(),
+  rcNumber: z.string({ invalid_type_error: "" }).optional(),
+});

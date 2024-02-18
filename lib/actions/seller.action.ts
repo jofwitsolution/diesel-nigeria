@@ -70,3 +70,82 @@ export const sellerUpdateBusinessInfo = async (
     return { error: "Something went wrong!" };
   }
 };
+
+export const sellerUploadVerificationDocs = async (
+  incCertData: string | ArrayBuffer | null,
+  cacData: string | ArrayBuffer | null,
+  path: string
+) => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const user = await db.user.findUnique({
+      where: { id: currentUser?.id },
+      include: {
+        incorporationCertificate: true,
+        CACForm: true,
+      },
+    });
+
+    if (incCertData) {
+      const publicId: string = user?.incorporationCertificate
+        ? user.incorporationCertificate.public_id.split("/")[1]
+        : `doc-${Date.now()}`;
+      //   const publicId: string = `img-${Date.now()}`;
+
+      const result = await cloudinary.uploader.upload(incCertData as string, {
+        // resource_type: "raw",
+        folder: "documents",
+        public_id: publicId,
+      });
+
+      await db.incorporationCertificate.upsert({
+        where: { userId: user?.id },
+        update: {
+          url: result.url,
+          public_id: result.public_id,
+        },
+        create: {
+          url: result.url,
+          public_id: result.public_id,
+          userId: user?.id,
+        },
+      });
+    }
+
+    if (cacData) {
+      const publicId: string = user?.CACForm
+        ? user.CACForm.public_id.split("/")[1]
+        : `doc-${Date.now()}`;
+      //   const publicId: string = `img-${Date.now()}`;
+
+      const result = await cloudinary.uploader.upload(incCertData as string, {
+        // resource_type: "raw",
+        folder: "documents",
+        public_id: publicId,
+      });
+
+      await db.cACForm.upsert({
+        where: { userId: user?.id },
+        update: {
+          url: result.url,
+          public_id: result.public_id,
+        },
+        create: {
+          url: result.url,
+          public_id: result.public_id,
+          userId: user?.id,
+        },
+      });
+    }
+
+    revalidatePath(path);
+    return { success: "Document uploaded successfuly" };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};

@@ -105,13 +105,13 @@ model User {
 
 model Product {
   id            String        @id @default(cuid())
-  price         Decimal
+  price         String
   description   String?
   isAvailable   Boolean
-  numberInStock Decimal
+  numberInStock String
 
   seller        User          @relation(fields: [sellerId], references: [id])
-  density       Decimal
+  density       String
 
   // Foreign key
   sellerId      String
@@ -123,8 +123,8 @@ model Product {
 
 model Order {
   id                    String      @id @default(cuid())
-  quantity              Decimal
-  amount                Decimal
+  quantity              String
+  amount                String
   orderNumber           String
   orderDate             DateTime    @default(now())
   updatedAt             DateTime    @updatedAt
@@ -157,8 +157,8 @@ model Transaction {
   channel            String
   reference          String
   orderNumber        String
-  amount             Decimal
-  quantity           Decimal
+  amount             String
+  quantity           String
   date               DateTime    @default(now())
   category           TransactionCategory
 
@@ -175,7 +175,7 @@ model Transaction {
 
 model Wallet {
   id                 String     @id @default(cuid())
-  balance            Decimal    @default(0)
+  balance            String    @default(0)
 
   user               User?          @relation(fields: [userId], references: [id])
 

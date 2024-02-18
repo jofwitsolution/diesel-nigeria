@@ -2,6 +2,7 @@ import { User } from "@prisma/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SellerBusinessInfo from "@/components/forms/SellerBusinessInfo";
 import SellerBankDetails from "@/components/forms/SellerBankDetails";
+import SellerVerificationDocs from "@/components/forms/SellerVerificationDocs";
 
 interface Props {
   user: User;
@@ -38,8 +39,9 @@ const SellerSettingsTab = ({ user }: Props) => {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="profile" className="w-full space-y-6">
-          <div>
+          <div className="">
             <SellerBusinessInfo user={user} />
+            <SellerVerificationDocs user={user} />
           </div>
         </TabsContent>
         <TabsContent value="bank-details" className="w-full space-y-6">

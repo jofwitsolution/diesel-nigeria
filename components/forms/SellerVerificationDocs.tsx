@@ -5,7 +5,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { User } from "@prisma/client";
-import { SellerBusinessInfoSchema } from "@/lib/validations";
+import { SellerVerificationDocSchema } from "@/lib/validations";
 import {
   Form,
   FormControl,
@@ -17,11 +17,10 @@ import {
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { FormError } from "./FormError";
-import { Textarea } from "../ui/textarea";
-import ImageInput from "./ImageInput";
-import { sellerUpdateBusinessInfo } from "@/lib/actions/seller.action";
+import { sellerUploadVerificationDocs } from "@/lib/actions/seller.action";
 import { usePathname } from "next/navigation";
 import { toast } from "sonner";
+import CertificateInput from "./CertificateInput";
 
 interface Props {
   user: User;
@@ -31,37 +30,41 @@ const SellerVerificationDocs = ({ user }: Props) => {
   const pathname = usePathname();
   const [error, setError] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
-  const [imageData, setImageData] = useState<string | ArrayBuffer | null>("");
+  const [incCertData, setIncCertData] = useState<string | ArrayBuffer | null>(
+    ""
+  );
+  const [cacData, setCacData] = useState<string | ArrayBuffer | null>("");
 
-  const form = useForm<z.infer<typeof SellerBusinessInfoSchema>>({
-    resolver: zodResolver(SellerBusinessInfoSchema),
+  const form = useForm<z.infer<typeof SellerVerificationDocSchema>>({
+    resolver: zodResolver(SellerVerificationDocSchema),
     defaultValues: {
-      businessName: user?.businessName!,
-      email: user?.email!,
-      phoneNumber: user?.phoneNumber!,
-      address: user?.address!,
-      businessDescription: user?.businessDescription!,
+      businessRegisteration: user?.isVerifiedSeller ? "Verified" : "Unverified",
+      rcNumber: user?.rcNumber as string,
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof SellerBusinessInfoSchema>) => {
+  const onSubmit = async (
+    values: z.infer<typeof SellerVerificationDocSchema>
+  ) => {
     setError("");
 
     console.log(values);
 
     startTransition(() => {
-      sellerUpdateBusinessInfo(values, imageData, pathname).then((data) => {
-        setError(data.error);
+      sellerUploadVerificationDocs(incCertData, cacData, pathname).then(
+        (data) => {
+          setError(data.error);
 
-        if (data.success) {
-          toast.success("Changes saved successfuly");
+          if (data.success) {
+            toast.success("Changes saved successfuly");
+          }
         }
-      });
+      );
     });
   };
 
   return (
-    <div className="mt-6 w-full md:mt-12">
+    <div className="mt-10 w-full md:mt-20">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -69,24 +72,22 @@ const SellerVerificationDocs = ({ user }: Props) => {
         >
           <div className="space-y-3 xs:w-[18.75rem] sm:w-[20rem]">
             <h2 className="mb-8 font-[700] md:text-[1.125rem]">
-              Business information
+              Business verification documents
             </h2>
 
             <FormField
-              control={form.control}
-              name="businessName"
+              name="incorporationCertificate"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[0.875rem] text-[#151515]">
-                    Business Name
+                    Certificate of Incorporation
                   </FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      disabled={true}
-                      placeholder="Enter business name"
-                      type="name"
-                      className="w-full rounded-[4px] border-[#9EA2B3] py-[0.75rem]"
+                    <CertificateInput
+                      handleFileData={(data) => setIncCertData(data)}
+                      isDisabled={isPending}
+                      isVerified={user?.isVerifiedSeller}
+                      currentDoc={user?.incorporationCertificate?.url!}
                     />
                   </FormControl>
                   <FormMessage className="text-red-400 max-xs:text-[0.7rem]" />
@@ -94,41 +95,18 @@ const SellerVerificationDocs = ({ user }: Props) => {
               )}
             />
             <FormField
-              control={form.control}
-              name="email"
+              name="CACForm"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[0.875rem] text-[#151515]">
-                    Business Email
+                    Form CAC 7
                   </FormLabel>
                   <FormControl>
-                    <Input
-                      {...field}
-                      disabled={true}
-                      placeholder="Enter business email"
-                      type="email"
-                      className="w-full rounded-[4px] border-[#9EA2B3] py-[0.75rem]"
-                    />
-                  </FormControl>
-                  <FormMessage className="text-red-400 max-xs:text-[0.7rem]" />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="address"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-[0.875rem] text-[#151515]">
-                    Business Address
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      disabled={isPending}
-                      placeholder="Enter business address"
-                      type="text"
-                      className="w-full rounded-[4px] border-[#9EA2B3] py-[0.75rem]"
+                    <CertificateInput
+                      handleFileData={(data) => setCacData(data)}
+                      isDisabled={isPending}
+                      isVerified={user?.isVerifiedSeller}
+                      currentDoc={user?.CACForm?.url!}
                     />
                   </FormControl>
                   <FormMessage className="text-red-400 max-xs:text-[0.7rem]" />
@@ -136,12 +114,12 @@ const SellerVerificationDocs = ({ user }: Props) => {
               )}
             />
           </div>
-          <div className="flex flex-col-reverse gap-3 xs:w-[18.75rem] sm:w-[20rem] md:flex-col md:gap-6">
+          <div className="flex flex-col-reverse gap-3 xs:w-[18.75rem] sm:w-[20rem] md:flex-col md:gap-8">
             <div className="self-end md:mt-[-1rem]">
               <Button
                 disabled={isPending}
                 type="submit"
-                className="h-[2.5rem] rounded-[4px] bg-primary-500 font-fraunces text-light-900"
+                className="primary-btn-medium"
               >
                 {isPending ? "Saving..." : "Save changes"}
               </Button>
@@ -150,37 +128,19 @@ const SellerVerificationDocs = ({ user }: Props) => {
             <div className="w-full space-y-3">
               <FormField
                 control={form.control}
-                name="phoneNumber"
+                name="businessRegisteration"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-[0.875rem] text-[#151515]">
-                      Business Phone number
+                      Business Registeration
                     </FormLabel>
                     <FormControl>
                       <Input
                         {...field}
                         disabled={true}
-                        placeholder="Enter business phone number"
-                        type="tel"
+                        placeholder="Registeration"
+                        type="text"
                         className="w-full rounded-[4px] border-[#9EA2B3] py-[0.75rem]"
-                      />
-                    </FormControl>
-                    <FormMessage className="text-red-400 max-xs:text-[0.7rem]" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                name="avatar"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-[0.875rem] text-[#151515]">
-                      Business Logo
-                    </FormLabel>
-                    <FormControl>
-                      <ImageInput
-                        handleFileData={(data) => setImageData(data)}
-                        isDisabled={isPending}
-                        currentLogo={user?.avatar?.url!}
                       />
                     </FormControl>
                     <FormMessage className="text-red-400 max-xs:text-[0.7rem]" />
@@ -189,17 +149,18 @@ const SellerVerificationDocs = ({ user }: Props) => {
               />
               <FormField
                 control={form.control}
-                name="businessDescription"
+                name="rcNumber"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-[0.875rem] text-[#151515]">
-                      Business Description
+                      RC Number
                     </FormLabel>
                     <FormControl>
-                      <Textarea
+                      <Input
                         {...field}
-                        disabled={isPending}
-                        placeholder="Enter business description"
+                        disabled={true}
+                        placeholder="Enter RC number"
+                        type="number"
                         className="w-full rounded-[4px] border-[#9EA2B3] py-[0.75rem]"
                       />
                     </FormControl>
@@ -207,6 +168,7 @@ const SellerVerificationDocs = ({ user }: Props) => {
                   </FormItem>
                 )}
               />
+
               <FormError message={error} />
             </div>
           </div>
