@@ -28,7 +28,7 @@ const Product = ({ product }: Props) => {
           </span>
           <Button
             onClick={() => setUpdateDialogState(true)}
-            className="h-[1.8rem] w-[5rem] border bg-primary-500 text-light-900 md:h-[2.375rem]"
+            className="h-[1.6rem] w-[4.5rem] border bg-primary-500 text-light-900 md:h-[2rem]"
           >
             Update
           </Button>
