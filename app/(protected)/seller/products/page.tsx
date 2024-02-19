@@ -1,10 +1,13 @@
 import React from "react";
 import AllProducts from "@/components/pages/seller/AllProducts";
+import { getSellerProducts } from "@/lib/actions/seller.action";
 
-const ProductsPage = () => {
+const ProductsPage = async () => {
+  const result = await getSellerProducts();
+
   return (
     <div className="max-w-[72.1875rem]">
-      <AllProducts />
+      <AllProducts products={result.products!} />
     </div>
   );
 };

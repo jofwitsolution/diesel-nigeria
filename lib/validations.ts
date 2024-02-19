@@ -104,6 +104,19 @@ export const NewSellerSchema = z.object({
   }),
 });
 
+export const ProductSchema = z.object({
+  isAvailable: z.boolean(),
+  density: z.string({
+    required_error: "Velocity cannot be empty",
+  }),
+  price: z.string({
+    required_error: "Price cannot be empty",
+  }),
+  numberInStock: z.string({
+    required_error: "Enter a valid volume",
+  }),
+});
+
 export const SellerBusinessInfoSchema = z.object({
   address: z
     .string()
