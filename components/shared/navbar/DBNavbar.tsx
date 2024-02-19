@@ -4,8 +4,13 @@ import Image from "next/image";
 import React from "react";
 import DBMobileNav from "./DBMobileNav";
 import { useCurrentRole } from "@/hooks/user";
+import { User } from "@prisma/client";
 
-const DBNavbar = () => {
+interface Props {
+  user: User;
+}
+
+const DBNavbar = ({ user }: Props) => {
   const role = useCurrentRole();
 
   return (
@@ -22,7 +27,7 @@ const DBNavbar = () => {
               height={20}
               alt="notification bell"
             />
-            <DBMobileNav />
+            <DBMobileNav user={user} />
           </div>
         </div>
       </div>

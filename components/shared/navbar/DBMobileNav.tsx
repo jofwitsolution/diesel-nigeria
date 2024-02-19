@@ -10,6 +10,7 @@ import {
 import { adminNavLinks, buyerNavLinks, sellerNavLinks } from "@/constants";
 import { useCurrentRole } from "@/hooks/user";
 import { logout } from "@/lib/actions/auth.action";
+import { User } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -73,7 +74,11 @@ const NavContent = () => {
   );
 };
 
-const DBMobileNav = () => {
+interface Props {
+  user: User;
+}
+
+const DBMobileNav = ({ user }: Props) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -104,15 +109,19 @@ const DBMobileNav = () => {
           </SheetClose>
 
           <div className="mt-20">
-            <div className="flex w-[13.125rem] items-center justify-center gap-[1.25rem] rounded-md bg-[#808494] py-2">
+            <div className="flex w-[10rem] items-center gap-[1.25rem] rounded-md bg-[#808494] p-2 max-xs:px-1 xs:w-[13.125rem]">
               <Image
-                src="/images/icons/db-left-avatar.svg"
+                src={
+                  user?.avatar
+                    ? (user?.avatar?.url as string)
+                    : "/images/icons/db-left-avatar.svg"
+                }
                 width={40}
                 height={40}
                 alt="user avatar"
               />{" "}
               <span className="text-[0.75rem] font-medium">
-                Bolt Corporation Ltd
+                {user?.businessName}
               </span>
             </div>
           </div>

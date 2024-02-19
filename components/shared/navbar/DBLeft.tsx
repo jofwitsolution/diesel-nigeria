@@ -8,8 +8,13 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
 import { logout } from "@/lib/actions/auth.action";
+import { User } from "@prisma/client";
 
-const DBLeft = () => {
+interface Props {
+  user: User;
+}
+
+const DBLeft = ({ user }: Props) => {
   const role = useCurrentRole();
   const pathname = usePathname();
 
@@ -109,15 +114,19 @@ const DBLeft = () => {
         </Button>
       </div>
       <div className="mt-20 flex justify-center">
-        <div className="flex items-center justify-center gap-[1.25rem] rounded-md py-2 lg:w-[13.125rem] lg:bg-[#808494]">
+        <div className="flex items-center gap-[1.25rem] rounded-md p-2 lg:w-[13.125rem] lg:bg-[#808494]">
           <Image
-            src="/images/icons/db-left-avatar.svg"
+            src={
+              user?.avatar
+                ? (user?.avatar?.url as string)
+                : "/images/icons/db-left-avatar.svg"
+            }
             width={40}
             height={40}
             alt="user avatar"
           />{" "}
           <span className="text-[0.75rem] font-medium max-lg:hidden">
-            Bolt Corporation Ltd
+            {user?.businessName}
           </span>
         </div>
       </div>
