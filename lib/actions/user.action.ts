@@ -88,9 +88,33 @@ export const getVerifiedSellers = async () => {
       },
     });
 
-    console.log("Sellers: ", sellers);
-
     return { sellers };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const getSellerDetails = async (sellerId: string) => {
+  try {
+    const seller = await db.user.findUnique({
+      where: {
+        id: sellerId,
+        isVerifiedSeller: true,
+      },
+      select: {
+        avatar: true,
+        businessName: true,
+        state: true,
+        products: true,
+        id: true,
+        rcNumber: true,
+        address: true,
+        businessDescription: true,
+      },
+    });
+
+    return { seller };
   } catch (error) {
     console.log(error);
     return { error: "Something went wrong!" };

@@ -8,16 +8,18 @@ import {
   authRoutes,
   publicRoutes,
 } from "@/routes";
+import { getCurrentRole } from "./lib/helpers/auth";
 
 const { auth } = NextAuth(authConfig);
 
-export default auth((req) => {
+export default auth(async (req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
-
-  const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
-  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
-  const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+  const pathname = nextUrl.pathname;
+  const isApiAuthRoute = pathname.startsWith(apiAuthPrefix);
+  const isPublicRoute = publicRoutes.includes(pathname);
+  const isAuthRoute = authRoutes.includes(pathname);
+  const currentRole = await getCurrentRole();
 
   // if it is api-auth route
   if (isApiAuthRoute) {
@@ -34,7 +36,7 @@ export default auth((req) => {
 
   // if user not logged in and route is not public route
   if (!isLoggedIn && !isPublicRoute) {
-    let callbackUrl = nextUrl.pathname;
+    let callbackUrl = pathname;
     if (nextUrl.search) {
       callbackUrl += nextUrl.search;
     }
@@ -44,6 +46,20 @@ export default auth((req) => {
     return Response.redirect(
       new URL(`/auth/login?callbackUrl=${encodedCallbackUrl}`, nextUrl)
     );
+  }
+
+  // if user is logged in and route is not public route
+  if (isLoggedIn && !isPublicRoute) {
+    // restrict every users to their roles
+    if (currentRole === "seller" && !pathname.startsWith("/seller")) {
+      return Response.redirect(new URL(`/`, nextUrl));
+    }
+    if (currentRole === "buyer" && !pathname.startsWith("/buyer")) {
+      return Response.redirect(new URL(`/`, nextUrl));
+    }
+    if (currentRole === "admin" && !pathname.startsWith("/admin")) {
+      return Response.redirect(new URL(`/`, nextUrl));
+    }
   }
 
   return null;

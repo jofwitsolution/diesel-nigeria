@@ -150,7 +150,7 @@ const SellersInBuyerDB = ({ sellers }) => {
                 {row.getVisibleCells().map((cell) => (
                   <td key={cell.id} className="dist-table-style">
                     <Link
-                      href={`/buyers/sellers/${row.original.id}`}
+                      href={`/buyer/sellers/${row.original.id}`}
                       className="hover:underline"
                     >
                       {" "}
