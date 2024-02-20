@@ -1,12 +1,14 @@
 import Image from "next/image";
 import React from "react";
 import Link from "next/link";
-import SearchDistributor from "../../shared/search/SearchDistributor";
 import HomeDistributorTable from "../../shared/table/HomeDistributorTable";
 import { Button } from "@/components/ui/button";
 import { getCurrentDate } from "@/lib/utils";
+import { getVerifiedSellers } from "@/lib/actions/user.action";
 
-const HomeHero = () => {
+const HomeHero = async () => {
+  const result = await getVerifiedSellers();
+
   return (
     <header className="max-width py-[2.1rem] md:py-[3.25rem]">
       <section className="static w-full sm:relative sm:min-h-[77rem]">
@@ -19,11 +21,7 @@ const HomeHero = () => {
               {getCurrentDate()}
             </span>
             <div className="mx-auto flex max-w-[40.9375rem] flex-col items-center gap-[1.5rem] bg-transparent">
-              <SearchDistributor
-                inputStyle="sm:text-light-900"
-                wrapperStyle="max-sm:border max-sm:border-light-600 bg-light-900 sm:bg-[rgba(255,255,255,0.20)]"
-              />
-              <HomeDistributorTable />
+              <HomeDistributorTable sellers={result.sellers ?? []} />
             </div>
             <span className="text-center text-[1.125rem] font-medium sm:text-light-900">
               Manage, Order, Sell and Track your Diesel like Never Before{" "}

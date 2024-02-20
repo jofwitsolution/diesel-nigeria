@@ -77,7 +77,7 @@ export const getVerifiedSellers = async () => {
         role: "seller",
         isVerifiedSeller: true,
         emailVerified: { not: null },
-        products: { some: {} }, // Check if the products array has at least one item
+        // products: { some: {} }, // Check if the products array has at least one item
       },
       select: {
         avatar: true,

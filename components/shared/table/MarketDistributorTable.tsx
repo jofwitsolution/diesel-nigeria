@@ -1,20 +1,22 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import React, { SyntheticEvent } from "react";
+import React, { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
+  getPaginationRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
-import { User } from "@prisma/client";
-import { formatPrice } from "@/lib/utils";
+import Link from "next/link";
+import Pagination from "./Pagination";
 import { fuzzyFilter } from "./helper";
-import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
+import SearchBox from "../search/SearchBox";
+import { formatPrice } from "@/lib/utils";
+import { User } from "next-auth";
 
 const columnHelper = createColumnHelper<User>();
 
@@ -73,35 +75,35 @@ const columns = [
   }),
 ];
 
-const HomeDistributorTable = ({ sellers }) => {
-  const router = useRouter();
+const MarketDistributorTable = ({ sellers }) => {
+  const searchParams = useSearchParams();
+  const urlQuery = searchParams.get("keyword");
+  const [globalFilter, setGlobalFilter] = useState<string>("");
+
+  useEffect(() => {
+    setGlobalFilter(urlQuery as string);
+  }, [urlQuery]);
 
   const table = useReactTable({
-    data: sellers.slice(0, 10),
+    data: sellers,
     columns,
     filterFns: {
       fuzzy: fuzzyFilter,
     },
+    state: {
+      globalFilter,
+    },
+    onGlobalFilterChange: setGlobalFilter,
     globalFilterFn: fuzzyFilter,
     getFilteredRowModel: getFilteredRowModel(),
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
-  const handleSearch = (e: SyntheticEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if ((e.target as HTMLFormElement).search.value) {
-      router.push(
-        `/market?keyword=${(e.target as HTMLFormElement).search.value}`
-      );
-    }
-  };
-
   return (
-    <div className="mx-auto flex max-w-[40.9375rem] flex-col items-center gap-[1.5rem] bg-transparent">
-      <form
-        onSubmit={handleSearch}
-        className={`flex h-[3.125rem] w-full items-center rounded-[0.5rem] max-sm:border max-sm:border-light-600 sm:bg-[rgba(255,255,255,0.20)]`}
+    <div className="mx-auto mt-[2.5rem] flex flex-col items-center gap-[1.5rem] rounded-[1.25rem] md:bg-light-500 md:py-[1.6875rem] lg:w-[62.5rem] lg:px-[4.75rem]">
+      <div
+        className={`flex h-[3.125rem] w-full max-w-[40.9375rem] items-center rounded-[0.5rem] text-dark-100`}
       >
         <div className="flex size-[3.125rem] items-center justify-center rounded-l-[0.5rem] bg-primary-500">
           <Image
@@ -111,19 +113,20 @@ const HomeDistributorTable = ({ sellers }) => {
             alt="fuel truck"
           />
         </div>
-        <Input
+        <SearchBox
+          initialValue={globalFilter ?? ""}
+          onInputChange={(value) => setGlobalFilter(String(value))}
           type="text"
-          name="search"
           placeholder="Search for a distributor, state"
-          className={`no-focus size-full border-none bg-transparent shadow-none  outline-none placeholder:text-[0.9rem] sm:text-light-900`}
+          className={`no-focus size-full border border-none border-light-600 bg-light-900 shadow-none outline-none placeholder:text-[0.9rem]`}
         />
-      </form>
+      </div>
       <table className="overflow-hidden rounded-[10px]">
-        <thead className="">
+        <thead>
           {table?.getHeaderGroups().map((headerGroup) => (
             <tr
               key={headerGroup.id}
-              className="bg-light-900 text-left text-[0.53rem] font-medium text-gray-50 xs:text-[0.655rem]"
+              className="bg-light-900 text-left text-[0.53rem] font-medium text-gray-50 xs:text-[0.8125rem]"
             >
               {headerGroup.headers.map((header) => (
                 <th
@@ -139,11 +142,11 @@ const HomeDistributorTable = ({ sellers }) => {
             </tr>
           ))}
         </thead>
-        <tbody className="bg-light-gradient">
+        <tbody className="">
           {table?.getRowModel().rows.map((row) => (
             <tr
               key={row.id}
-              className="text-[0.6rem] text-light-900 max-sm:border-b max-sm:bg-light-800 max-sm:font-medium max-sm:text-black xs:text-[0.88rem]"
+              className="border-b bg-light-800 text-[0.6rem] text-black max-xs:font-medium xs:text-[0.88rem] xs:text-gray-50 md:text-[1.125rem]"
             >
               {row.getVisibleCells().map((cell) => (
                 <td key={cell.id} className="dist-table-style">
@@ -155,8 +158,13 @@ const HomeDistributorTable = ({ sellers }) => {
           ))}
         </tbody>
       </table>
+      {sellers?.length > 10 && (
+        <div className="my-8 flex justify-center">
+          <Pagination table={table} />
+        </div>
+      )}
     </div>
   );
 };
 
-export default HomeDistributorTable;
+export default MarketDistributorTable;
