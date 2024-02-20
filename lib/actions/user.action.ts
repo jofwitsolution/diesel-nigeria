@@ -69,3 +69,30 @@ export const resetPassword = async (
     return { error: "Something went wrong!" };
   }
 };
+
+export const getVerifiedSellers = async () => {
+  try {
+    const sellers = await db.user.findMany({
+      where: {
+        role: "seller",
+        isVerifiedSeller: true,
+        emailVerified: { not: null },
+        products: { some: {} }, // Check if the products array has at least one item
+      },
+      select: {
+        avatar: true,
+        businessName: true,
+        state: true,
+        products: true,
+        id: true,
+      },
+    });
+
+    console.log("Sellers: ", sellers);
+
+    return { sellers };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};

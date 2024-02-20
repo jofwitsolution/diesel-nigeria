@@ -83,6 +83,7 @@ model User {
   businessName  String?   @unique @default("")
   rcNumber      String?   @unique @default("")
   address       String?   @default("")
+  state         String?   @default("")
   phoneNumber   String?   @unique @default("")
   businessDescription String? @default("")
   isVerifiedSeller  Boolean @default(false)
