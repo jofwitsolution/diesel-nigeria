@@ -25,6 +25,11 @@ export function formatPrice(price: number) {
 }
 
 export function formatPriceNGN(amount: number): string {
+  // Ensure amount is a valid number
+  if (isNaN(amount)) {
+    return "Invalid Price";
+  }
+
   // Convert amount to string and split into integer and decimal parts
   const strAmount: string = amount.toFixed(2);
   const parts: string[] = strAmount.split(".");
