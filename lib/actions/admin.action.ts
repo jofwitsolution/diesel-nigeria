@@ -52,7 +52,6 @@ export const addNewSeller = async (values: z.infer<typeof NewSellerSchema>) => {
     await db.wallet.create({
       data: {
         userId: user.id,
-        balance: 0,
       },
     });
 

@@ -98,6 +98,7 @@ model User {
   CACForm       CACForm?
   incorporationCertificate      IncorporationCertificate?
   document      Document?
+  branches      Branch[]
   products      Product[]
   accounts      Account[]
   buyerOrders   Order[] @relation("OrderToBuyer")
@@ -105,6 +106,24 @@ model User {
   buyerTransactions  Transaction[] @relation("TransactionToBuyer")
   sellerTransactions  Transaction[] @relation("TransactionToSeller")
 
+  updatedAt     DateTime    @updatedAt
+}
+
+model Branch {
+  id            String        @id @default(cuid())
+  state         String
+  address       String
+  email         String
+  phoneNumber   String
+
+  orders        Order[]
+
+  user          User          @relation(fields: [userId], references: [id])
+
+  // Foreign key
+  userId      String
+
+  createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 }
 
@@ -145,14 +164,17 @@ model Order {
 
   seller                User        @relation("OrderToSeller", fields: [sellerId], references: [id])
   buyer                 User        @relation("OrderToBuyer", fields: [buyerId], references: [id])
+  deliveryBranch        Branch     @relation(fields: [deliveryBranchId], references: [id])
   product               Product     @relation(fields: [productId], references: [id])
 
   // Foreign keys
   sellerId              String
   buyerId               String
+  deliveryBranchId      String
   productId             String
 
    @@index([productId])
+   @@index([deliveryBranchId])
    @@index([buyerId])
    @@index([sellerId])
 }

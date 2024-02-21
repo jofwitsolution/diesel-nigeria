@@ -104,6 +104,21 @@ export const NewSellerSchema = z.object({
   }),
 });
 
+export const BranchSchema = z.object({
+  state: z.string({
+    required_error: "State is required",
+  }),
+  email: z.string().email({
+    message: "Email is required",
+  }),
+  address: z.string().min(3, {
+    message: "Address is required.",
+  }),
+  phoneNumber: z.string().min(10, {
+    message: "Please input phone number.",
+  }),
+});
+
 export const ProductSchema = z.object({
   isAvailable: z.boolean(),
   density: z.string({
