@@ -31,7 +31,6 @@ const CalendarOrder = () => {
           selected={date}
           onDayClick={(day) => {
             setDate(day);
-            console.log(day);
           }}
           modifiersClassNames={{
             selected: "text-light-900 bg-primary-500",

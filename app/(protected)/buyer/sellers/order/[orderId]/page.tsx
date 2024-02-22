@@ -1,34 +1,36 @@
 import React from "react";
+import SellerDetails from "@/components/pages/buyer/SellerDetails";
+import { Button } from "@/components/ui/button";
+import { getOrder, getSellerDetails } from "@/lib/actions/user.action";
 import Image from "next/image";
 import Link from "next/link";
-import { getPlaceOrderData } from "@/lib/actions/buyer.action";
-import PlaceOrderForm from "@/components/forms/PlaceOrderForm";
 import DBSkeleton from "@/components/DBSkeleton";
-import { Button } from "@/components/ui/button";
 
-const Page = async ({ params }: { params: { sellerId: string } }) => {
-  const result = await getPlaceOrderData(params.sellerId);
+const Page = async ({ params }: { params: { orderId: string } }) => {
+  const result = await getOrder(params.orderId);
+
+  console.log(result);
 
   return (
-    <div className="max-w-[69.9375rem]">
-      {result?.sellerData && (
+    <div className="max-w-[68.0625rem] space-y-6">
+      {/* {result?.seller && (
         <>
-          <div className="mb-6 flex justify-between gap-6">
-            <div className="flex items-center gap-2 rounded-md bg-light-900 px-2 py-3">
+          <div className="flex justify-between gap-6">
+            <div className="flex items-center gap-2 rounded-md bg-light-900 px-2 py-3 max-xs:hidden">
               <Image
                 src={
-                  result?.sellerData?.avatar
-                    ? result.sellerData.avatar.url
+                  result?.seller?.avatar
+                    ? result.seller.avatar.url
                     : "/images/icons/db-left-avatar.svg"
                 }
                 width={30}
                 height={25}
                 alt={"Zec"}
-                className="max-xs:hidden"
+                className=""
               />
-              {result?.sellerData?.businessName}
+              {result?.seller?.businessName}
             </div>
-            <Link href={`/buyer/sellers/${params.sellerId}`}>
+            <Link href="/buyer/sellers">
               <Button className="flex items-center gap-1 border text-[0.875rem]">
                 <Image
                   src="/images/icons/arrow-left.svg"
@@ -42,17 +44,14 @@ const Page = async ({ params }: { params: { sellerId: string } }) => {
             </Link>
           </div>
 
-          <PlaceOrderForm
-            buyerData={result?.buyerData}
-            sellerData={result?.sellerData}
-          />
+          <SellerDetails seller={result?.seller} />
         </>
       )}
       {result?.error ? (
         <DBSkeleton message={result?.error} />
-      ) : !result?.sellerData ? (
+      ) : !result?.seller ? (
         <DBSkeleton message={"Loading..."} />
-      ) : null}
+      ) : null} */}
     </div>
   );
 };

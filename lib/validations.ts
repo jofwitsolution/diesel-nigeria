@@ -174,27 +174,56 @@ export const BankDetailsSchema = z.object({
 });
 
 export const PlaceOrderSchema = z.object({
-  businessName: z.string({
-    required_error: "Company name is required",
-  }),
+  businessName: z
+    .string({
+      required_error: "Company name is required",
+    })
+    .min(3, {
+      message: "Company name is required",
+    }),
   email: z.string().email({
     message: "Email is required",
   }),
   phoneNumber: z.string().min(10, {
     message: "Please input phone number.",
   }),
-  deliveryLocation: z.string({ required_error: "Location is required." }),
-  branch: z.string({
-    required_error: "Select a branch.",
-  }),
-  density: z.string({
-    required_error: "Select diesel density.",
-  }),
-  quantity: z.string({
-    required_error: "Quantity is required.",
-  }),
-  deliveryDate: z.string({
-    required_error: "Delivery date is a required field.",
-  }),
-  message: z.string().optional(),
+  deliveryLocation: z
+    .string({ required_error: "Location is required." })
+    .min(3, {
+      message: "Location is required.",
+    }),
+  branch: z
+    .string({
+      required_error: "Select a branch.",
+    })
+    .min(3, {
+      message: "You must select a branch.",
+    }),
+  product: z
+    .string({
+      required_error: "Select diesel density.",
+    })
+    .min(3, {
+      message: "Select diesel density.",
+    }),
+  quantity: z
+    .string({
+      required_error: "Quantity is required.",
+    })
+    .min(1, {
+      message: "Quantity is required.",
+    }),
+  deliveryDate: z
+    .date({
+      required_error: "Delivery date is a required field.",
+    })
+    .min(new Date(Date.now() - 86400000), {
+      // minimum is current date minus one day (86400000)
+      message: "Delivery date must be a future date.",
+    }),
+  message: z
+    .string({
+      invalid_type_error: "Input message",
+    })
+    .optional(),
 });

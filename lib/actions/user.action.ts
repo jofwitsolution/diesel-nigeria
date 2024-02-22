@@ -35,15 +35,15 @@ export const resetPassword = async (
   values: z.infer<typeof ResetPasswordSchema>
 ) => {
   try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
     const validatedFields = ResetPasswordSchema.safeParse(values);
 
     if (!validatedFields.success) {
       return { error: "Invalid fields!" };
-    }
-
-    const currentUser = await getCurrentUser();
-    if (!currentUser) {
-      return { error: "Unauthenticated" };
     }
 
     const user = await getUserById(currentUser.id);
@@ -170,6 +170,51 @@ export const getUserBranches = async (userId: string) => {
     });
 
     return { branches };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const getOrder = async (orderId: string) => {
+  try {
+    const order = await db.order.findUnique({
+      where: { id: orderId },
+      select: {
+        orderNumber: true,
+        businessName: true,
+        email: true,
+        phoneNumber: true,
+        deliveryLocation: true,
+        quantity: true,
+        expectedDeliveryDate: true,
+        deliveryBranch: true,
+        message: true,
+        seller: {
+          select: {
+            avatar: true,
+            businessName: true,
+            rcNumber: true,
+            id: true,
+          },
+        },
+        buyer: {
+          select: {
+            avatar: true,
+            businessName: true,
+            rcNumber: true,
+            id: true,
+          },
+        },
+        product: true,
+        totalRate: true,
+        serviceCharge: true,
+        deliveryCharge: true,
+        amount: true,
+      },
+    });
+
+    return { order };
   } catch (error) {
     console.log(error);
     return { error: "Something went wrong!" };
