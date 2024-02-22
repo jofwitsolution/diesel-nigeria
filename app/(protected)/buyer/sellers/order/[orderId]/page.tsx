@@ -1,10 +1,10 @@
 import React from "react";
-import SellerDetails from "@/components/pages/buyer/SellerDetails";
-import { Button } from "@/components/ui/button";
-import { getOrder, getSellerDetails } from "@/lib/actions/user.action";
-import Image from "next/image";
-import Link from "next/link";
-import DBSkeleton from "@/components/DBSkeleton";
+// import SellerDetails from "@/components/pages/buyer/SellerDetails";
+// import { Button } from "@/components/ui/button";
+import { getOrder } from "@/lib/actions/user.action";
+// import Image from "next/image";
+// import Link from "next/link";
+// import DBSkeleton from "@/components/DBSkeleton";
 
 const Page = async ({ params }: { params: { orderId: string } }) => {
   const result = await getOrder(params.orderId);

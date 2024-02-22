@@ -24,11 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { cn, formatPrice } from "@/lib/utils";
-import { Calendar } from "../ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { CalendarIcon } from "@radix-ui/react-icons";
-import { format } from "date-fns";
+import { formatPrice } from "@/lib/utils";
 import DateInput from "../ui/date-input";
 import LoaderOverlay from "../LoaderOverlay";
 import { createOrder } from "@/lib/actions/buyer.action";
