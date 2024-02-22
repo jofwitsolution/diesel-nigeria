@@ -7,7 +7,7 @@ import RecentOrders from "@/components/shared/table/RecentOrders";
 
 const OverviewPage = async () => {
   return (
-    <div className="space-y-6">
+    <div className="max-w-[72.625rem] space-y-6">
       <div className="flex gap-6">
         <div className="mx-auto max-w-[42.9375rem]">
           <SummaryCards />
@@ -16,13 +16,13 @@ const OverviewPage = async () => {
           <AdminCalendar />
         </div>
       </div>
-      <div className="max-w-[72.625rem]">
+      <div className="">
         <RevenueBoard />
       </div>
-      <div className="max-w-[72.625rem]">
+      <div className="">
         <RetentionBoard />
       </div>
-      <div className="max-w-[72.625rem]">
+      <div className="">
         <RecentOrders />
       </div>
     </div>

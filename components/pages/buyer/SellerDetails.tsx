@@ -23,7 +23,7 @@ const SellerDetails = ({ seller }: Props) => {
             width={100}
             height={75}
             alt={"Zec"}
-            className="max-xs:hidden"
+            className=""
           />
           <span className="">{seller.businessName}</span>
           <span className="">RC {seller.rcNumber}</span>

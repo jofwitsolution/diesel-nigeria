@@ -12,8 +12,6 @@ const Page = async () => {
     result = await getUserBranches(currentUser.id as string);
   }
 
-  console.log(result);
-
   return (
     <div className="max-w-[63.25rem]">
       <BranchTopLayout />

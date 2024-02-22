@@ -14,7 +14,7 @@ const Page = async ({ params }: { params: { sellerId: string } }) => {
       {result?.seller && (
         <>
           <div className="flex justify-between gap-6">
-            <div className="flex items-center gap-2 rounded-md bg-light-900 px-2 py-3">
+            <div className="flex items-center gap-2 rounded-md bg-light-900 px-2 py-3 max-xs:hidden">
               <Image
                 src={
                   result?.seller?.avatar
@@ -24,7 +24,7 @@ const Page = async ({ params }: { params: { sellerId: string } }) => {
                 width={30}
                 height={25}
                 alt={"Zec"}
-                className="max-xs:hidden"
+                className=""
               />
               {result?.seller?.businessName}
             </div>

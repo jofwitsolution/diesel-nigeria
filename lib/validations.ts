@@ -172,3 +172,29 @@ export const BankDetailsSchema = z.object({
     message: "Enter a valid name",
   }),
 });
+
+export const PlaceOrderSchema = z.object({
+  businessName: z.string({
+    required_error: "Company name is required",
+  }),
+  email: z.string().email({
+    message: "Email is required",
+  }),
+  phoneNumber: z.string().min(10, {
+    message: "Please input phone number.",
+  }),
+  deliveryLocation: z.string({ required_error: "Location is required." }),
+  branch: z.string({
+    required_error: "Select a branch.",
+  }),
+  density: z.string({
+    required_error: "Select diesel density.",
+  }),
+  quantity: z.string({
+    required_error: "Quantity is required.",
+  }),
+  deliveryDate: z.string({
+    required_error: "Delivery date is a required field.",
+  }),
+  message: z.string().optional(),
+});
