@@ -7,7 +7,6 @@ const Page = async () => {
   const currentUser = await getCurrentUser();
   const result = await getOrders(currentUser?.id as string);
 
-  console.log(result.orders);
   return (
     <div className="flex max-w-[73.125rem] gap-6">
       <BuyerOrders orders={result.orders ?? []} />

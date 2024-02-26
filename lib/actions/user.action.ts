@@ -192,6 +192,7 @@ export const getOrder = async (orderId: string) => {
             businessName: true,
             rcNumber: true,
             id: true,
+            address: true,
           },
         },
         buyer: {
@@ -203,6 +204,7 @@ export const getOrder = async (orderId: string) => {
           },
         },
         product: true,
+        deliveryBranch: true,
       },
     });
 
