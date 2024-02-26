@@ -177,19 +177,15 @@ export const getUserBranches = async (userId: string) => {
 };
 
 export const getOrder = async (orderId: string) => {
+  const currentUser = await getCurrentUser();
+  if (!currentUser) {
+    return { error: "Unauthenticated" };
+  }
+
   try {
     const order = await db.order.findUnique({
       where: { id: orderId },
-      select: {
-        orderNumber: true,
-        businessName: true,
-        email: true,
-        phoneNumber: true,
-        deliveryLocation: true,
-        quantity: true,
-        expectedDeliveryDate: true,
-        deliveryBranch: true,
-        message: true,
+      include: {
         seller: {
           select: {
             avatar: true,
@@ -207,14 +203,47 @@ export const getOrder = async (orderId: string) => {
           },
         },
         product: true,
-        totalRate: true,
-        serviceCharge: true,
-        deliveryCharge: true,
-        amount: true,
       },
     });
 
     return { order };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const getOrders = async (userId: string) => {
+  const currentUser = await getCurrentUser();
+  if (!currentUser) {
+    return { error: "Unauthenticated" };
+  }
+
+  try {
+    const orders = await db.order.findMany({
+      where: { OR: [{ buyerId: userId }, { sellerId: userId }] },
+      include: {
+        seller: {
+          select: {
+            avatar: true,
+            businessName: true,
+            rcNumber: true,
+            id: true,
+          },
+        },
+        buyer: {
+          select: {
+            avatar: true,
+            businessName: true,
+            rcNumber: true,
+            id: true,
+          },
+        },
+        product: true,
+      },
+    });
+
+    return { orders };
   } catch (error) {
     console.log(error);
     return { error: "Something went wrong!" };

@@ -160,3 +160,22 @@ export const adminNavLinks: DashboardNavLinks[] = [
     isBottom: true,
   },
 ];
+
+export const orderFilters = [
+  {
+    label: "All",
+    value: "",
+  },
+  {
+    label: "Pending",
+    value: "pending",
+  },
+  {
+    label: "In Progress",
+    value: "progress",
+  },
+  {
+    label: "Delivered",
+    value: "delivered",
+  },
+];
