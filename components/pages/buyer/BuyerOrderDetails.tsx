@@ -34,7 +34,7 @@ const BuyerOrderDetails = ({ order }: Props) => {
         <span className="text-center font-[600]">Order Details</span>
         <table className="overflow-hidden">
           <thead>
-            <tr className="border-b text-left text-[0.3rem] font-medium xs:text-[0.8125rem]">
+            <tr className="border-b text-left text-[0.3rem] font-medium sm:text-[0.8125rem]">
               <th className="dist-table-style w-[24.625rem]">Litre</th>
               <th className="dist-table-style w-[24.625rem]">
                 Order Date & Time
@@ -49,7 +49,7 @@ const BuyerOrderDetails = ({ order }: Props) => {
             </tr>
           </thead>
           <tbody className="">
-            <tr className="border-b bg-light-900 text-[0.3rem] text-black max-xs:font-medium xs:text-[0.8125rem] xs:text-gray-50">
+            <tr className="border-b bg-light-900 text-[0.3rem] text-black max-xs:font-medium xs:text-gray-50 sm:text-[0.8125rem]">
               <td className="dist-table-style">{order.quantity}Litres</td>
               <td className="dist-table-style">
                 <span className="flex flex-col">
