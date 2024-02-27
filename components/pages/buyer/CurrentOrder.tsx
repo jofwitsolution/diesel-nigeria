@@ -2,15 +2,54 @@
 
 import React from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { PaystackButton } from "react-paystack";
 import { Order as OrderModel } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { formatDate, formatPriceNGN, getTimeOfDay } from "@/lib/utils";
+import { useCurrentUser } from "@/hooks/user";
 
 interface Props {
   order: OrderModel;
 }
 
 const CurrentOrder = ({ order }: Props) => {
+  const router = useRouter();
+  const currentUser = useCurrentUser();
+
+  const componentProps = {
+    email: order.email,
+    amount: Number(order.amount) * 100,
+    publicKey: process.env.NEXT_PUBLIC_PAYSTACK_TEST_PUBLIC_KEY as string,
+    channels: ["card"],
+    metadata: {
+      userId: currentUser?.id,
+      orderId: order.id,
+
+      custom_fields: [
+        {
+          display_name: "Business Name",
+          variable_name: "businessName",
+          value: order.businessName,
+        },
+        {
+          display_name: "Phone Number",
+          variable_name: "phoneNumber",
+          value: order.phoneNumber,
+        },
+        {
+          display_name: "Order Number",
+          variable_name: "orderNumber",
+          value: order.orderNumber,
+        },
+      ],
+    },
+    text: "Proceed to Payment",
+    onSuccess: () =>
+      alert("Thanks for doing business with us! Come back soon!!"),
+    onClose: () => router.replace(`/buyer/sellers/order/${order.id}`),
+  };
+
   return (
     <div className="w-full rounded-md bg-light-900 px-2 py-3 text-[0.875rem] md:p-6 lg:px-10">
       <div className="mb-3 flex flex-col justify-between border-b-2 pb-3 xs:flex-row xs:items-center">
@@ -124,9 +163,10 @@ const CurrentOrder = ({ order }: Props) => {
         <Button className="border border-primary-500 font-medium hover:bg-primary-100">
           Edit your Order
         </Button>
-        <Button className="bg-primary-500 font-medium text-light-900 active:bg-primary-100">
-          Proceed to Payment
-        </Button>
+        <PaystackButton
+          {...componentProps}
+          className="rounded-md bg-primary-500 px-3 font-medium text-light-900 active:bg-primary-100"
+        />
       </div>
       <div className="my-4 w-full border-b" />
     </div>

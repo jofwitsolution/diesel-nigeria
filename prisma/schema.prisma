@@ -189,7 +189,7 @@ model Transaction {
   reference          String
   orderNumber        String
   amount             String
-  quantity           String
+  isRefund           Boolean @default(false)
   date               DateTime    @default(now())
   category           TransactionCategory
 
