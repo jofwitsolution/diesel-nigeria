@@ -1,16 +1,10 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import {
-  formatDate,
-  formatPrice,
-  formatPriceNGN,
-  getTimeOfDay,
-} from "@/lib/utils";
-import { statusBg } from "@/styles/utils";
-import { Order as OrderModel } from "@prisma/client";
-import Image from "next/image";
 import React from "react";
+import Image from "next/image";
+import { Order as OrderModel } from "@prisma/client";
+import { Button } from "@/components/ui/button";
+import { formatDate, formatPriceNGN, getTimeOfDay } from "@/lib/utils";
 
 interface Props {
   order: OrderModel;
