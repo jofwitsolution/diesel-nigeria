@@ -49,7 +49,9 @@ const CurrentOrder = ({ order }: Props) => {
     },
     text: "Proceed to Payment",
     onSuccess: ({ reference }: { reference: string }) => {
-      router.replace(`/payments/process?reference=${reference}`);
+      router.replace(
+        `/payments/process?reference=${reference}&order_id=${order.id}`
+      );
     },
     onClose: () => router.replace(`/buyer/sellers/order/${order.id}`),
   };

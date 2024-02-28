@@ -123,7 +123,6 @@ export const verifyOrderPayment = async (reference: string) => {
     if (!currentUser) {
       return { error: "Unauthenticated" };
     }
-    console.log(reference);
 
     const verifRes = await fetch(
       `https://api.paystack.co/transaction/verify/${reference}`,

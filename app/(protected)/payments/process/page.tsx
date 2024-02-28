@@ -14,7 +14,7 @@ const PaymentProcessPage = async ({ searchParams }: URLProps) => {
 
   result = await verifyOrderPayment(searchParams.reference as string);
 
-  return <PaymentProcess result={result} />;
+  return <PaymentProcess result={result} orderId={searchParams.order_id} />;
 };
 
 export default PaymentProcessPage;
