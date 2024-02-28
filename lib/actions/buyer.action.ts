@@ -116,3 +116,75 @@ export const createOrder = async (
     return { error: "Something went wrong!" };
   }
 };
+
+export const verifyOrderPayment = async (reference: string) => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+    console.log(reference);
+
+    const verifRes = await fetch(
+      `https://api.paystack.co/transaction/verify/${reference}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${process.env.PAYSTACK_TEST_SECRET_KEY}`,
+        },
+      }
+    );
+
+    const { data } = await verifRes.json();
+    console.log(data);
+    if (data?.status !== "success") {
+      return { error: `Payment unsuccessful` };
+    }
+
+    if (data?.metadata?.userId !== currentUser.id) {
+      return { error: `Invalid Payment` };
+    }
+
+    const order = await db.order.findUnique({
+      where: { id: data?.metadata.orderId, buyerId: data?.metadata.userId },
+    });
+    if (!order) {
+      return { error: `Invalid Order Payment` };
+    }
+
+    console.log(Number(order.amount), Number(data.amount));
+    if (Number(order.amount) !== Number(data.amount) / 100) {
+      return { error: `Payment cannot be less than the expected amount` };
+    }
+
+    if (order.isBuyerPaid) {
+      return { error: `Buyer already paid for this order.` };
+    }
+
+    // await db.order.update({
+    //   where: { id: order.id },
+    //   data: {
+    //     isBuyerPaid: true,
+    //     status: "progress",
+    //     channel: data?.channel,
+    //   },
+    // });
+
+    // await db.transaction.create({
+    //   data: {
+    //     channel: data.channel,
+    //     reference: data.reference,
+    //     orderNumber: order.orderNumber,
+    //     amount: data.amount,
+    //     category: "commision",
+    //     buyerId: order.buyerId,
+    //     sellerId: order.sellerId,
+    //   },
+    // });
+
+    return { success: "Payment made successfully", orderId: order.id };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};

@@ -22,6 +22,9 @@ const CurrentOrder = ({ order }: Props) => {
     amount: Number(order.amount) * 100,
     publicKey: process.env.NEXT_PUBLIC_PAYSTACK_TEST_PUBLIC_KEY as string,
     channels: ["card"],
+    label: order.businessName,
+    last_name: order.businessName,
+    phone: order.phoneNumber,
     metadata: {
       userId: currentUser?.id,
       orderId: order.id,
@@ -37,16 +40,17 @@ const CurrentOrder = ({ order }: Props) => {
           variable_name: "phoneNumber",
           value: order.phoneNumber,
         },
-        {
-          display_name: "Order Number",
-          variable_name: "orderNumber",
-          value: order.orderNumber,
-        },
+        // {
+        //   display_name: "Order Number",
+        //   variable_name: "orderNumber",
+        //   value: order.orderNumber,
+        // },
       ],
     },
     text: "Proceed to Payment",
-    onSuccess: () =>
-      alert("Thanks for doing business with us! Come back soon!!"),
+    onSuccess: ({ reference }: { reference: string }) => {
+      router.replace(`/payments/process?reference=${reference}`);
+    },
     onClose: () => router.replace(`/buyer/sellers/order/${order.id}`),
   };
 
@@ -160,13 +164,17 @@ const CurrentOrder = ({ order }: Props) => {
       </div>
 
       <div className="mt-10 flex flex-wrap justify-between gap-8 max-xs:justify-center md:mt-20">
-        <Button className="border border-primary-500 font-medium hover:bg-primary-100">
-          Edit your Order
-        </Button>
-        <PaystackButton
-          {...componentProps}
-          className="rounded-md bg-primary-500 px-3 font-medium text-light-900 active:bg-primary-100"
-        />
+        {!order?.isBuyerPaid && (
+          <>
+            <Button className="border border-primary-500 font-medium hover:bg-primary-100">
+              Edit your Order
+            </Button>
+            <PaystackButton
+              {...componentProps}
+              className="rounded-md bg-primary-500 px-3 font-medium text-light-900 active:bg-primary-100"
+            />
+          </>
+        )}
       </div>
       <div className="my-4 w-full border-b" />
     </div>

@@ -12,6 +12,13 @@ export const publicRoutes = [
 ];
 
 /**
+ * An array of non dashboard routes that are not accessible to the public
+ * These routes require authentication
+ * @type {string[]}
+ */
+export const otherRoutes = ["/payments/process"];
+
+/**
  * An array of routes that are used for authentication
  * These routes will redirect logged in users to their various roles
  * @type {string[]}

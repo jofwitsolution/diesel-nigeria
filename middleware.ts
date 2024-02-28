@@ -6,6 +6,7 @@ import {
   DEFAULT_LOGIN_REDIRECT,
   apiAuthPrefix,
   authRoutes,
+  otherRoutes,
   publicRoutes,
 } from "@/routes";
 import { getCurrentRole } from "./lib/helpers/auth";
@@ -18,6 +19,7 @@ export default auth(async (req) => {
   const pathname = nextUrl.pathname;
   const isApiAuthRoute = pathname.startsWith(apiAuthPrefix);
   const isPublicRoute = publicRoutes.includes(pathname);
+  const isOtherRoute = otherRoutes.includes(pathname);
   const isAuthRoute = authRoutes.includes(pathname);
   const currentRole = await getCurrentRole();
 
@@ -48,8 +50,8 @@ export default auth(async (req) => {
     );
   }
 
-  // if user is logged in and route is not public route
-  if (isLoggedIn && !isPublicRoute) {
+  // if user is logged in and route is not public route and other route
+  if (isLoggedIn && !isPublicRoute && !isOtherRoute) {
     // restrict every users to their roles
     if (currentRole === "seller" && !pathname.startsWith("/seller")) {
       return Response.redirect(new URL(`/`, nextUrl));
@@ -65,7 +67,6 @@ export default auth(async (req) => {
   return null;
 });
 
-// Optionally, don't invoke Middleware on some paths
 export const config = {
   matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
 };
