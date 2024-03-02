@@ -18,3 +18,11 @@ export async function generateOrderNumber() {
     throw error;
   }
 }
+
+export function countUniqueSellers(orders: Object[]) {
+  const uniqueSellers = new Set();
+  orders.forEach((order) => {
+    uniqueSellers.add(order.seller.id);
+  });
+  return uniqueSellers.size;
+}

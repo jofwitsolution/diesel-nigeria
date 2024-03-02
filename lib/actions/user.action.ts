@@ -1,5 +1,6 @@
 "use server";
 
+// import moment from "moment";
 import * as z from "zod";
 import bcrypt from "bcryptjs";
 import { exclude } from "@/prisma/pristma.utils";
@@ -177,12 +178,12 @@ export const getUserBranches = async (userId: string) => {
 };
 
 export const getOrder = async (orderId: string) => {
-  const currentUser = await getCurrentUser();
-  if (!currentUser) {
-    return { error: "Unauthenticated" };
-  }
-
   try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
     const order = await db.order.findUnique({
       where: { id: orderId },
       include: {
@@ -215,15 +216,23 @@ export const getOrder = async (orderId: string) => {
   }
 };
 
-export const getOrders = async (userId: string) => {
-  const currentUser = await getCurrentUser();
-  if (!currentUser) {
-    return { error: "Unauthenticated" };
-  }
-
+export const getOrders = async (
+  userId: string,
+  orderBy: string = "desc",
+  take: null | number = null,
+  targetDate: null | Date = null
+) => {
   try {
-    const orders = await db.order.findMany({
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const query = {
       where: { OR: [{ buyerId: userId }, { sellerId: userId }] },
+      orderBy: {
+        orderDate: orderBy,
+      },
       include: {
         seller: {
           select: {
@@ -231,6 +240,7 @@ export const getOrders = async (userId: string) => {
             businessName: true,
             rcNumber: true,
             id: true,
+            address: true,
           },
         },
         buyer: {
@@ -239,13 +249,49 @@ export const getOrders = async (userId: string) => {
             businessName: true,
             rcNumber: true,
             id: true,
+            address: true,
           },
         },
         product: true,
       },
-    });
+    };
+
+    if (take !== null) {
+      query.take = take;
+    }
+
+    if (targetDate !== null) {
+      query.where.orderDate = { gte: new Date(targetDate) };
+    }
+
+    const orders = await db.order.findMany(query);
 
     return { orders };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const getTopSellers = async () => {
+  try {
+    const sellers = await db.user.findMany({
+      where: {
+        role: "seller",
+        isVerifiedSeller: true,
+        emailVerified: { not: null },
+        // products: { some: {} }, // Check if the products array has at least one item
+      },
+      select: {
+        avatar: true,
+        businessName: true,
+        state: true,
+        products: true,
+        id: true,
+      },
+    });
+
+    return { topSellers: sellers };
   } catch (error) {
     console.log(error);
     return { error: "Something went wrong!" };

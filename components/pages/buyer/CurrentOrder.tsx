@@ -40,11 +40,11 @@ const CurrentOrder = ({ order }: Props) => {
           variable_name: "phoneNumber",
           value: order.phoneNumber,
         },
-        // {
-        //   display_name: "Order Number",
-        //   variable_name: "orderNumber",
-        //   value: order.orderNumber,
-        // },
+        {
+          display_name: "Order Number",
+          variable_name: "orderNumber",
+          value: order.orderNumber,
+        },
       ],
     },
     text: "Proceed to Payment",
@@ -53,7 +53,9 @@ const CurrentOrder = ({ order }: Props) => {
         `/payments/process?reference=${reference}&order_id=${order.id}`
       );
     },
-    onClose: () => router.replace(`/buyer/sellers/order/${order.id}`),
+    onClose: () => {
+      window.location.href = `/buyer/sellers/order/${order.id}`;
+    },
   };
 
   return (

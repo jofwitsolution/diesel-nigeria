@@ -1,15 +1,34 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import Image from "next/image";
 import { formatDate } from "@/lib/utils";
 import { statusBg } from "@/styles/utils";
+import { getOrders } from "@/lib/actions/user.action";
+import { useCurrentUser } from "@/hooks/user";
+import { Order } from "@prisma/client";
 
 const CalendarOrder = () => {
+  const currentUser = useCurrentUser();
+  const [orders, setOrders] = useState<Order[]>([]);
+
   const today = new Date();
   const [date, setDate] = useState<Date>(today);
 
+  useEffect(() => {
+    const getOrdersByDay = async () => {
+      const result = await getOrders(currentUser?.id as string, "asc", 4, date);
+      if (result?.orders) {
+        console.log(result);
+        setOrders(result.orders);
+      }
+    };
+
+    getOrdersByDay();
+  }, [date, currentUser]);
+
+  console.log(orders);
   return (
     <div className="rounded-md bg-light-900 p-4">
       <div className="mb-4 flex items-center gap-5">
@@ -56,55 +75,43 @@ const CalendarOrder = () => {
       </div>
       <div className="mt-8 space-y-6 px-2">
         {/* order one */}
-        <div>
-          <span className="text-[0.75rem] font-medium">
-            Payment Order #2345
-          </span>
-          <div className="mt-3 flex items-start justify-between gap-4 text-[0.75rem] font-medium text-[#808494]">
-            <div className="">
-              <span className="flex items-center justify-center gap-[0.675rem]">
-                <Image
-                  src={"/images/icons/honeywell.svg"}
-                  width={27}
-                  height={27}
-                  alt="seller"
-                />
-                <span className="font-medium">Mrs Oil Company</span>
+        {orders.map((order) => (
+          <div key={order.id}>
+            <span className="text-[0.75rem] font-medium">
+              Payment Order {order.orderNumber}
+            </span>
+            <div className="mt-3 flex items-start justify-between gap-4 text-[0.75rem] font-medium text-[#808494]">
+              <div className="">
+                <span className="flex items-center justify-center gap-[0.675rem]">
+                  <Image
+                    src={
+                      order.seller.avatar.url ??
+                      "/images/icons/db-left-avatar.svg"
+                    }
+                    width={27}
+                    height={27}
+                    alt="seller"
+                  />
+                  <span className="font-medium">
+                    {order.seller.businessName}
+                  </span>
+                </span>
+              </div>
+              <span>{order.seller.address}</span>
+              <span
+                className={`${statusBg(order.status)} rounded p-1 font-[700] capitalize`}
+              >
+                {order.status}
               </span>
             </div>
-            <span>Bolt Corporation, Surulere, Branch Office</span>
-            <span
-              className={`${statusBg("progress")} rounded p-1 font-[700] capitalize`}
-            >
-              progress
-            </span>
           </div>
-        </div>
-        {/* order two */}
-        <div>
-          <span className="text-[0.75rem] font-medium">
-            Payment Order #2345
-          </span>
-          <div className="mt-3 flex items-start justify-between gap-4 text-[0.75rem] font-medium text-[#808494]">
-            <div className="">
-              <span className="flex items-center justify-center gap-[0.675rem]">
-                <Image
-                  src={"/images/icons/honeywell.svg"}
-                  width={27}
-                  height={27}
-                  alt="seller"
-                />
-                <span className="font-medium">Nepal Energies Ltd</span>
-              </span>
-            </div>
-            <span>Bolt Corporation, Surulere, Branch Office</span>
-            <span
-              className={`${statusBg("progress")} rounded p-1 font-[700] capitalize`}
-            >
-              progress
-            </span>
+        ))}
+
+        {orders.length === 0 && (
+          <div className="flex h-[5rem] items-center justify-center">
+            <p>No order</p>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
