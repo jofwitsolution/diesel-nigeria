@@ -12,17 +12,20 @@ import { Order } from "@prisma/client";
 const CalendarOrder = () => {
   const currentUser = useCurrentUser();
   const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const today = new Date();
   const [date, setDate] = useState<Date>(today);
 
   useEffect(() => {
     const getOrdersByDay = async () => {
+      setLoading(true);
       const result = await getOrders(currentUser?.id as string, "asc", 4, date);
       if (result?.orders) {
         console.log(result);
         setOrders(result.orders);
       }
+      setLoading(false);
     };
 
     getOrdersByDay();
@@ -109,7 +112,7 @@ const CalendarOrder = () => {
 
         {orders.length === 0 && (
           <div className="flex h-[5rem] items-center justify-center">
-            <p>No order</p>
+            {loading ? <p>Loading...</p> : <p>No order</p>}
           </div>
         )}
       </div>
