@@ -452,3 +452,45 @@ export const getSalesAnalytics = async () => {
     return { error: "Something went wrong!" };
   }
 };
+
+export const getSellerWalletData = async () => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const wallet = await db.wallet.findUnique({
+      where: { userId: currentUser.id },
+    });
+    const transactions = await db.transaction.findMany({
+      where: { sellerId: currentUser.id },
+    });
+
+    const totalPayment = transactions.reduce((a, transaction) => {
+      if (transaction.category === "settlement") {
+        return a + Number(transaction.amount);
+      } else {
+        return a;
+      }
+    }, 0);
+
+    const totalWithdrawal = transactions.reduce((a, transaction) => {
+      if (transaction.category === "withdrawal") {
+        return a + Number(transaction.amount);
+      } else {
+        return a;
+      }
+    }, 0);
+
+    return {
+      success: true,
+      balance: wallet?.balance,
+      totalPayment,
+      totalWithdrawal,
+    };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};

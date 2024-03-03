@@ -1,9 +1,33 @@
+"use client";
+
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/utils";
 import Image from "next/image";
-import React from "react";
+import { getSellerWalletData } from "@/lib/actions/seller.action";
 
 const SellerAccountManagement = () => {
+  const [walletData, setWalletData] = useState({
+    balance: 0,
+    totalPayment: 0,
+    totalWithdrawal: 0,
+  });
+
+  useEffect(() => {
+    const fetchWalletData = async () => {
+      const result = await getSellerWalletData();
+      if (!result?.success) {
+        setWalletData({
+          balance: result.balance!,
+          totalPayment: result.totalPayment!,
+          totalWithdrawal: result.totalWithdrawal!,
+        });
+      }
+    };
+
+    fetchWalletData();
+  }, []);
+
   return (
     <div className="mt-6 w-full space-y-6 rounded-lg bg-light-900 p-3">
       <div className="flex flex-wrap justify-between gap-6">
@@ -27,7 +51,7 @@ const SellerAccountManagement = () => {
             Wallet Balance
           </span>
           <span className="text-[1.5rem] font-medium leading-[1.6rem] lg:text-[2.5rem] lg:leading-[2.6rem]">
-            {formatPrice(0)}
+            {formatPrice(walletData.balance)}
           </span>
         </div>
         <div className="flex h-[5.25rem] flex-[28%] flex-col gap-2 rounded-md border px-2 py-3 max-xs:flex-[50%] md:flex-[23%] md:px-4">
@@ -41,7 +65,7 @@ const SellerAccountManagement = () => {
             />
           </span>
           <span className="font-medium lg:text-[1.25rem]">
-            {formatPrice(0)}
+            {formatPrice(walletData.totalPayment)}
           </span>
         </div>
         <div className="flex h-[5.25rem] flex-[28%] flex-col gap-2 rounded-md border px-2 py-3 md:flex-[23%] md:px-4">
@@ -57,7 +81,7 @@ const SellerAccountManagement = () => {
             />
           </span>
           <span className="font-medium lg:text-[1.25rem]">
-            {formatPrice(0)}
+            {formatPrice(walletData.totalWithdrawal)}
           </span>
         </div>
       </div>
