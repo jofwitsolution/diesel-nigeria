@@ -31,7 +31,6 @@ const CalendarOrder = () => {
     getOrdersByDay();
   }, [date, currentUser]);
 
-  console.log(orders);
   return (
     <div className="rounded-md bg-light-900 p-4">
       <div className="mb-4 flex items-center gap-5">

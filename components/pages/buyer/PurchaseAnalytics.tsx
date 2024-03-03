@@ -1,5 +1,5 @@
 import React from "react";
-import AnalyticsCircle from "./chart/AnalyticsCircle";
+import AnalyticsCircle from "../../shared/chart/AnalyticsCircle";
 import { getPurchaseAnalytics } from "@/lib/actions/buyer.action";
 
 const PurchaseAnalytics = async () => {

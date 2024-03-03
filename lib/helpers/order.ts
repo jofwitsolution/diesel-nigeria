@@ -26,3 +26,11 @@ export function countUniqueSellers(orders: Object[]) {
   });
   return uniqueSellers.size;
 }
+
+export function countUniqueBuyers(orders: Object[]) {
+  const uniqueBuyers = new Set();
+  orders.forEach((order) => {
+    uniqueBuyers.add(order.buyer.id);
+  });
+  return uniqueBuyers.size;
+}

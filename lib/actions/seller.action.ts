@@ -10,6 +10,12 @@ import {
 import { getCurrentUser } from "../helpers/auth";
 import { cloudinary } from "../helpers/cloudinary";
 import { db } from "../db";
+import {
+  sendOrderDeliveredEmailToAdmin,
+  sendOrderDeliveredEmailToBuyer,
+  sendOrderInProgressEmailToBuyer,
+} from "../helpers/mail";
+import { countUniqueBuyers } from "../helpers/order";
 
 export const sellerUpdateBusinessInfo = async (
   values: z.infer<typeof SellerBusinessInfoSchema>,
@@ -278,6 +284,169 @@ export const getSellerProducts = async () => {
     });
 
     return { products };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const sellerUpdateOrderStatus = async (
+  orderId: string,
+  status: string,
+  pathname: string
+) => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const order = await db.order.findUnique({
+      where: { sellerId: currentUser?.id, id: orderId },
+    });
+    if (!order) {
+      return { error: "Order not found" };
+    }
+
+    if (
+      !order.isBuyerPaid ||
+      order.status === "delivered" ||
+      order.status === "cancelled"
+    ) {
+      return { error: "This action cannot be performed" };
+    }
+
+    await db.order.update({
+      where: { sellerId: currentUser?.id, id: orderId },
+      data: {
+        status,
+      },
+    });
+
+    // await db.orderTracking.update({
+    //   where: { orderId },
+    //   data: {
+    //     [status]: true,
+    //   },
+    // });
+
+    if (status === "progress") {
+      await sendOrderInProgressEmailToBuyer({
+        orderNumber: order.orderNumber,
+        email: order.email,
+        businessName: order.businessName,
+      });
+    }
+
+    if (status === "delivered") {
+      await sendOrderDeliveredEmailToBuyer({
+        orderNumber: order.orderNumber,
+        email: order.email,
+        businessName: order.businessName,
+      });
+      await sendOrderDeliveredEmailToAdmin({
+        orderNumber: order.orderNumber,
+        businessName: order.businessName,
+      });
+    }
+
+    revalidatePath(pathname);
+    return { success: "Order updated successfuly" };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const getSellerOverview = async () => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const products = await db.product.findMany({
+      where: { sellerId: currentUser.id },
+    });
+
+    const orders = await db.order.findMany({
+      where: { sellerId: currentUser.id },
+    });
+
+    const totalLitres = products.reduce(
+      (a, product) => a + Number(product.numberInStock),
+      0
+    );
+
+    const completedOrders = orders.reduce((a, order) => {
+      if (order.status === "delivered") {
+        return a + 1;
+      } else {
+        return a;
+      }
+    }, 0);
+
+    const pendingOrders = orders.reduce((a, order) => {
+      if (order.status === "pending") {
+        return a + 1;
+      } else {
+        return a;
+      }
+    }, 0);
+
+    const priceAlert = products[0] ? products[0].price : 0;
+
+    return {
+      priceAlert,
+      totalProducts: products.length,
+      totalOrders: orders.length,
+      totalLitres,
+      completedOrders,
+      pendingOrders,
+    };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const getSalesAnalytics = async () => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const orders = await db.order.findMany({
+      where: { sellerId: currentUser.id, status: "delivered" },
+      include: {
+        seller: {
+          select: {
+            avatar: true,
+            businessName: true,
+            rcNumber: true,
+            id: true,
+            address: true,
+          },
+        },
+        buyer: {
+          select: {
+            avatar: true,
+            businessName: true,
+            rcNumber: true,
+            id: true,
+          },
+        },
+        product: true,
+        deliveryBranch: true,
+      },
+    });
+
+    const volumes = orders.reduce((a, order) => a + Number(order.quantity), 0);
+    const sales = orders.reduce((a, order) => a + parseFloat(order.amount), 0);
+    const buyersServiced = countUniqueBuyers(orders);
+
+    return { volumes, sales, buyersServiced };
   } catch (error) {
     console.log(error);
     return { error: "Something went wrong!" };

@@ -129,6 +129,12 @@ export const createOrder = async (
       },
     });
 
+    await db.orderTracking.create({
+      data: {
+        orderId: order.id,
+      },
+    });
+
     await sendOrderCreatedEmailToBuyer({
       email: order.email,
       amount: order.amount,

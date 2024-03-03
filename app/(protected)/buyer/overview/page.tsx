@@ -2,7 +2,7 @@ import React from "react";
 import DBSearchDistributor from "@/components/shared/search/DBSearchDistributor";
 import TopSellers from "@/components/shared/TopSellers";
 import RecentTransactions from "@/components/shared/table/RecentTransactions";
-import PurchaseAnalytics from "@/components/shared/PurchaseAnalytics";
+import PurchaseAnalytics from "@/components/pages/buyer/PurchaseAnalytics";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import CalendarOrder from "@/components/pages/buyer/CalendarOrder";

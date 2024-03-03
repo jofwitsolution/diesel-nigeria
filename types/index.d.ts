@@ -51,3 +51,9 @@ export interface OrderPaymentToAdmin {
   orderNumber: string;
   quantity: string;
 }
+
+export interface OrderStatusToBuyer {
+  businessName: string;
+  orderNumber: string;
+  email: string;
+}

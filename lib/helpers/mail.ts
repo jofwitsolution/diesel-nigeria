@@ -5,6 +5,7 @@ import {
   OrderPaymentToAdmin,
   OrderPaymentToBuyer,
   OrderPaymentToSeller,
+  OrderStatusToBuyer,
 } from "@/types";
 import { Resend } from "resend";
 import { formatPrice } from "../utils";
@@ -181,6 +182,65 @@ export const sendOrderPaymentEmailToAdmin = async ({
     <p>Business Name: ${businessName}</p>
 
     <p>Kindly ensure the order is fulfilled.</p>
+    <br/>
+    <p>Thank you</p>
+          `,
+  });
+};
+
+export const sendOrderInProgressEmailToBuyer = async ({
+  orderNumber,
+  email,
+  businessName,
+}: OrderStatusToBuyer) => {
+  await resend.emails.send({
+    from: dieselngEmail,
+    to: email,
+    subject: `Order ${orderNumber}, in progress.`,
+    html: `
+    <p>Dear ${businessName}</p>
+    <p>Your order is on its way.</p>
+
+    <br/>
+    <p>Thank you</p>
+          `,
+  });
+};
+
+export const sendOrderDeliveredEmailToBuyer = async ({
+  orderNumber,
+  email,
+  businessName,
+}: OrderStatusToBuyer) => {
+  await resend.emails.send({
+    from: dieselngEmail,
+    to: email,
+    subject: `Order ${orderNumber}, delivered.`,
+    html: `
+    <p>Dear ${businessName}</p>
+    <p>Your order has been delivered successfuly.</p>
+
+    <br/>
+    <p>Thank you</p>
+          `,
+  });
+};
+
+export const sendOrderDeliveredEmailToAdmin = async ({
+  orderNumber,
+  businessName,
+}: {
+  orderNumber: string;
+  businessName: string;
+}) => {
+  await resend.emails.send({
+    from: dieselngEmail,
+    to: dieselngAdminEmail,
+    subject: `Order ${orderNumber}, delivered.`,
+    html: `
+    <p>Dear Dieselng Admin</p>
+    <p>Order ${orderNumber}, submitted by ${businessName} has been delivered successfuly.</p>
+
     <br/>
     <p>Thank you</p>
           `,

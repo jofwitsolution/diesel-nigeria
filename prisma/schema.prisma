@@ -32,6 +32,18 @@ enum TransactionCategory {
   settlement
 }
 
+model OrderTracking {
+  id           String  @id @default(cuid()) 
+  delivered    Boolean @default(false)
+  pending      Boolean @default(true)
+  progress     Boolean @default(false)
+
+  order        Order?    @relation(fields: [orderId], references: [id])
+
+  // Foreign key
+  orderId      String?  @unique
+}
+
 model Document {
   id           String  @id @default(cuid())  
   url          String  
@@ -170,6 +182,8 @@ model Order {
   buyer                 User        @relation("OrderToBuyer", fields: [buyerId], references: [id])
   deliveryBranch        Branch     @relation(fields: [deliveryBranchId], references: [id])
   product               Product     @relation(fields: [productId], references: [id])
+
+  tracking              OrderTracking?
 
   // Foreign keys
   sellerId              String

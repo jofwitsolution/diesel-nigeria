@@ -31,7 +31,7 @@ export function formatPriceNGN(amount: number): string {
   }
 
   // Convert amount to string and split into integer and decimal parts
-  const strAmount: string = amount.toFixed(2);
+  const strAmount: string = Number(amount).toFixed(2);
   const parts: string[] = strAmount.split(".");
 
   // Extract integer part and format with commas
