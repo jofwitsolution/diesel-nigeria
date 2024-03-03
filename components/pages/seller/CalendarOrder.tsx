@@ -21,7 +21,6 @@ const CalendarOrder = () => {
       setLoading(true);
       const result = await getOrders(currentUser?.id as string, "asc", 4, date);
       if (result?.orders) {
-        console.log(result);
         setOrders(result.orders);
       }
       setLoading(false);

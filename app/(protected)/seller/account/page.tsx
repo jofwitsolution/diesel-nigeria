@@ -1,5 +1,5 @@
 import React from "react";
-import AccountTabs from "@/components/pages/admin/AccountTabs";
+import SellerAccountTabs from "@/components/pages/seller/SellerAccountTabs";
 
 const AccountPage = () => {
   return (
@@ -13,7 +13,7 @@ const AccountPage = () => {
         </div>
       </div>
       <div>
-        <AccountTabs />
+        <SellerAccountTabs />
       </div>
     </div>
   );

@@ -30,6 +30,8 @@ enum OrderStatus {
 enum TransactionCategory {
   commision
   settlement
+  withdrawal
+  refund
 }
 
 model OrderTracking {
@@ -216,6 +218,11 @@ model Transaction {
 
   @@index([buyerId])
   @@index([sellerId])
+}
+
+model WithdrawalRequest {
+  id                 String  @id @default(cuid())
+  channel            String
 }
 
 model Wallet {
