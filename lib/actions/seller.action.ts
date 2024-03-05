@@ -519,3 +519,23 @@ export const getPaymentOverview = async () => {
     return { error: "Something went wrong!" };
   }
 };
+
+export const getSellerWithdrawals = async () => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const withdrawals = await db.withdrawalRequest.findMany({
+      where: {
+        userId: currentUser.id,
+      },
+    });
+
+    return { success: true, withdrawals };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};

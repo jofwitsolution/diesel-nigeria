@@ -237,7 +237,6 @@ export const verifyOrderPayment = async (reference: string) => {
         amount: order.amount,
         category: "commision",
         buyerId: order.buyerId,
-        sellerId: order.sellerId,
       },
     });
 

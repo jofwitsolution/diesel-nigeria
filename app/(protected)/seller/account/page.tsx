@@ -2,12 +2,16 @@ import React from "react";
 import SellerAccountTabs from "@/components/pages/seller/SellerAccountTabs";
 import { getCurrentUser } from "@/lib/helpers/auth";
 import { getTransactions } from "@/lib/actions/user.action";
-import { getPaymentOverview } from "@/lib/actions/seller.action";
+import {
+  getPaymentOverview,
+  getSellerWithdrawals,
+} from "@/lib/actions/seller.action";
 
 const AccountPage = async () => {
   const currentUser = await getCurrentUser();
   const transactionResult = await getTransactions(currentUser?.id!, "desc", 4);
   const paymentResult = await getPaymentOverview();
+  const withdrawalResult = await getSellerWithdrawals();
 
   return (
     <div className="space-y-6">
@@ -23,6 +27,7 @@ const AccountPage = async () => {
         <SellerAccountTabs
           transactions={transactionResult.transactions ?? []}
           payments={paymentResult.payments ?? []}
+          withdrawals={withdrawalResult.withdrawals ?? []}
         />
       </div>
     </div>

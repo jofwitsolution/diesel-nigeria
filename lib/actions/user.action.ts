@@ -334,7 +334,6 @@ export const getTransactions = async (
             address: true,
           },
         },
-        product: true,
       },
     };
 

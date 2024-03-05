@@ -5,7 +5,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SellerAccountManagement from "./SellerAccountManagement";
 import SellerRecentTransactions from "./SellerRecentTransactions";
 import SellerPaymentOverview from "./SellerPaymentOverview";
-import { Transaction } from "@prisma/client";
+import { Transaction, WithdrawalRequest } from "@prisma/client";
+import SellerPayments from "@/components/shared/table/SellerPayments";
+import SellerWithdrawalRequest from "@/components/shared/table/SellerWithdrawalRequest";
 
 interface Props {
   transactions: Transaction[];
@@ -13,9 +15,10 @@ interface Props {
     amount: string;
     date: Date;
   }[];
+  withdrawals: WithdrawalRequest[];
 }
 
-const SellerAccountTabs = ({ transactions, payments }: Props) => {
+const SellerAccountTabs = ({ transactions, payments, withdrawals }: Props) => {
   return (
     <div>
       <Tabs defaultValue="overview" className="1332px:w-[67.125rem]">
@@ -39,9 +42,9 @@ const SellerAccountTabs = ({ transactions, payments }: Props) => {
             Withdrawal
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="overview" className="w-full space-y-6">
+        <TabsContent value="overview" className="w-full">
           <SellerAccountManagement />
-          <div className="flex w-full flex-col gap-6 lg:flex-row">
+          <div className="mt-6 flex w-full flex-col gap-6 lg:flex-row">
             <div className="w-full lg:w-[40%]">
               <SellerRecentTransactions transactions={transactions} />
             </div>
@@ -49,6 +52,12 @@ const SellerAccountTabs = ({ transactions, payments }: Props) => {
               <SellerPaymentOverview payments={payments} />
             </div>
           </div>
+        </TabsContent>
+        <TabsContent value="payments" className="w-full">
+          <SellerPayments transactions={transactions} />
+        </TabsContent>
+        <TabsContent value="withdrawal" className="w-full">
+          <SellerWithdrawalRequest withdrawals={withdrawals} />
         </TabsContent>
       </Tabs>
     </div>

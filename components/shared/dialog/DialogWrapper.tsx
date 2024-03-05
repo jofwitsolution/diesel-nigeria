@@ -15,10 +15,14 @@ interface Props {
   children: React.ReactNode;
   title: string;
   containerStyle: string;
+  dialogClose?: boolean;
+  customClose?: boolean;
 }
 
 const DialogWrapper = ({
   dialogState,
+  dialogClose = false,
+  customClose = true,
   handleDialogState,
   children,
   title,
@@ -28,25 +32,28 @@ const DialogWrapper = ({
     <Dialog open={dialogState}>
       <DialogOverlay className="z-[1300]">
         <DialogContent
-          className={`${containerStyle} z-[1500] rounded-[0.9rem] bg-white pb-8 pt-4 sm:rounded-xl`}
+          dialogClose={dialogClose}
+          className={`${containerStyle} z-[1500] rounded-[8px] bg-white pb-8 pt-4 sm:rounded-xl`}
         >
-          <DialogHeader className="border-b pb-2">
+          <DialogHeader className="pb-2">
             <DialogTitle className="flex w-full justify-between text-[0.88rem] font-medium">
               <span>{title}</span>
-              <Button
-                onClick={() => {
-                  handleDialogState();
-                }}
-                type="button"
-                className="size-max p-0"
-              >
-                <Image
-                  src="/images/icons/cancel.svg"
-                  width={14}
-                  height={14}
-                  alt="cancel"
-                />
-              </Button>
+              {customClose && (
+                <Button
+                  onClick={() => {
+                    handleDialogState();
+                  }}
+                  type="button"
+                  className="size-max p-0"
+                >
+                  <Image
+                    src="/images/icons/cancel.svg"
+                    width={14}
+                    height={14}
+                    alt="cancel"
+                  />
+                </Button>
+              )}
             </DialogTitle>
           </DialogHeader>
           {children}

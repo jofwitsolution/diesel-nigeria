@@ -1,13 +1,15 @@
 import Image from "next/image";
 import { createColumnHelper } from "@tanstack/react-table";
 import { formatDate, formatPrice, getTimeOfDay } from "@/lib/utils";
-import { Order } from "@prisma/client";
+import { Order, Transaction, WithdrawalRequest } from "@prisma/client";
 import { statusBg } from "@/styles/utils";
 
-const columnHelper = createColumnHelper<Order>();
+const orderColumnHelper = createColumnHelper<Order>();
+const transactionColumnHelper = createColumnHelper<Transaction>();
+const withdrawalColumnHelper = createColumnHelper<WithdrawalRequest>();
 
 export const buyerOrderColumns = [
-  columnHelper.accessor((row) => row.seller, {
+  orderColumnHelper.accessor((row) => row.seller, {
     id: "supplierName",
     cell: (info) => {
       const seller = info.row.original?.seller;
@@ -24,19 +26,19 @@ export const buyerOrderColumns = [
             height={31}
             alt="icon"
             className="w-[20px] xs:w-[initial]"
-          />{" "}
+          />
           <span className="">{seller.businessName}</span>
         </div>
       );
     },
     header: () => "Supplier Name",
   }),
-  columnHelper.accessor("quantity", {
+  orderColumnHelper.accessor("quantity", {
     id: "quantity",
     header: "Litre",
     cell: (info) => `${info.getValue()} Litres`,
   }),
-  columnHelper.accessor("orderDate", {
+  orderColumnHelper.accessor("orderDate", {
     id: "dateTime",
     cell: (info) => {
       const date = formatDate(info.getValue());
@@ -56,7 +58,7 @@ export const buyerOrderColumns = [
       </span>
     ),
   }),
-  columnHelper.accessor("expectedDeliveryDate", {
+  orderColumnHelper.accessor("expectedDeliveryDate", {
     id: "expectedDeliveryDate",
     header: () => (
       <span className="flex flex-col">
@@ -66,17 +68,17 @@ export const buyerOrderColumns = [
     ),
     cell: (info) => formatDate(info.getValue()),
   }),
-  columnHelper.accessor("amount", {
+  orderColumnHelper.accessor("amount", {
     id: "amount",
     header: "Amount",
     cell: (info) => formatPrice(Number(info.getValue())),
   }),
-  columnHelper.accessor("orderNumber", {
+  orderColumnHelper.accessor("orderNumber", {
     id: "orderNumber",
     header: "Order Number",
     cell: (info) => info.getValue(),
   }),
-  columnHelper.accessor("status", {
+  orderColumnHelper.accessor("status", {
     id: "status",
     header: "Status",
     cell: (info) => (
@@ -90,7 +92,7 @@ export const buyerOrderColumns = [
 ];
 
 export const sellerOrderColumns = [
-  columnHelper.accessor((row) => row.buyer, {
+  orderColumnHelper.accessor((row) => row.buyer, {
     id: "customer",
     cell: (info) => {
       const buyer = info.row.original?.buyer;
@@ -114,12 +116,12 @@ export const sellerOrderColumns = [
     },
     header: () => "Customer",
   }),
-  columnHelper.accessor("quantity", {
+  orderColumnHelper.accessor("quantity", {
     id: "quantity",
     header: "Litre",
     cell: (info) => `${info.getValue()} Litres`,
   }),
-  columnHelper.accessor("orderDate", {
+  orderColumnHelper.accessor("orderDate", {
     id: "dateTime",
     cell: (info) => {
       const date = formatDate(info.getValue());
@@ -139,7 +141,7 @@ export const sellerOrderColumns = [
       </span>
     ),
   }),
-  columnHelper.accessor("expectedDeliveryDate", {
+  orderColumnHelper.accessor("expectedDeliveryDate", {
     id: "expectedDeliveryDate",
     header: () => (
       <span className="flex flex-col">
@@ -149,17 +151,109 @@ export const sellerOrderColumns = [
     ),
     cell: (info) => formatDate(info.getValue()),
   }),
-  columnHelper.accessor("amount", {
+  orderColumnHelper.accessor("amount", {
     id: "amount",
     header: "Amount",
     cell: (info) => formatPrice(Number(info.getValue())),
   }),
-  columnHelper.accessor("orderNumber", {
+  orderColumnHelper.accessor("orderNumber", {
     id: "orderNumber",
     header: "Order Number",
     cell: (info) => info.getValue(),
   }),
-  columnHelper.accessor("status", {
+  orderColumnHelper.accessor("status", {
+    id: "status",
+    header: "Status",
+    cell: (info) => (
+      <span
+        className={`${statusBg(info.getValue())} rounded p-1 font-[700] capitalize`}
+      >
+        {info.getValue()}
+      </span>
+    ),
+  }),
+];
+
+export const sellerTransactionColumns = [
+  transactionColumnHelper.accessor("date", {
+    id: "dateTime",
+    cell: (info) => {
+      const date = formatDate(info.getValue());
+      const time = getTimeOfDay(info.getValue());
+
+      return (
+        <span className="flex flex-col">
+          <span className="font-medium">{date}</span>
+          <span className="">{time}</span>
+        </span>
+      );
+    },
+    header: "Date, time",
+  }),
+  transactionColumnHelper.accessor("reference", {
+    id: "reference",
+    header: "Reference",
+    cell: (info) => info.getValue(),
+  }),
+  transactionColumnHelper.accessor("orderNumber", {
+    id: "orderNumber",
+    header: "Order Number",
+    cell: (info) => info.getValue(),
+  }),
+  transactionColumnHelper.accessor("amount", {
+    id: "amount",
+    header: "Amount",
+    cell: (info) => formatPrice(Number(info.getValue())),
+  }),
+  transactionColumnHelper.accessor("channel", {
+    id: "channel",
+    header: "Channel",
+    cell: (info) => info.getValue(),
+  }),
+];
+
+export const sellerWithdrawalColumns = [
+  withdrawalColumnHelper.accessor("date", {
+    id: "dateTime",
+    cell: (info) => {
+      const date = formatDate(info.getValue());
+      const time = getTimeOfDay(info.getValue());
+
+      return (
+        <span className="flex flex-col">
+          <span className="font-medium">{date}</span>
+          <span className="">{time}</span>
+        </span>
+      );
+    },
+    header: "Date, time",
+  }),
+  withdrawalColumnHelper.accessor("reference", {
+    id: "reference",
+    header: "Reference",
+    cell: (info) => info.getValue(),
+  }),
+  withdrawalColumnHelper.accessor("amount", {
+    id: "amount",
+    header: "Amount",
+    cell: (info) => formatPrice(Number(info.getValue())),
+  }),
+  withdrawalColumnHelper.accessor("bank", {
+    id: "destination",
+    header: "Destination",
+    cell: (info) => (
+      <span className="flex flex-col gap-1">
+        <span className="capitalize">{info.row.original.bank}</span>
+        <span>{info.row.original.accountNumber}</span>
+      </span>
+    ),
+  }),
+  withdrawalColumnHelper.accessor("description", {
+    id: "description",
+    header: "Description",
+    cell: (info) => info.getValue(),
+  }),
+  withdrawalColumnHelper.accessor("status", {
     id: "status",
     header: "Status",
     cell: (info) => (
