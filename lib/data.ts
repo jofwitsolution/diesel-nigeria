@@ -203,3 +203,126 @@ export const users = [
     emailVerified,
   },
 ];
+
+export const sampleTransactions = [
+  {
+    id: "1",
+    amount: "50.00",
+    date: new Date("2024-01-05T10:30:00"),
+    category: "FOOD",
+  },
+  {
+    id: "2",
+    amount: "100.00",
+    date: new Date("2024-01-15T14:45:00"),
+    category: "SHOPPING",
+  },
+  {
+    id: "3",
+    amount: "75.00",
+    date: new Date("2024-02-08T08:15:00"),
+    category: "TRANSPORTATION",
+  },
+  {
+    id: "4",
+    amount: "40.00",
+    date: new Date("2024-02-20T12:00:00"),
+    category: "ENTERTAINMENT",
+  },
+  {
+    id: "5",
+    amount: "120.00",
+    date: new Date("2024-03-03T16:20:00"),
+    category: "UTILITIES",
+  },
+  {
+    id: "6",
+    amount: "90.00",
+    date: new Date("2024-03-10T09:30:00"),
+    category: "HEALTHCARE",
+  },
+  {
+    id: "7",
+    amount: "55.00",
+    date: new Date("2024-04-01T11:45:00"),
+    category: "FOOD",
+  },
+  {
+    id: "8",
+    amount: "85.00",
+    date: new Date("2024-04-12T18:00:00"),
+    category: "SHOPPING",
+  },
+  {
+    id: "9",
+    amount: "65.00",
+    date: new Date("2024-05-06T07:30:00"),
+    category: "TRANSPORTATION",
+  },
+  {
+    id: "10",
+    amount: "30.00",
+    date: new Date("2024-05-15T13:20:00"),
+    category: "ENTERTAINMENT",
+  },
+  {
+    id: "11",
+    amount: "110.00",
+    date: new Date("2024-06-02T10:15:00"),
+    category: "UTILITIES",
+  },
+  {
+    id: "12",
+    amount: "70.00",
+    date: new Date("2024-06-18T09:00:00"),
+    category: "HEALTHCARE",
+  },
+  {
+    id: "13",
+    amount: "45.00",
+    date: new Date("2024-07-04T15:30:00"),
+    category: "FOOD",
+  },
+  {
+    id: "14",
+    amount: "95.00",
+    date: new Date("2024-07-19T20:45:00"),
+    category: "SHOPPING",
+  },
+  {
+    id: "15",
+    amount: "80.00",
+    date: new Date("2024-08-05T11:00:00"),
+    category: "TRANSPORTATION",
+  },
+  {
+    id: "16",
+    amount: "35.00",
+    date: new Date("2024-08-22T14:10:00"),
+    category: "ENTERTAINMENT",
+  },
+  {
+    id: "17",
+    amount: "125.00",
+    date: new Date("2024-09-03T09:45:00"),
+    category: "UTILITIES",
+  },
+  {
+    id: "18",
+    amount: "60.00",
+    date: new Date("2024-09-14T17:30:00"),
+    category: "HEALTHCARE",
+  },
+  {
+    id: "19",
+    amount: "50.00",
+    date: new Date("2024-10-08T08:20:00"),
+    category: "FOOD",
+  },
+  {
+    id: "20",
+    amount: "105.00",
+    date: new Date("2024-10-25T12:15:00"),
+    category: "SHOPPING",
+  },
+];

@@ -16,6 +16,7 @@ import {
   sendOrderInProgressEmailToBuyer,
 } from "../helpers/mail";
 import { countUniqueBuyers } from "../helpers/order";
+import { getJanuary1stOfCurrentYear } from "../utils";
 
 export const sellerUpdateBusinessInfo = async (
   values: z.infer<typeof SellerBusinessInfoSchema>,
@@ -489,6 +490,30 @@ export const getSellerWalletData = async () => {
       totalPayment,
       totalWithdrawal,
     };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const getPaymentOverview = async () => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const january1stOfCurrentYear = getJanuary1stOfCurrentYear();
+
+    const payments = await db.transaction.findMany({
+      where: {
+        sellerId: currentUser.id,
+        category: "settlement",
+        date: { gte: january1stOfCurrentYear },
+      },
+    });
+
+    return { success: true, payments };
   } catch (error) {
     console.log(error);
     return { error: "Something went wrong!" };

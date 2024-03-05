@@ -27,11 +27,18 @@ enum OrderStatus {
   cancelled
 }
 
+enum WithdrawalStatus {
+  successful
+  pending
+  failed
+  cancelled
+}
+
 enum TransactionCategory {
   commision
   settlement
   withdrawal
-  refund
+  reversal
 }
 
 model OrderTracking {
@@ -119,6 +126,7 @@ model User {
   sellerOrders   Order[] @relation("OrderToSeller")
   buyerTransactions  Transaction[] @relation("TransactionToBuyer")
   sellerTransactions  Transaction[] @relation("TransactionToSeller")
+  withdrawalRequests  WithdrawalRequest[]
 
   updatedAt     DateTime    @updatedAt
 }
@@ -223,6 +231,18 @@ model Transaction {
 model WithdrawalRequest {
   id                 String  @id @default(cuid())
   channel            String
+  reference          String
+  amount             String
+  description        String    @default("Funds withdrawn into the account")
+  bank               String
+  accountNumber      String
+  status             WithdrawalStatus @default(pending)
+  date               DateTime    @default(now())
+
+  user                User?        @relation(fields: [userId], references: [id])
+
+  // Foreign keys
+  userId              String?
 }
 
 model Wallet {

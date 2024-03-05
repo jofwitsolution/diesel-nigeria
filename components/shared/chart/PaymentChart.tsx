@@ -3,7 +3,12 @@
 import React, { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 
-const PaymentChart: React.FC = () => {
+// [
+//   650000, 500009, 800000, 810000, 560000, 550000, 400000,
+//   700000, 900000, 600000, 750000, 850000,
+// ]
+
+const PaymentChart: React.FC = ({ chartData }) => {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   const chartInstance = useRef<Chart<"line"> | null>(null);
 
@@ -35,10 +40,7 @@ const PaymentChart: React.FC = () => {
             datasets: [
               {
                 label: "Payments",
-                data: [
-                  650000, 500009, 800000, 810000, 560000, 550000, 400000,
-                  700000, 900000, 600000, 750000, 850000,
-                ], // Replace with your payment data
+                data: chartData, // Replace with your payment data
                 backgroundColor: "rgba(75, 192, 192, 0.4)",
                 borderColor: "rgba(75, 192, 192, 1)",
                 borderWidth: 2,

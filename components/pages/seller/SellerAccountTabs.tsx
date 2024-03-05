@@ -5,8 +5,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SellerAccountManagement from "./SellerAccountManagement";
 import SellerRecentTransactions from "./SellerRecentTransactions";
 import SellerPaymentOverview from "./SellerPaymentOverview";
+import { Transaction } from "@prisma/client";
 
-const SellerAccountTabs = () => {
+interface Props {
+  transactions: Transaction[];
+  payments: {
+    amount: string;
+    date: Date;
+  }[];
+}
+
+const SellerAccountTabs = ({ transactions, payments }: Props) => {
   return (
     <div>
       <Tabs defaultValue="overview" className="1332px:w-[67.125rem]">
@@ -34,10 +43,10 @@ const SellerAccountTabs = () => {
           <SellerAccountManagement />
           <div className="flex w-full flex-col gap-6 lg:flex-row">
             <div className="w-full lg:w-[40%]">
-              <SellerRecentTransactions />
+              <SellerRecentTransactions transactions={transactions} />
             </div>
             <div className="w-full lg:w-[60%]">
-              <SellerPaymentOverview />
+              <SellerPaymentOverview payments={payments} />
             </div>
           </div>
         </TabsContent>

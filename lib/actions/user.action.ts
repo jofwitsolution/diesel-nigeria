@@ -297,3 +297,60 @@ export const getTopSellers = async () => {
     return { error: "Something went wrong!" };
   }
 };
+
+export const getTransactions = async (
+  userId: string,
+  orderBy: string = "desc",
+  take: null | number = null,
+  targetDate: null | Date = null
+) => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const query = {
+      where: { OR: [{ buyerId: userId }, { sellerId: userId }] },
+      orderBy: {
+        date: orderBy,
+      },
+      include: {
+        seller: {
+          select: {
+            avatar: true,
+            businessName: true,
+            rcNumber: true,
+            id: true,
+            address: true,
+          },
+        },
+        buyer: {
+          select: {
+            avatar: true,
+            businessName: true,
+            rcNumber: true,
+            id: true,
+            address: true,
+          },
+        },
+        product: true,
+      },
+    };
+
+    if (take !== null) {
+      query.take = take;
+    }
+
+    if (targetDate !== null) {
+      query.where.date = { gte: new Date(targetDate) };
+    }
+
+    const transactions = await db.transaction.findMany(query);
+
+    return { success: true, transactions };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};

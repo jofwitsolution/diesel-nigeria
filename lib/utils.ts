@@ -190,3 +190,94 @@ export function getTimeOfDay(input: string | Date | number): string {
 
   return `${formattedHours}:${formattedMinutes}${ampm}`;
 }
+
+export function getSimpleDateTime(input: string | Date | number): string {
+  let date: Date;
+
+  // Convert input to Date object
+  if (typeof input === "string") {
+    date = new Date(input);
+  } else if (typeof input === "number") {
+    date = new Date(input);
+  } else if (input instanceof Date) {
+    date = input;
+  } else {
+    throw new Error(
+      "Invalid input. Please provide a valid date string, date object, or timestamp."
+    );
+  }
+
+  // Get month name
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const monthName = months[date.getMonth()];
+
+  // Get hours and minutes
+  let hours = date.getHours();
+  const minutes = date.getMinutes();
+
+  // Convert hours to 12-hour format and determine AM/PM
+  const amOrPm = hours >= 12 ? "PM" : "AM";
+  hours = hours % 12 || 12;
+
+  // Format the date and time
+  const formattedDateTime = `${monthName} ${date.getDate()}, ${hours}:${minutes.toString().padStart(2, "0")} ${amOrPm}`;
+
+  return formattedDateTime;
+}
+
+export function getMonthAbbreviation(
+  input: string | Date | number | Date
+): string {
+  let date: Date;
+
+  // Convert input to Date object
+  if (typeof input === "string") {
+    date = new Date(input);
+  } else if (typeof input === "number") {
+    date = new Date(input);
+  } else if (input instanceof Date) {
+    date = input;
+  } else {
+    throw new Error(
+      "Invalid input. Please provide a valid date string, date object, or timestamp."
+    );
+  }
+
+  // Get month abbreviation
+  const monthsAbbreviation = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  return monthsAbbreviation[date.getMonth()];
+}
+
+export function getJanuary1stOfCurrentYear(): Date {
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  const januaryFirst = new Date(currentYear, 0, 1); // Note: Months are 0-based in JavaScript Date constructor
+  return januaryFirst;
+}
