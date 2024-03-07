@@ -40,9 +40,11 @@ const SellerAccountManagement = ({
   bank,
 }: Props) => {
   const [isWithdrawDialogOpen, setWithdrawDialogOpen] = useState(false);
+  const [isSuccessDialogOpen, setSuccessDialogOpen] = useState(false);
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
+  const [formValues, setFormValues] = useState({});
 
   const form = useForm<z.infer<typeof WithdrawalSchema>>({
     resolver: zodResolver(WithdrawalSchema),
@@ -57,6 +59,7 @@ const SellerAccountManagement = ({
   const onSubmit = async (values: z.infer<typeof WithdrawalSchema>) => {
     setError("");
     setSuccess("");
+    setFormValues(values);
 
     startTransition(() => {
       sellerWithdrawFunds(values).then((data) => {
@@ -66,6 +69,7 @@ const SellerAccountManagement = ({
         if (data?.success) {
           form.reset();
           setWithdrawDialogOpen(false);
+          setSuccessDialogOpen(true);
           toast.success(data.success);
         }
       });
@@ -263,6 +267,36 @@ const SellerAccountManagement = ({
         </div>
       </DialogWrapper>
       {isPending && <LoaderOverlay type="cliploader" size={40} />}
+      <DialogWrapper
+        dialogState={isSuccessDialogOpen}
+        handleDialogState={() => {
+          setSuccessDialogOpen(!isSuccessDialogOpen);
+        }}
+        title=""
+        customClose={true}
+        containerStyle="max-w-[24.75rem]"
+      >
+        <div className="flex w-full flex-col items-center justify-center gap-8 px-[1rem] xs:px-[3rem]">
+          <Image
+            src="/images/confirmed.png"
+            width={260}
+            height={260}
+            alt="success"
+          />
+          <div className="flex flex-col items-center">
+            <span className="gap-1 text-center font-fraunces text-[1.125rem] font-medium">
+              Withdrawal Request
+            </span>
+            <p className="text-center">
+              The sum of{" "}
+              <span className="font-medium">
+                {formatPrice(Number(formValues?.amount))}
+              </span>{" "}
+              was requested successfully.
+            </p>
+          </div>
+        </div>
+      </DialogWrapper>
     </>
   );
 };
