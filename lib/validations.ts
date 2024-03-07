@@ -227,3 +227,25 @@ export const PlaceOrderSchema = z.object({
     })
     .optional(),
 });
+
+export const WithdrawalSchema = z.object({
+  amount: z.string({ invalid_type_error: "Enter withdraw amount" }).min(1, {
+    message: "Invalid amount",
+  }),
+  accountNumber: z
+    .string({ invalid_type_error: "Enter account number" })
+    .min(10, {
+      message: "Invalid account number",
+    })
+    .max(10, {
+      message: "Invalid account number",
+    }),
+  bank: z.string({ invalid_type_error: "Enter bank name" }).min(3, {
+    message: "Enter a valid bank",
+  }),
+  description: z
+    .string({ invalid_type_error: "You must enter a description" })
+    .min(1, {
+      message: "You must enter a description",
+    }),
+});

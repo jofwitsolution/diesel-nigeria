@@ -4,6 +4,7 @@ import { getCurrentUser } from "@/lib/helpers/auth";
 import { getTransactions } from "@/lib/actions/user.action";
 import {
   getPaymentOverview,
+  getSellerWalletData,
   getSellerWithdrawals,
 } from "@/lib/actions/seller.action";
 
@@ -12,6 +13,7 @@ const AccountPage = async () => {
   const transactionResult = await getTransactions(currentUser?.id!, "desc", 4);
   const paymentResult = await getPaymentOverview();
   const withdrawalResult = await getSellerWithdrawals();
+  const walletDataResult = await getSellerWalletData();
 
   return (
     <div className="space-y-6">
@@ -28,6 +30,13 @@ const AccountPage = async () => {
           transactions={transactionResult.transactions ?? []}
           payments={paymentResult.payments ?? []}
           withdrawals={withdrawalResult.withdrawals ?? []}
+          walletData={{
+            balance: walletDataResult.balance ?? 0,
+            totalPayment: walletDataResult.totalPayment ?? 0,
+            totalWithdrawal: walletDataResult.totalWithdrawal ?? 0,
+            accountNumber: walletDataResult.accountNumber ?? "0",
+            bank: walletDataResult.bank ?? "",
+          }}
         />
       </div>
     </div>

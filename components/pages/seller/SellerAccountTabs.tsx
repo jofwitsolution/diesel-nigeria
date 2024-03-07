@@ -16,9 +16,21 @@ interface Props {
     date: Date;
   }[];
   withdrawals: WithdrawalRequest[];
+  walletData: {
+    balance: number;
+    totalPayment: number;
+    totalWithdrawal: number;
+    accountNumber: string;
+    bank: string;
+  };
 }
 
-const SellerAccountTabs = ({ transactions, payments, withdrawals }: Props) => {
+const SellerAccountTabs = ({
+  transactions,
+  payments,
+  withdrawals,
+  walletData,
+}: Props) => {
   return (
     <div>
       <Tabs defaultValue="overview" className="1332px:w-[67.125rem]">
@@ -43,7 +55,13 @@ const SellerAccountTabs = ({ transactions, payments, withdrawals }: Props) => {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="overview" className="w-full">
-          <SellerAccountManagement />
+          <SellerAccountManagement
+            balance={walletData.balance}
+            accountNumber={walletData.accountNumber}
+            bank={walletData.bank}
+            totalPayment={walletData.totalPayment}
+            totalWithdrawal={walletData.totalWithdrawal}
+          />
           <div className="mt-6 flex w-full flex-col gap-6 lg:flex-row">
             <div className="w-full lg:w-[40%]">
               <SellerRecentTransactions transactions={transactions} />

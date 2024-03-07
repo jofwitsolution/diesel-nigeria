@@ -1,35 +1,76 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState, useTransition } from "react";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/utils";
 import Image from "next/image";
-import { getSellerWalletData } from "@/lib/actions/seller.action";
 import DialogWrapper from "@/components/shared/dialog/DialogWrapper";
+import { FormSuccess } from "@/components/forms/FormSuccess";
+import { FormError } from "@/components/forms/FormError";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { WithdrawalSchema } from "@/lib/validations";
+import { sellerWithdrawFunds } from "@/lib/actions/seller.action";
+import LoaderOverlay from "@/components/LoaderOverlay";
 
-const SellerAccountManagement = () => {
-  const [walletData, setWalletData] = useState({
-    balance: 0,
-    totalPayment: 0,
-    totalWithdrawal: 0,
+interface Props {
+  balance: number;
+  totalPayment: number;
+  totalWithdrawal: number;
+  accountNumber: string;
+  bank: string;
+}
+
+const SellerAccountManagement = ({
+  balance,
+  totalPayment,
+  totalWithdrawal,
+  accountNumber,
+  bank,
+}: Props) => {
+  const [isWithdrawDialogOpen, setWithdrawDialogOpen] = useState(false);
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
+  const [isPending, startTransition] = useTransition();
+
+  const form = useForm<z.infer<typeof WithdrawalSchema>>({
+    resolver: zodResolver(WithdrawalSchema),
+    defaultValues: {
+      amount: "",
+      description: "",
+      accountNumber,
+      bank,
+    },
   });
 
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const onSubmit = async (values: z.infer<typeof WithdrawalSchema>) => {
+    setError("");
+    setSuccess("");
 
-  useEffect(() => {
-    const fetchWalletData = async () => {
-      const result = await getSellerWalletData();
-      if (!result?.success) {
-        setWalletData({
-          balance: result.balance!,
-          totalPayment: result.totalPayment!,
-          totalWithdrawal: result.totalWithdrawal!,
-        });
-      }
-    };
+    startTransition(() => {
+      sellerWithdrawFunds(values).then((data) => {
+        setError(data.error);
+        setSuccess(data.success);
 
-    fetchWalletData();
-  }, []);
+        if (data?.success) {
+          form.reset();
+          setWithdrawDialogOpen(false);
+          toast.success(data.success);
+        }
+      });
+    });
+  };
 
   return (
     <>
@@ -45,7 +86,7 @@ const SellerAccountManagement = () => {
           </div>
           <div>
             <Button
-              onClick={() => setIsDialogOpen(true)}
+              onClick={() => setWithdrawDialogOpen(true)}
               className="h-[2.375rem] border border-primary-500 px-6 font-[700] text-primary-500 active:bg-primary-100"
             >
               Withdraw Funds
@@ -58,7 +99,7 @@ const SellerAccountManagement = () => {
               Wallet Balance
             </span>
             <span className="text-[1.5rem] font-medium leading-[1.6rem] lg:text-[2.5rem] lg:leading-[2.6rem]">
-              {formatPrice(walletData.balance)}
+              {formatPrice(balance)}
             </span>
           </div>
           <div className="flex h-[5.25rem] flex-[28%] flex-col gap-2 rounded-md border px-2 py-3 max-xs:flex-[50%] md:flex-[23%] md:px-4">
@@ -74,7 +115,7 @@ const SellerAccountManagement = () => {
               />
             </span>
             <span className="font-medium lg:text-[1.25rem]">
-              {formatPrice(walletData.totalPayment)}
+              {formatPrice(totalPayment)}
             </span>
           </div>
           <div className="flex h-[5.25rem] flex-[28%] flex-col gap-2 rounded-md border px-2 py-3 md:flex-[23%] md:px-4">
@@ -90,22 +131,138 @@ const SellerAccountManagement = () => {
               />
             </span>
             <span className="font-medium lg:text-[1.25rem]">
-              {formatPrice(walletData.totalWithdrawal)}
+              {formatPrice(totalWithdrawal)}
             </span>
           </div>
         </div>
       </div>
       <DialogWrapper
-        dialogState={isDialogOpen}
+        dialogState={isWithdrawDialogOpen}
         handleDialogState={() => {
-          setIsDialogOpen(!isDialogOpen);
+          setWithdrawDialogOpen(!isWithdrawDialogOpen);
         }}
         title="Withdraw Funds"
         customClose={true}
-        containerStyle="max-sm:w-[18.75rem] sm:max-w-[24.75rem]"
+        containerStyle="max-w-[24.75rem]"
       >
-        <div>Form</div>
+        <div className="mx-auto w-full xs:w-[20.75rem]">
+          <div className="mb-4 flex w-full flex-col bg-primary-500 px-2 py-3 text-light-900 md:px-4">
+            <span className="text-[0.75rem]">Wallet Balance</span>
+            <span>
+              <span className="font-fraunces text-[1.1rem] md:text-[1.5rem]">
+                {formatPrice(balance)}
+              </span>
+            </span>
+          </div>
+          <div className="w-full">
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="w-full space-y-4"
+              >
+                <div className="w-full space-y-3">
+                  <FormField
+                    control={form.control}
+                    name="amount"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-[0.875rem] text-[#151515]">
+                          Amount (Naira)
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            disabled={isPending}
+                            placeholder="Enter amount"
+                            type="number"
+                            className="w-full rounded-[4px] border-[#9EA2B3]"
+                          />
+                        </FormControl>
+                        <FormMessage className="text-red-400 max-xs:text-[0.7rem]" />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-[0.875rem] text-[#151515]">
+                          Description
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            disabled={isPending}
+                            placeholder="Enter description"
+                            type="text"
+                            className="w-full rounded-[4px] border-[#9EA2B3]"
+                          />
+                        </FormControl>
+                        <FormMessage className="text-red-400 max-xs:text-[0.7rem]" />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="accountNumber"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-[0.875rem] text-[#151515]">
+                          Account Number
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            disabled={true}
+                            placeholder="Enter account number"
+                            type="number"
+                            className="w-full rounded-[4px] border-[#9EA2B3]"
+                          />
+                        </FormControl>
+                        <FormMessage className="text-red-400 max-xs:text-[0.7rem]" />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="bank"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-[0.875rem] text-[#151515]">
+                          Bank
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            disabled={true}
+                            placeholder="Enter bank name"
+                            type="text"
+                            className="w-full rounded-[4px] border-[#9EA2B3]"
+                          />
+                        </FormControl>
+                        <FormMessage className="text-red-400 max-xs:text-[0.7rem]" />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <FormError message={error} />
+                <FormSuccess message={success} />
+                <div className="">
+                  <Button
+                    disabled={isPending}
+                    type="submit"
+                    className="h-[2.3rem] w-full rounded-[4px] bg-primary-500 px-4 font-fraunces text-light-900 active:bg-primary-100"
+                  >
+                    Withdraw
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </div>
+        </div>
       </DialogWrapper>
+      {isPending && <LoaderOverlay type="cliploader" size={40} />}
     </>
   );
 };

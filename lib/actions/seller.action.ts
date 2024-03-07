@@ -6,6 +6,7 @@ import {
   BankDetailsSchema,
   ProductSchema,
   SellerBusinessInfoSchema,
+  WithdrawalSchema,
 } from "../validations";
 import { getCurrentUser } from "../helpers/auth";
 import { cloudinary } from "../helpers/cloudinary";
@@ -17,6 +18,7 @@ import {
 } from "../helpers/mail";
 import { countUniqueBuyers } from "../helpers/order";
 import { getJanuary1stOfCurrentYear } from "../utils";
+import { getUserById } from "../helpers/user";
 
 export const sellerUpdateBusinessInfo = async (
   values: z.infer<typeof SellerBusinessInfoSchema>,
@@ -461,6 +463,7 @@ export const getSellerWalletData = async () => {
       return { error: "Unauthenticated" };
     }
 
+    const user = await getUserById(currentUser.id);
     const wallet = await db.wallet.findUnique({
       where: { userId: currentUser.id },
     });
@@ -489,6 +492,8 @@ export const getSellerWalletData = async () => {
       balance: wallet?.balance,
       totalPayment,
       totalWithdrawal,
+      accountNumber: user.accountNumber as string,
+      bank: user.bank as string,
     };
   } catch (error) {
     console.log(error);
@@ -534,6 +539,68 @@ export const getSellerWithdrawals = async () => {
     });
 
     return { success: true, withdrawals };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const sellerWithdrawFunds = async (
+  values: z.infer<typeof WithdrawalSchema>
+) => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const fields = WithdrawalSchema.safeParse(values);
+
+    if (!fields.success) {
+      return { error: "Invalid fields." };
+    }
+
+    const { amount, accountNumber, description, bank } = fields.data;
+
+    if (Number(amount) < 20000) {
+      return {
+        error: "Minimum withdrawal is 20,000",
+      };
+    }
+
+    const wallet = await db.wallet.findUnique({
+      where: { userId: currentUser.id },
+    });
+    if (!wallet) {
+      return { error: "No wallet found!" };
+    }
+
+    if (Number(wallet.balance) < Number(amount)) {
+      return { error: "Insufficient balance" };
+    }
+
+    const withdrawal = await db.withdrawalRequest.findFirst({
+      where: {
+        userId: currentUser.id,
+        status: "pending",
+      },
+    });
+    if (withdrawal) {
+      return { error: "You have a pending withdrawal" };
+    }
+
+    await db.withdrawalRequest.create({
+      data: {
+        amount,
+        accountNumber,
+        bank,
+        description,
+        channel: "transfer",
+        reference: Date.now().toString(),
+      },
+    });
+
+    return { success: "Withdrawal submitted successfuly" };
   } catch (error) {
     console.log(error);
     return { error: "Something went wrong!" };

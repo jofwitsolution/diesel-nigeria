@@ -10,7 +10,6 @@ import {
   getPaginationRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
-import Link from "next/link";
 import Pagination from "./Pagination";
 import SearchBox from "../search/SearchBox";
 import { fuzzyFilter } from "./helper";
