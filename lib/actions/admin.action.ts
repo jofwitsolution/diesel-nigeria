@@ -8,9 +8,15 @@ import { getUserByEmail, getUserById } from "../helpers/user";
 import { generatePassword } from "../utils";
 import { generateVerificationToken } from "../helpers/token";
 import { sendNewSellerEmail, sendVerificationEmail } from "../helpers/mail";
+import { getCurrentUser } from "../helpers/auth";
 
 export const addNewSeller = async (values: z.infer<typeof NewSellerSchema>) => {
   try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
     const newSellerFields = NewSellerSchema.safeParse(values);
 
     if (!newSellerFields.success) {
@@ -71,6 +77,11 @@ export const addNewSeller = async (values: z.infer<typeof NewSellerSchema>) => {
 
 export const verifySeller = async (id: string) => {
   try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
     const seller = await getUserById(id);
     if (!seller || seller.role !== "seller") {
       return { error: "Seller does not exist!" };
@@ -96,6 +107,11 @@ export const verifySeller = async (id: string) => {
 
 export const verifyBuyer = async (id: string) => {
   try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
     const buyer = await getUserById(id);
     if (!buyer || buyer.role !== "buyer") {
       return { error: "Buyer does not exist!" };
@@ -113,6 +129,330 @@ export const verifyBuyer = async (id: string) => {
     }
 
     return { success: "Buyer verification approved!" };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const getAdminOverview = async () => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const products = await db.product.findMany();
+
+    const orders = await db.order.findMany();
+
+    const totalBuyers = await db.user.count({ where: { role: "buyer" } });
+    const totalSellers = await db.user.count({ where: { role: "seller" } });
+
+    const completedOrders = orders.reduce((a, order) => {
+      if (order.status === "delivered") {
+        return a + 1;
+      } else {
+        return a;
+      }
+    }, 0);
+
+    const pendingOrders = orders.reduce((a, order) => {
+      if (order.status === "pending") {
+        return a + 1;
+      } else {
+        return a;
+      }
+    }, 0);
+
+    return {
+      totalProducts: products.length,
+      totalOrders: orders.length,
+      totalBuyers,
+      totalSellers,
+      completedOrders,
+      pendingOrders,
+    };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const getAdminRevenue = async () => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const currentDate = new Date();
+    const startOfYear = new Date(currentDate.getFullYear(), 0, 1);
+    const endOfYear = new Date(currentDate.getFullYear() + 1, 0, 1);
+
+    const commisions = await db.transaction.findMany({
+      where: {
+        category: "commision",
+        AND: [
+          {
+            date: {
+              gte: startOfYear,
+              lt: endOfYear,
+            },
+          },
+        ],
+      },
+    });
+
+    const reversals = await db.transaction.findMany({
+      where: {
+        category: "reversal",
+        AND: [
+          {
+            date: {
+              gte: startOfYear,
+              lt: endOfYear,
+            },
+          },
+        ],
+      },
+    });
+
+    const totalCommision = commisions.reduce(
+      (a, commision) => a + Number(commision.amount),
+      0
+    );
+    const totalReversal = reversals.reduce(
+      (a, reversal) => a + Number(reversal.amount),
+      0
+    );
+    const totalRevenue = totalCommision - totalReversal;
+
+    const startOfLastMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() - 1,
+      1
+    );
+
+    // Calculate the start date of the current month
+    const startOfCurrentMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      1
+    );
+
+    // Query commisions for the last month
+    const lastMonthCommision = await db.transaction.findMany({
+      where: {
+        category: "commision",
+        AND: [
+          {
+            date: {
+              gte: startOfLastMonth,
+              lt: startOfCurrentMonth,
+            },
+          },
+        ],
+      },
+    });
+
+    // Query reversals for the last month
+    const lastMonthReversal = await db.transaction.findMany({
+      where: {
+        category: "reversal",
+        AND: [
+          {
+            date: {
+              gte: startOfLastMonth,
+              lt: startOfCurrentMonth,
+            },
+          },
+        ],
+      },
+    });
+
+    const monthlyTotalCommision = lastMonthCommision.reduce(
+      (a, commision) => a + Number(commision.amount),
+      0
+    );
+    const monthlyTotalReversal = lastMonthReversal.reduce(
+      (a, reversal) => a + Number(reversal.amount),
+      0
+    );
+    const monthlyTotalRevenue = monthlyTotalCommision - monthlyTotalReversal;
+
+    // Calculate the start date of the last week (7 days ago from today)
+    const startDateOfLastWeek = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate() - 7
+    );
+
+    // Calculate the start date of today
+    const startOfToday = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate()
+    );
+
+    // Query commisions for the last week
+    const lastWeekCommision = await db.transaction.findMany({
+      where: {
+        category: "commision",
+        AND: [
+          {
+            date: {
+              gte: startDateOfLastWeek,
+              lt: startOfToday,
+            },
+          },
+        ],
+      },
+    });
+
+    // Query reversal for the last week
+    const lastWeekReversal = await db.transaction.findMany({
+      where: {
+        category: "reversal",
+        AND: [
+          {
+            date: {
+              gte: startDateOfLastWeek,
+              lt: startOfToday,
+            },
+          },
+        ],
+      },
+    });
+
+    const weeklyTotalCommision = lastWeekCommision.reduce(
+      (a, commision) => a + Number(commision.amount),
+      0
+    );
+    const weeklyTotalReversal = lastWeekReversal.reduce(
+      (a, reversal) => a + Number(reversal.amount),
+      0
+    );
+    const weeklyTotalRevenue = weeklyTotalCommision - weeklyTotalReversal;
+
+    // Calculate the start date of yesterday
+    const startOfYesterday = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate() - 1
+    );
+
+    // Query commisions for yesterday
+    const yesterdayCommision = await db.transaction.findMany({
+      where: {
+        category: "commision",
+        AND: [
+          {
+            date: {
+              gte: startOfYesterday,
+              lt: startOfToday,
+            },
+          },
+        ],
+      },
+    });
+
+    // Query reversal for yesterday
+    const yesterdayReversal = await db.transaction.findMany({
+      where: {
+        category: "reversal",
+        AND: [
+          {
+            date: {
+              gte: startOfYesterday,
+              lt: startOfToday,
+            },
+          },
+        ],
+      },
+    });
+
+    const yesterdayTotalCommision = yesterdayCommision.reduce(
+      (a, commision) => a + Number(commision.amount),
+      0
+    );
+    const yesterdayTotalReversal = yesterdayReversal.reduce(
+      (a, reversal) => a + Number(reversal.amount),
+      0
+    );
+    const yesterdayTotalRevenue =
+      yesterdayTotalCommision - yesterdayTotalReversal;
+
+    return {
+      totalRevenue,
+      monthlyTotalRevenue,
+      weeklyTotalRevenue,
+      yesterdayTotalRevenue,
+    };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const getAllOrders = async (
+  orderBy: string = "desc",
+  take: null | number = null,
+  selectedDate: null | Date = null
+) => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const query = {
+      orderBy: {
+        orderDate: orderBy,
+      },
+      include: {
+        seller: {
+          select: {
+            avatar: true,
+            businessName: true,
+            rcNumber: true,
+            id: true,
+            address: true,
+          },
+        },
+        buyer: {
+          select: {
+            avatar: true,
+            businessName: true,
+            rcNumber: true,
+            id: true,
+            address: true,
+          },
+        },
+        product: true,
+      },
+    };
+
+    if (take !== null) {
+      query.take = take;
+    }
+
+    if (selectedDate !== null) {
+      // Calculate the start date
+      const startDate = new Date(selectedDate);
+
+      // calculate the next date
+      const endDate = new Date(
+        startDate.getFullYear(),
+        startDate.getMonth(),
+        startDate.getDate() + 1
+      );
+      query.where.orderDate = { gte: startDate, lt: endDate };
+    }
+
+    const orders = await db.order.findMany(query);
+
+    return { orders };
   } catch (error) {
     console.log(error);
     return { error: "Something went wrong!" };

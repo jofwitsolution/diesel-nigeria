@@ -4,8 +4,11 @@ import RevenueBoard from "@/components/pages/admin/RevenueBoard";
 import AdminCalendar from "@/components/pages/admin/AdminCalendar";
 import RetentionBoard from "@/components/pages/admin/RetentionBoard";
 import RecentOrders from "@/components/shared/table/RecentOrders";
+import { getAllOrders } from "@/lib/actions/admin.action";
 
 const OverviewPage = async () => {
+  const result = await getAllOrders("desc", 3);
+
   return (
     <div className="max-w-[72.625rem] space-y-6">
       <div className="flex gap-6">
@@ -23,7 +26,7 @@ const OverviewPage = async () => {
         <RetentionBoard />
       </div>
       <div className="">
-        <RecentOrders />
+        <RecentOrders recentOrders={result.orders ?? []} />
       </div>
     </div>
   );

@@ -1,52 +1,21 @@
 import { formatDate, formatPrice } from "@/lib/utils";
 import { statusBg } from "@/styles/utils";
+import { Order } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const recentOrders = [
-  {
-    id: "01",
-    orderNumber: "23442",
-    date: "2024-01-08T10:01:45.841+00:00",
-    deliveryDate: "2024-01-08T10:01:45.841+00:00",
-    amount: 45970,
-    businessName: "Honeywell Petroleum",
-    status: "delivered",
-    litre: 20,
-    avatar: "/images/icons/honeywell.svg",
-  },
-  {
-    id: "02",
-    orderNumber: "23442",
-    date: "2024-01-08T10:01:45.841+00:00",
-    deliveryDate: "2024-01-08T10:01:45.841+00:00",
-    amount: 45970,
-    businessName: "Honeywell Petroleum",
-    status: "delivered",
-    litre: 20,
-    avatar: "/images/icons/honeywell.svg",
-  },
-  {
-    id: "03",
-    orderNumber: "23442",
-    date: "2024-01-08T10:01:45.841+00:00",
-    deliveryDate: "2024-01-08T10:01:45.841+00:00",
-    amount: 45970,
-    businessName: "Honeywell Petroleum",
-    status: "progress",
-    litre: 20,
-    avatar: "/images/icons/honeywell.svg",
-  },
-];
+interface Props {
+  recentOrders: Order[];
+}
 
-const RecentOrders = () => {
+const RecentOrders = ({ recentOrders }: Props) => {
   return (
     <div className="w-full rounded-md bg-light-900 py-4">
       <div className="mb-4 flex w-full items-center justify-between px-3">
         <span className="font-semibold">Recent Orders</span>
         <Link
-          href="#"
+          href="/admin/orders"
           className="flex items-center gap-2 text-[0.75rem] text-primary-500"
         >
           See all
@@ -73,7 +42,11 @@ const RecentOrders = () => {
               >
                 <td className="flex items-center justify-start gap-[0.675rem] py-3 ps-3">
                   <Image
-                    src={"/images/icons/honeywell.svg"}
+                    src={
+                      order?.buyer?.avatar
+                        ? order?.buyer?.avatar.url
+                        : "/images/icons/db-left-avatar.svg"
+                    }
                     width={27}
                     height={27}
                     alt={order.businessName}
@@ -81,10 +54,10 @@ const RecentOrders = () => {
                   />
                   <span className="font-medium">{order.businessName}</span>
                 </td>
-                <td className="max-sm:hidden">{order.litre} Litres</td>
-                <td className="">{formatDate(order.date)}</td>
-                <td className="">{formatDate(order.deliveryDate)}</td>
-                <td className="">{formatPrice(order.amount)}</td>
+                <td className="max-sm:hidden">{order.quantity} Litres</td>
+                <td className="">{formatDate(order.orderDate)}</td>
+                <td className="">{formatDate(order.expectedDeliveryDate)}</td>
+                <td className="">{formatPrice(Number(order.amount))}</td>
                 <td className="max-sm:hidden">{order.orderNumber}</td>
                 <td className="pe-2">
                   <span
@@ -97,6 +70,12 @@ const RecentOrders = () => {
             ))}
           </tbody>
         </table>
+
+        {recentOrders.length === 0 && (
+          <div className="flex h-20 w-full items-center justify-center font-medium">
+            <p>No available order</p>
+          </div>
+        )}
       </div>
     </div>
   );

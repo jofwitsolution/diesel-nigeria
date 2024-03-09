@@ -386,3 +386,39 @@ export const sampleTransactions = [
     category: "SHOPPING",
   },
 ];
+
+export const sampleRecentOrders = [
+  {
+    id: "01",
+    orderNumber: "23442",
+    date: "2024-01-08T10:01:45.841+00:00",
+    deliveryDate: "2024-01-08T10:01:45.841+00:00",
+    amount: 45970,
+    businessName: "Honeywell Petroleum",
+    status: "delivered",
+    litre: 20,
+    avatar: "/images/icons/honeywell.svg",
+  },
+  {
+    id: "02",
+    orderNumber: "23442",
+    date: "2024-01-08T10:01:45.841+00:00",
+    deliveryDate: "2024-01-08T10:01:45.841+00:00",
+    amount: 45970,
+    businessName: "Honeywell Petroleum",
+    status: "delivered",
+    litre: 20,
+    avatar: "/images/icons/honeywell.svg",
+  },
+  {
+    id: "03",
+    orderNumber: "23442",
+    date: "2024-01-08T10:01:45.841+00:00",
+    deliveryDate: "2024-01-08T10:01:45.841+00:00",
+    amount: 45970,
+    businessName: "Honeywell Petroleum",
+    status: "progress",
+    litre: 20,
+    avatar: "/images/icons/honeywell.svg",
+  },
+];

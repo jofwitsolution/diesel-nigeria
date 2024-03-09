@@ -220,7 +220,7 @@ export const getOrders = async (
   userId: string,
   orderBy: string = "desc",
   take: null | number = null,
-  targetDate: null | Date = null
+  selectedDate: null | Date = null
 ) => {
   try {
     const currentUser = await getCurrentUser();
@@ -260,8 +260,17 @@ export const getOrders = async (
       query.take = take;
     }
 
-    if (targetDate !== null) {
-      query.where.orderDate = { gte: new Date(targetDate) };
+    if (selectedDate !== null) {
+      // Calculate the start date
+      const startDate = new Date(selectedDate);
+
+      // calculate the next date
+      const endDate = new Date(
+        startDate.getFullYear(),
+        startDate.getMonth(),
+        startDate.getDate() + 1
+      );
+      query.where.orderDate = { gte: startDate, lt: endDate };
     }
 
     const orders = await db.order.findMany(query);
