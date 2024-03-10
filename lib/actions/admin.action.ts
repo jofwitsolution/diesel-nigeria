@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 import { NewSellerSchema } from "../validations";
 import { db } from "../db";
 import { getUserByEmail, getUserById } from "../helpers/user";
-import { generatePassword } from "../utils";
+import { generatePassword, getJanuary1stOfCurrentYear } from "../utils";
 import { generateVerificationToken } from "../helpers/token";
 import { sendNewSellerEmail, sendVerificationEmail } from "../helpers/mail";
 import { getCurrentUser } from "../helpers/auth";
@@ -453,6 +453,131 @@ export const getAllOrders = async (
     const orders = await db.order.findMany(query);
 
     return { orders };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const getAdminWalletData = async () => {
+  const dieselngWalletId = process.env.DIESELNG_WALLET_ID;
+  if (!dieselngWalletId) {
+    return { error: "No diesel wallet id present" };
+  }
+
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const dieselngWallet = await db.wallet.findUnique({
+      where: { id: dieselngWalletId },
+    });
+    if (!dieselngWallet) {
+      return { error: "No diesel wallet present" };
+    }
+
+    const transactions = await db.transaction.findMany();
+
+    const totalPayment = transactions.reduce((a, transaction) => {
+      if (transaction.category === "commision") {
+        return a + Number(transaction.amount);
+      } else {
+        return a;
+      }
+    }, 0);
+
+    const totalWithdrawal = transactions.reduce((a, transaction) => {
+      if (transaction.category === "withdrawal") {
+        return a + Number(transaction.amount);
+      } else {
+        return a;
+      }
+    }, 0);
+
+    return {
+      success: true,
+      balance: dieselngWallet.balance,
+      totalPayment,
+      totalWithdrawal,
+    };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const getAllTransactions = async (
+  orderBy: string = "desc",
+  take: null | number = null,
+  targetDate: null | Date = null
+) => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const query = {
+      orderBy: {
+        date: orderBy,
+      },
+      include: {
+        seller: {
+          select: {
+            avatar: true,
+            businessName: true,
+            rcNumber: true,
+            id: true,
+            address: true,
+          },
+        },
+        buyer: {
+          select: {
+            avatar: true,
+            businessName: true,
+            rcNumber: true,
+            id: true,
+            address: true,
+          },
+        },
+      },
+    };
+
+    if (take !== null) {
+      query.take = take;
+    }
+
+    if (targetDate !== null) {
+      query.where.date = { gte: new Date(targetDate) };
+    }
+
+    const transactions = await db.transaction.findMany(query);
+
+    return { success: true, transactions };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const adminGetTransactionOverview = async () => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const january1stOfCurrentYear = getJanuary1stOfCurrentYear();
+
+    const transactionsForYear = await db.transaction.findMany({
+      where: {
+        date: { gte: january1stOfCurrentYear },
+      },
+    });
+
+    return { success: true, transactionsForYear };
   } catch (error) {
     console.log(error);
     return { error: "Something went wrong!" };

@@ -1,7 +1,16 @@
 import AccountTabs from "@/components/pages/admin/AccountTabs";
+import {
+  adminGetTransactionOverview,
+  getAdminWalletData,
+  getAllTransactions,
+} from "@/lib/actions/admin.action";
 import React from "react";
 
-const AccountPage = () => {
+const AccountPage = async () => {
+  const walletDataResult = await getAdminWalletData();
+  const transactionResult = await getAllTransactions("desc");
+  const transactionForYearResult = await adminGetTransactionOverview();
+
   return (
     <div className="space-y-6">
       <div className="max-w-[69.125rem]">
@@ -13,7 +22,17 @@ const AccountPage = () => {
         </div>
       </div>
       <div>
-        <AccountTabs />
+        <AccountTabs
+          transactionsForCurrentYear={
+            transactionForYearResult.transactionsForYear ?? []
+          }
+          transactions={transactionResult.transactions ?? []}
+          walletData={{
+            balance: walletDataResult.balance ?? 0,
+            totalPayment: walletDataResult.totalPayment ?? 0,
+            totalWithdrawal: walletDataResult.totalWithdrawal ?? 0,
+          }}
+        />
       </div>
     </div>
   );

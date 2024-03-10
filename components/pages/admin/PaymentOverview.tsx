@@ -1,7 +1,15 @@
-import PaymentChart from "@/components/shared/chart/PaymentChart";
 import React from "react";
+import PaymentChart from "@/components/shared/chart/PaymentChart";
+import { getPaymentsChartData } from "@/components/shared/chart/chartData";
 
-const PaymentOverview = () => {
+interface Props {
+  transactionsForCurrentYear: {
+    amount: string;
+    date: Date;
+  }[];
+}
+
+const PaymentOverview = ({ transactionsForCurrentYear }: Props) => {
   return (
     <div className="w-full rounded-md bg-light-900 p-4">
       <div className="flex flex-col gap-1">
@@ -13,7 +21,9 @@ const PaymentOverview = () => {
         </span>
       </div>
       <div className="h-[400px] w-full max-sm:w-[90%]">
-        <PaymentChart />
+        <PaymentChart
+          chartData={getPaymentsChartData(transactionsForCurrentYear)}
+        />
       </div>
     </div>
   );
