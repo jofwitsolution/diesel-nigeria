@@ -583,3 +583,67 @@ export const adminGetTransactionOverview = async () => {
     return { error: "Something went wrong!" };
   }
 };
+
+export const adminGetAllOrders = async (
+  orderBy: string = "desc",
+  take: null | number = null,
+  selectedDate: null | Date = null
+) => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const query = {
+      orderBy: {
+        orderDate: orderBy,
+      },
+      include: {
+        seller: {
+          select: {
+            avatar: true,
+            businessName: true,
+            rcNumber: true,
+            id: true,
+            address: true,
+          },
+        },
+        buyer: {
+          select: {
+            avatar: true,
+            businessName: true,
+            rcNumber: true,
+            id: true,
+            address: true,
+          },
+        },
+        product: true,
+      },
+    };
+
+    if (take !== null) {
+      query.take = take;
+    }
+
+    if (selectedDate !== null) {
+      // Calculate the start date
+      const startDate = new Date(selectedDate);
+
+      // calculate the next date
+      const endDate = new Date(
+        startDate.getFullYear(),
+        startDate.getMonth(),
+        startDate.getDate() + 1
+      );
+      query.where.orderDate = { gte: startDate, lt: endDate };
+    }
+
+    const orders = await db.order.findMany(query);
+
+    return { orders };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};

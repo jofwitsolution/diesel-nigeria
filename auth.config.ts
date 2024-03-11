@@ -4,7 +4,6 @@ import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import { getUserByEmail } from "@/lib/helpers/user";
 import { LoginSchema } from "@/lib/validations";
-// import { connectToDatabase } from "./lib/mongoose";
 
 export default {
   providers: [
@@ -14,8 +13,6 @@ export default {
     }),
     Credentials({
       async authorize(credentials) {
-        // connectToDatabase();
-
         const validatedFields = LoginSchema.safeParse(credentials);
 
         if (validatedFields.success) {

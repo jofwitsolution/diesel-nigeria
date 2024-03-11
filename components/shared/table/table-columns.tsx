@@ -176,28 +176,22 @@ export const sellerOrderColumns = [
 
 export const adminOrderColumns = [
   orderColumnHelper.accessor((row) => row.buyer, {
-    id: "customer",
+    id: "buyer",
     cell: (info) => {
       const buyer = info.row.original?.buyer;
 
-      return (
-        <div className="flex size-full items-center gap-2 xs:gap-4">
-          <Image
-            src={
-              buyer?.avatar
-                ? buyer?.avatar.url
-                : "/images/icons/db-left-avatar.svg"
-            }
-            width={31}
-            height={31}
-            alt="icon"
-            className="w-[20px] xs:w-[initial]"
-          />{" "}
-          <span className="">{buyer.businessName}</span>
-        </div>
-      );
+      return <span className="">{buyer.businessName}</span>;
     },
-    header: () => "Customer",
+    header: () => "Buyer",
+  }),
+  orderColumnHelper.accessor((row) => row.seller, {
+    id: "seller",
+    cell: (info) => {
+      const seller = info.row.original?.seller;
+
+      return <span className="">{seller.businessName}</span>;
+    },
+    header: () => "Seller",
   }),
   orderColumnHelper.accessor("quantity", {
     id: "quantity",

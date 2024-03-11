@@ -16,11 +16,11 @@ export const {
     error: "/auth/error",
   },
   events: {
-    // the event is used to auto update emailVerified field of users that login with google
+    // the event is used to auto update emailVerified and businessName fields of users that login with google
     async linkAccount({ user }) {
       await db.user.update({
         where: { id: user.id },
-        data: { emailVerified: new Date() },
+        data: { emailVerified: new Date(), businessName: user.name },
       });
     },
   },
