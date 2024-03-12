@@ -78,6 +78,7 @@ export const getVerifiedSellers = async () => {
       where: {
         role: "seller",
         isVerifiedSeller: true,
+        isSuspended: false,
         emailVerified: { not: null },
         // products: { some: {} }, // Check if the products array has at least one item
       },

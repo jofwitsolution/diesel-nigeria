@@ -9,7 +9,7 @@ import Filter from "@/components/shared/Filter";
 import AdminSellersTable from "@/components/shared/table/AdminSellersTable";
 import AddSellerForm from "@/components/forms/AddSellerForm";
 
-const Sellers = () => {
+const Sellers = ({ sellers }) => {
   const [addSellerDialog, setAddSellerDialog] = useState(false);
 
   return (
@@ -46,7 +46,7 @@ const Sellers = () => {
           </div>
         </div>
         <div>
-          <AdminSellersTable />
+          <AdminSellersTable sellers={sellers} />
         </div>
       </div>
 

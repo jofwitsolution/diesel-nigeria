@@ -9,6 +9,7 @@ import { generatePassword, getJanuary1stOfCurrentYear } from "../utils";
 import { generateVerificationToken } from "../helpers/token";
 import { sendNewSellerEmail, sendVerificationEmail } from "../helpers/mail";
 import { getCurrentUser } from "../helpers/auth";
+import { revalidatePath } from "next/cache";
 
 export const addNewSeller = async (values: z.infer<typeof NewSellerSchema>) => {
   try {
@@ -642,6 +643,96 @@ export const adminGetAllOrders = async (
     const orders = await db.order.findMany(query);
 
     return { orders };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const adminGetUsersByRole = async (role: "seller" | "buyer") => {
+  try {
+    const sellers = await db.user.findMany({
+      where: {
+        role,
+      },
+      select: {
+        avatar: true,
+        businessName: true,
+        state: true,
+        rcNumber: true,
+        id: true,
+        address: true,
+        phoneNumber: true,
+        email: true,
+        isSuspended: true,
+      },
+    });
+
+    return { sellers };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const adminSuspendUser = async (
+  userId: string,
+  action: "suspend" | "activate",
+  path: string
+) => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const outcome = action === "suspend";
+
+    await db.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        isSuspended: outcome,
+      },
+    });
+
+    revalidatePath(path);
+    if (outcome) {
+      return { success: "Account suspended!" };
+    } else {
+      return { success: "Account activated!" };
+    }
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const adminDeleteUser = async (userId: string, path: string) => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    // check if user have a pending or order in progress
+    const order = await db.order.findFirst({
+      where: {
+        AND: [
+          { OR: [{ buyerId: userId }, { sellerId: userId }] },
+          { OR: [{ status: "pending" }, { status: "progress" }] },
+        ],
+      },
+    });
+    if (order) {
+      return { error: "You can't delete users with active Order" };
+    }
+
+    await db.user.delete({ where: { id: userId } });
+
+    revalidatePath(path);
+    return { success: "Account deleted successfully" };
   } catch (error) {
     console.log(error);
     return { error: "Something went wrong!" };
