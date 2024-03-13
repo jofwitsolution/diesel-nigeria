@@ -8,16 +8,14 @@ interface Props {
   icon: string;
 }
 
-const SumCard = ({ children, title, icon }: Props) => {
+const BigSumCard = ({ children, title, icon }: Props) => {
   return (
     <Card className="h-[11.8125rem] w-full bg-light-900 xs:w-[13.1875rem]">
       <CardHeader className="flex flex-col items-center">
         <span>
           <Image src={icon} width={40} height={40} alt={title} />
         </span>
-        <CardTitle className="text-center text-[0.75rem] font-medium">
-          {title}
-        </CardTitle>
+        <CardTitle className="text-[0.75rem] font-medium">{title}</CardTitle>
       </CardHeader>
       <CardContent className="mt-[-1rem] flex flex-col items-center">
         {children}
@@ -26,4 +24,4 @@ const SumCard = ({ children, title, icon }: Props) => {
   );
 };
 
-export default SumCard;
+export default BigSumCard;

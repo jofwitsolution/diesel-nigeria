@@ -12,6 +12,11 @@ import { revalidatePath } from "next/cache";
 
 export const getUser = async (id: string) => {
   try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
     const user = await db.user.findUnique({
       where: { id },
       include: {

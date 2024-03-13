@@ -6,7 +6,7 @@ const SellersPage = async () => {
 
   return (
     <div className="">
-      <Sellers sellers={result.sellers ?? []} />
+      <Sellers sellers={result.users ?? []} />
     </div>
   );
 };

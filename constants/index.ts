@@ -128,12 +128,12 @@ export const adminNavLinks: DashboardNavLinks[] = [
     icon: "/images/icons/buyer.svg",
     isBottom: false,
   },
-  {
-    route: "/admin/drivers",
-    label: "Drivers",
-    icon: "/images/icons/drivers.svg",
-    isBottom: false,
-  },
+  // {
+  //   route: "/admin/drivers",
+  //   label: "Drivers",
+  //   icon: "/images/icons/drivers.svg",
+  //   isBottom: false,
+  // },
   {
     route: "/admin/transactions",
     label: "Transactions",

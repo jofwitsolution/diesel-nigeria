@@ -651,7 +651,7 @@ export const adminGetAllOrders = async (
 
 export const adminGetUsersByRole = async (role: "seller" | "buyer") => {
   try {
-    const sellers = await db.user.findMany({
+    const users = await db.user.findMany({
       where: {
         role,
       },
@@ -668,7 +668,7 @@ export const adminGetUsersByRole = async (role: "seller" | "buyer") => {
       },
     });
 
-    return { sellers };
+    return { users };
   } catch (error) {
     console.log(error);
     return { error: "Something went wrong!" };
