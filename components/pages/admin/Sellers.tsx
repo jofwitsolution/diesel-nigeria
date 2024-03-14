@@ -8,19 +8,42 @@ import ExportAs from "@/components/shared/ExportAs";
 import Filter from "@/components/shared/Filter";
 import AdminSellersTable from "@/components/shared/table/AdminSellersTable";
 import AddSellerForm from "@/components/forms/AddSellerForm";
+import { userFilters } from "@/constants";
 
 const Sellers = ({ sellers }) => {
   const [addSellerDialog, setAddSellerDialog] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterTerm, setFilterTerm] = useState("All");
+  const [currentFilter, setCurrentFilter] = useState("");
+
+  const handleSearchInput = (input: string) => {
+    setSearchTerm(input);
+    setCurrentFilter(input);
+  };
+
+  const handleFilter = (input: string) => {
+    setSearchTerm("");
+    setFilterTerm(input);
+    setCurrentFilter(input);
+  };
 
   return (
     <>
       <div className="max-w-[68.5625rem] space-y-6">
         <div className="xL:gap-12 flex flex-wrap justify-between gap-6">
           <div className="xl:w-[22.8125rem]">
-            <Search placeholder="Search for a distributor" />
+            <Search
+              handleSearchInput={handleSearchInput}
+              searchTerm={searchTerm}
+              placeholder="Search for a distributor"
+            />
           </div>
           <div className="flex gap-4 max-sm:flex-wrap max-sm:gap-2">
-            <Filter />
+            <Filter
+              filters={userFilters}
+              handleFilter={handleFilter}
+              filterTerm={filterTerm}
+            />
             <ExportAs />
             <Button
               onClick={() => setAddSellerDialog(true)}
@@ -46,7 +69,7 @@ const Sellers = ({ sellers }) => {
           </div>
         </div>
         <div>
-          <AdminSellersTable sellers={sellers} />
+          <AdminSellersTable currentFilter={currentFilter} sellers={sellers} />
         </div>
       </div>
 

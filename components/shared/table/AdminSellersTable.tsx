@@ -64,6 +64,23 @@ const columns = [
     cell: (info) => info.getValue(),
     header: () => "RC Number",
   }),
+  columnHelper.accessor((row) => row.isSuspended, {
+    id: "status",
+    cell: (info) => {
+      const isSuspended = info.getValue();
+
+      return (
+        <>
+          {isSuspended ? (
+            <span className="text-red-500">Suspended</span>
+          ) : (
+            <span className="text-primary-500">Active</span>
+          )}
+        </>
+      );
+    },
+    header: "Status",
+  }),
   columnHelper.accessor("isSuspended", {
     id: "action",
     cell: (info) => {
@@ -75,12 +92,17 @@ const columns = [
   }),
 ];
 
-const AdminSellersTable = ({ sellers }) => {
+interface Props {
+  sellers: User[];
+  currentFilter: string;
+}
+
+const AdminSellersTable = ({ sellers, currentFilter }: Props) => {
   const [globalFilter, setGlobalFilter] = useState<string>("");
 
   useEffect(() => {
-    setGlobalFilter("");
-  }, []);
+    setGlobalFilter(currentFilter);
+  }, [currentFilter]);
 
   const table = useReactTable({
     data: sellers,

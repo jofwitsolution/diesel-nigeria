@@ -179,3 +179,18 @@ export const orderFilters = [
     value: "delivered",
   },
 ];
+
+export const userFilters = [
+  {
+    label: "All",
+    value: "",
+  },
+  {
+    label: "Active",
+    value: "active",
+  },
+  {
+    label: "Suspended",
+    value: "suspended",
+  },
+];

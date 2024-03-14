@@ -3,6 +3,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { formatDate, formatPrice, getTimeOfDay } from "@/lib/utils";
 import { Order, Transaction, WithdrawalRequest } from "@prisma/client";
 import { statusBg } from "@/styles/utils";
+import TransactionActionMenu from "../menubar/TransactionActionMenu";
 
 const orderColumnHelper = createColumnHelper<Order>();
 const transactionColumnHelper = createColumnHelper<Transaction>();
@@ -324,5 +325,63 @@ export const sellerWithdrawalColumns = [
         {info.getValue()}
       </span>
     ),
+  }),
+];
+
+export const allTransactionColumns = [
+  transactionColumnHelper.accessor("date", {
+    id: "dateTime",
+    cell: (info) => {
+      const date = formatDate(info.getValue());
+      const time = getTimeOfDay(info.getValue());
+
+      return (
+        <span className="flex flex-col">
+          <span className="font-medium">{date}</span>
+          <span className="">{time}</span>
+        </span>
+      );
+    },
+    header: "Date, time",
+  }),
+  transactionColumnHelper.accessor("reference", {
+    id: "reference",
+    header: "Reference",
+    cell: (info) => info.getValue(),
+  }),
+  transactionColumnHelper.accessor("orderNumber", {
+    id: "orderNumber",
+    header: "Order Number",
+    cell: (info) => info.getValue(),
+  }),
+  transactionColumnHelper.accessor("amount", {
+    id: "amount",
+    header: "Amount",
+    cell: (info) => formatPrice(Number(info.getValue())),
+  }),
+  transactionColumnHelper.accessor("buyerId", {
+    id: "businessName",
+    header: "Business Name",
+    cell: (info) => {
+      const user = info.row.original?.buyer
+        ? info.row.original?.buyer
+        : info.row.original?.seller;
+
+      return user.businessName;
+    },
+  }),
+  transactionColumnHelper.accessor("channel", {
+    id: "channel",
+    header: "Channel",
+    cell: (info) => info.getValue(),
+  }),
+  transactionColumnHelper.accessor("id", {
+    id: "action",
+    cell: (info) => {
+      const transaction = info.row.original;
+
+      return <TransactionActionMenu transaction={transaction} />;
+    },
+    header: "",
   }),
 ];

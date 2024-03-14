@@ -3,10 +3,12 @@ import Image from "next/image";
 import React from "react";
 
 interface Props {
+  handleSearchInput: (input: string) => void;
+  searchTerm: string;
   placeholder: string;
 }
 
-const Search = ({ placeholder }: Props) => {
+const Search = ({ handleSearchInput, searchTerm, placeholder }: Props) => {
   return (
     <div
       className={`flex h-[2.5rem] items-center  rounded-[0.5rem] bg-light-900 xl:h-[3.125rem]`}
@@ -21,6 +23,8 @@ const Search = ({ placeholder }: Props) => {
       </div>
       <Input
         type="text"
+        value={searchTerm}
+        onChange={(e) => handleSearchInput(e.target.value)}
         placeholder={placeholder}
         className={`no-focus w-full border-none  bg-transparent shadow-none outline-none placeholder:text-[0.9rem]`}
       />
