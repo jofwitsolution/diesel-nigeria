@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+import JSPDF from "jspdf";
 import { Transaction } from "@prisma/client";
 import {
   Menubar,
@@ -27,7 +27,7 @@ const TransactionActionMenu = ({
     // Specify the id of the element you want to convert to PDF
     html2canvas(input).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF();
+      const pdf = new JSPDF();
       pdf.addImage(imgData, "PNG", 0, 0);
       pdf.save(`${transaction.reference}-reciept.pdf`);
     });
