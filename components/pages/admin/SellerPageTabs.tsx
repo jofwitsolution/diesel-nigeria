@@ -4,10 +4,12 @@ import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SumCard from "@/components/shared/card/SumCard";
 import { formatPrice, formatPriceNGN } from "@/lib/utils";
-import { Order } from "@prisma/client";
+import { Order, User } from "@prisma/client";
 import AdminSellerOrders from "@/components/shared/table/AdminSellerOrders";
+import SellerProfile from "./SellerProfile";
 
 interface Props {
+  seller: User;
   orders: Order[];
   overviewData: {
     priceAlert: number;
@@ -21,7 +23,7 @@ interface Props {
   };
 }
 
-const SellerPageTabs = ({ overviewData, orders }: Props) => {
+const SellerPageTabs = ({ seller, overviewData, orders }: Props) => {
   return (
     <div>
       <Tabs defaultValue="overview" className="w-full">
@@ -31,6 +33,12 @@ const SellerPageTabs = ({ overviewData, orders }: Props) => {
             className="flex-1 border data-[state=active]:bg-primary-500 data-[state=active]:font-[700] data-[state=active]:text-light-900 max-xs:px-2 max-xs:text-[0.7rem]"
           >
             Overview
+          </TabsTrigger>
+          <TabsTrigger
+            value="profile"
+            className="flex-1 border data-[state=active]:bg-primary-500 data-[state=active]:font-[700] data-[state=active]:text-light-900 max-xs:px-2 max-xs:text-[0.7rem]"
+          >
+            Profile
           </TabsTrigger>
           <TabsTrigger
             value="orders"
@@ -101,6 +109,9 @@ const SellerPageTabs = ({ overviewData, orders }: Props) => {
               </span>
             </SumCard>
           </div>
+        </TabsContent>
+        <TabsContent value="profile" asChild>
+          <SellerProfile seller={seller} />
         </TabsContent>
         <TabsContent value="orders" className="w-full">
           <div className="w-full">

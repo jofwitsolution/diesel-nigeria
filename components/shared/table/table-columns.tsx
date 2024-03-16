@@ -382,6 +382,6 @@ export const allTransactionColumns = [
 
       return <TransactionActionMenu transaction={transaction} />;
     },
-    header: "",
+    header: () => <span className="invisible">Action</span>,
   }),
 ];

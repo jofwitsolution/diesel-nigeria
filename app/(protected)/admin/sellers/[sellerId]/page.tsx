@@ -53,6 +53,7 @@ const Page = async ({ params }: { params: { sellerId: string } }) => {
           </div>
 
           <SellerPageTabs
+            seller={sellerResult.user}
             orders={orderResult.orders ?? []}
             overviewData={{
               priceAlert: overviewResult?.priceAlert ?? 0,
