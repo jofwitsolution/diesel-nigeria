@@ -7,7 +7,12 @@ import { db } from "../db";
 import { getUserByEmail, getUserById } from "../helpers/user";
 import { generatePassword, getJanuary1stOfCurrentYear } from "../utils";
 import { generateVerificationToken } from "../helpers/token";
-import { sendNewSellerEmail, sendVerificationEmail } from "../helpers/mail";
+import {
+  sendDocumentRejectedEmail,
+  sendDocumentVerifiedEmail,
+  sendNewSellerEmail,
+  sendVerificationEmail,
+} from "../helpers/mail";
 import { getCurrentUser } from "../helpers/auth";
 import { revalidatePath } from "next/cache";
 
@@ -733,6 +738,98 @@ export const adminDeleteUser = async (userId: string, path: string) => {
 
     revalidatePath(path);
     return { success: "Account deleted successfully" };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const approveSellerDocs = async (userId: string, path: string) => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const user = await db.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        isVerifiedSeller: true,
+      },
+    });
+
+    await sendDocumentVerifiedEmail({
+      email: user.email,
+      businessName: user.businessName,
+    });
+
+    revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const approveBuyerDocs = async (userId: string, path: string) => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const user = await db.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        isVerifiedBuyer: true,
+      },
+    });
+
+    await sendDocumentVerifiedEmail({
+      email: user.email,
+      businessName: user.businessName,
+    });
+    revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const rejectBusinessDocs = async (
+  userId: string,
+  description: string,
+  path: string
+) => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    if (!description) {
+      return { error: "Please provide reason for rejection!" };
+    }
+
+    const user = await db.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user) {
+      return { error: "User not found!" };
+    }
+
+    await sendDocumentRejectedEmail({
+      email: user.email,
+      businessName: user.businessName,
+      description,
+    });
+    revalidatePath(path);
   } catch (error) {
     console.log(error);
     return { error: "Something went wrong!" };

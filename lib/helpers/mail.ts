@@ -246,3 +246,50 @@ export const sendOrderDeliveredEmailToAdmin = async ({
           `,
   });
 };
+
+export const sendDocumentVerifiedEmail = async ({
+  email,
+  businessName,
+}: {
+  email: string;
+  businessName: string;
+}) => {
+  await resend.emails.send({
+    from: dieselngEmail,
+    to: email,
+    subject: `Successful Document Verification.`,
+    html: `
+    <p>Dear ${businessName}</p>
+    <p>Your business document has been verified successfuly.</p>
+
+    <br/>
+    <p>Thank you</p>
+          `,
+  });
+};
+
+export const sendDocumentRejectedEmail = async ({
+  email,
+  businessName,
+  description,
+}: {
+  email: string;
+  businessName: string;
+  description: string;
+}) => {
+  await resend.emails.send({
+    from: dieselngEmail,
+    to: email,
+    subject: `Unsuccessful Verification.`,
+    html: `
+    <p>Dear ${businessName}</p>
+    <p>Your business document was rejected. See the details below;</p>
+    <br/>
+    <p>${description}</p>
+    <br/>
+    <p>After log in to your dashboard, go to settings to upload a valid business document.</p>
+    <br/>
+    <p>Thank you</p>
+          `,
+  });
+};

@@ -2,7 +2,7 @@ import React from "react";
 import { ClipLoader, RingLoader } from "react-spinners";
 
 interface Props {
-  type?: string;
+  type?: "cliploader" | "ringloader";
   color?: string;
   size?: number;
   text?: string;
