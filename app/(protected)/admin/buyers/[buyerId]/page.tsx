@@ -51,6 +51,7 @@ const Page = async ({ params }: { params: { buyerId: string } }) => {
           </div>
 
           <BuyerPageTabs
+            buyer={buyerResult.user}
             orders={orderResult.orders ?? []}
             overviewData={{
               totalBranches: overviewResult?.totalBranches ?? 0,
