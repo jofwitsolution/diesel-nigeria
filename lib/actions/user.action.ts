@@ -165,6 +165,42 @@ export const addBranch = async (
   }
 };
 
+export const updateBranch = async (
+  values: z.infer<typeof BranchSchema>,
+  branchId: string,
+  path: string
+) => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const fields = BranchSchema.safeParse(values);
+
+    if (!fields.success) {
+      return { error: "Invalid fields." };
+    }
+
+    const { state, address, email, phoneNumber } = fields.data;
+
+    await db.branch.update({
+      where: { id: branchId },
+      data: {
+        state,
+        address,
+        email,
+        phoneNumber,
+      },
+    });
+
+    revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
 export const getUserBranches = async (userId: string) => {
   try {
     const currentUser = await getCurrentUser();

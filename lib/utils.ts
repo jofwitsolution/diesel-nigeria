@@ -281,3 +281,17 @@ export function getJanuary1stOfCurrentYear(): Date {
   const januaryFirst = new Date(currentYear, 0, 1); // Note: Months are 0-based in JavaScript Date constructor
   return januaryFirst;
 }
+
+export function generateRandomCode(numDigits: number): string {
+  if (numDigits <= 0) {
+    throw new Error("Number of digits must be greater than zero");
+  }
+
+  const min = Math.pow(10, numDigits - 1);
+  const max = Math.pow(10, numDigits) - 1;
+
+  // Generate a random number within the specified range
+  const randomCode = Math.floor(Math.random() * (max - min + 1)) + min;
+
+  return randomCode.toString();
+}

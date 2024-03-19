@@ -15,6 +15,7 @@ import Pagination from "./Pagination";
 import SearchBox from "../search/SearchBox";
 import { fuzzyFilter } from "./helper";
 import { useSearchParams } from "next/navigation";
+import BranchActionMenu from "../menubar/BranchActionMenu";
 
 const columnHelper = createColumnHelper<Branch>();
 
@@ -42,6 +43,15 @@ const columns = [
     cell: (info) => (
       <span className="max-xs:text-[0.4rem]">{info.getValue()}</span>
     ),
+  }),
+  columnHelper.accessor("id", {
+    id: "action",
+    cell: (info) => {
+      const branch = info.row.original;
+
+      return <BranchActionMenu branch={branch} />;
+    },
+    header: () => <span className="invisible">Action</span>,
   }),
 ];
 
@@ -105,10 +115,7 @@ const BuyerBranches = ({ branches }: { branches: Branch[] }) => {
                 className="border-b text-left max-xs:text-[0.53rem]"
               >
                 {headerGroup.headers.map((header) => (
-                  <th
-                    key={header.id}
-                    className="dist-table-style w-[28.625rem]"
-                  >
+                  <th key={header.id} className="dist-table-style">
                     {flexRender(
                       header.column.columnDef.header,
                       header.getContext()
