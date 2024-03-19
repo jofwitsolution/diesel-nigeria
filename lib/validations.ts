@@ -151,7 +151,31 @@ export const SellerBusinessInfoSchema = z.object({
   email: z.string().optional(),
 });
 
+export const BuyerBusinessInfoSchema = z.object({
+  address: z
+    .string()
+    .min(3, {
+      message: "Address is required.",
+    })
+    .max(100, {
+      message: "Address cannot exceed 100 char.",
+    }),
+  businessDescription: z
+    .string({ invalid_type_error: "Enter business description" })
+    .min(50, {
+      message: "Description must be at least 50 char.",
+    }),
+  businessName: z.string().optional(),
+  phoneNumber: z.string().optional(),
+  email: z.string().optional(),
+});
+
 export const SellerVerificationDocSchema = z.object({
+  businessRegisteration: z.string({ invalid_type_error: "" }).optional(),
+  rcNumber: z.string({ invalid_type_error: "" }).optional(),
+});
+
+export const BuyerVerificationDocSchema = z.object({
   businessRegisteration: z.string({ invalid_type_error: "" }).optional(),
   rcNumber: z.string({ invalid_type_error: "" }).optional(),
 });

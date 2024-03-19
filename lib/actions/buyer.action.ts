@@ -3,7 +3,11 @@
 import * as z from "zod";
 import { db } from "../db";
 import { getCurrentUser } from "../helpers/auth";
-import { PlaceOrderSchema } from "../validations";
+import {
+  BuyerBusinessInfoSchema,
+  BuyerVerificationDocSchema,
+  PlaceOrderSchema,
+} from "../validations";
 import { countUniqueSellers, generateOrderNumber } from "../helpers/order";
 import {
   sendOrderCreatedEmailToAdmin,
@@ -14,6 +18,7 @@ import {
   sendOrderPaymentEmailToSeller,
 } from "../helpers/mail";
 import { revalidatePath } from "next/cache";
+import { cloudinary } from "../helpers/cloudinary";
 
 export const getPlaceOrderData = async (sellerId: string) => {
   try {
@@ -383,6 +388,137 @@ export const confirmOrderDelivery = async (orderId: string, path: string) => {
     });
 
     revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const buyerUpdateBusinessInfo = async (
+  values: z.infer<typeof BuyerBusinessInfoSchema>,
+  imageData: string | ArrayBuffer | null,
+  path: string
+) => {
+  try {
+    const fields = BuyerBusinessInfoSchema.safeParse(values);
+
+    if (!fields.success) {
+      return { error: "Invalid fields." };
+    }
+
+    const { address, businessDescription } = fields.data;
+
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const user = await db.user.findUnique({
+      where: { id: currentUser?.id },
+      include: {
+        avatar: true,
+      },
+    });
+
+    if (imageData) {
+      const publicId: string = user?.avatar
+        ? user.avatar.public_id.split("/")[1]
+        : `img-${Date.now()}`;
+      //   const publicId: string = `img-${Date.now()}`;
+
+      const result = await cloudinary.uploader.upload(imageData as string, {
+        // resource_type: "raw",
+        folder: "logo",
+        public_id: publicId,
+      });
+
+      await db.avatar.upsert({
+        where: { userId: user?.id },
+        update: {
+          url: result.url,
+          public_id: result.public_id,
+        },
+        create: {
+          url: result.url,
+          public_id: result.public_id,
+          userId: user?.id,
+        },
+      });
+    }
+
+    await db.user.update({
+      where: { id: user?.id },
+      data: {
+        address,
+        businessDescription,
+      },
+    });
+
+    revalidatePath(path);
+    return { success: "Changes saved successfuly" };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const buyerUploadVerificationDoc = async (
+  values: z.infer<typeof BuyerVerificationDocSchema>,
+  doc: string | ArrayBuffer | null,
+  path: string
+) => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const fields = BuyerVerificationDocSchema.safeParse(values);
+
+    if (!fields.success) {
+      return { error: "Invalid fields." };
+    }
+
+    const { rcNumber } = fields.data;
+
+    const user = await db.user.update({
+      where: { id: currentUser?.id },
+      data: {
+        rcNumber,
+      },
+      include: {
+        document: true,
+      },
+    });
+
+    if (doc) {
+      const publicId: string = user?.document
+        ? user.document.public_id.split("/")[1]
+        : `doc-${Date.now()}`;
+      //   const publicId: string = `img-${Date.now()}`;
+
+      const result = await cloudinary.uploader.upload(doc as string, {
+        // resource_type: "raw",
+        folder: "documents",
+        public_id: publicId,
+      });
+
+      await db.document.upsert({
+        where: { userId: user?.id },
+        update: {
+          url: result.url,
+          public_id: result.public_id,
+        },
+        create: {
+          url: result.url,
+          public_id: result.public_id,
+          userId: user?.id,
+        },
+      });
+    }
+
+    revalidatePath(path);
+    return { success: "Document uploaded successfuly" };
   } catch (error) {
     console.log(error);
     return { error: "Something went wrong!" };
