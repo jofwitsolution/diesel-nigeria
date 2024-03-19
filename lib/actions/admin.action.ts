@@ -12,9 +12,15 @@ import {
   sendDocumentVerifiedEmail,
   sendNewSellerEmail,
   sendVerificationEmail,
+  sendWithdrawalTransferEmail,
 } from "../helpers/mail";
 import { getCurrentUser } from "../helpers/auth";
 import { revalidatePath } from "next/cache";
+
+const dieselngWalletId = process.env.DIESELNG_WALLET_ID;
+if (!dieselngWalletId) {
+  throw Error(`Environment variable "DIESELNG_WALLET_ID" is undefined`);
+}
 
 export const addNewSeller = async (values: z.infer<typeof NewSellerSchema>) => {
   try {
@@ -466,11 +472,6 @@ export const getAllOrders = async (
 };
 
 export const getAdminWalletData = async () => {
-  const dieselngWalletId = process.env.DIESELNG_WALLET_ID;
-  if (!dieselngWalletId) {
-    return { error: "No diesel wallet id present" };
-  }
-
   try {
     const currentUser = await getCurrentUser();
     if (!currentUser) {
@@ -829,6 +830,150 @@ export const rejectBusinessDocs = async (
       businessName: user.businessName,
       description,
     });
+    revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const getAllWithdrawalRequests = async () => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const withdrawalRequests = await db.withdrawalRequest.findMany({
+      orderBy: { date: "desc" },
+      include: {
+        user: {
+          select: {
+            id: true,
+            businessName: true,
+            phoneNumber: true,
+            email: true,
+            accountName: true,
+            bank: true,
+            accountNumber: true,
+          },
+        },
+      },
+    });
+
+    return { success: true, withdrawalRequests };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const confirmFundTransfer = async (
+  withdrawalId: string,
+  path: string
+) => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const withdrawalRequest = await db.withdrawalRequest.findUnique({
+      where: { id: withdrawalId },
+    });
+    if (!withdrawalRequest) {
+      return { error: "Withdrawal request not found!" };
+    }
+
+    if (withdrawalRequest.status !== "pending") {
+      return { error: "This action cannot be performed!" };
+    }
+
+    const dieselngWallet = await db.wallet.findUnique({
+      where: { id: dieselngWalletId },
+    });
+    if (!dieselngWallet) {
+      return { error: "No diesel wallet present" };
+    }
+
+    const sellerWallet = await db.wallet.findUnique({
+      where: { userId: withdrawalRequest.userId as string },
+    });
+    if (!sellerWallet) {
+      return { error: "Seller wallet not found!" };
+    }
+
+    const newSellerBalance = (
+      Number(sellerWallet.balance) - Number(withdrawalRequest.amount)
+    ).toString();
+    await db.wallet.update({
+      where: { userId: withdrawalRequest.userId as string },
+      data: { balance: newSellerBalance },
+    });
+
+    const newDieselngBalance = (
+      Number(dieselngWallet.balance) - Number(withdrawalRequest.amount)
+    ).toString();
+    await db.wallet.update({
+      where: { id: dieselngWallet.id },
+      data: { balance: newDieselngBalance },
+    });
+
+    await db.withdrawalRequest.update({
+      where: { id: withdrawalRequest.id },
+      data: { status: "successful" },
+    });
+
+    await db.transaction.create({
+      data: {
+        channel: "transfer",
+        reference: `T${Date.now()}`,
+        orderNumber: "",
+        amount: withdrawalRequest.amount,
+        category: "withdrawal",
+        sellerId: withdrawalRequest.userId,
+      },
+    });
+
+    const seller = await db.user.findUnique({
+      where: { id: withdrawalRequest.userId as string },
+    });
+    await sendWithdrawalTransferEmail({
+      email: seller?.email!,
+      businessName: seller?.businessName!,
+      amount: withdrawalRequest.amount,
+    });
+
+    revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const rejectWithdrawal = async (withdrawalId: string, path: string) => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const withdrawalRequest = await db.withdrawalRequest.findUnique({
+      where: { id: withdrawalId },
+    });
+    if (!withdrawalRequest) {
+      return { error: "Withdrawal request not found!" };
+    }
+
+    if (withdrawalRequest.status !== "pending") {
+      return { error: "This action cannot be performed!" };
+    }
+
+    await db.withdrawalRequest.update({
+      where: { id: withdrawalId },
+      data: { status: "failed" },
+    });
+
     revalidatePath(path);
   } catch (error) {
     console.log(error);

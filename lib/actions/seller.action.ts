@@ -538,6 +538,8 @@ export const getSellerWithdrawals = async () => {
       },
     });
 
+    console.log(withdrawals);
+
     return { success: true, withdrawals };
   } catch (error) {
     console.log(error);
@@ -546,7 +548,8 @@ export const getSellerWithdrawals = async () => {
 };
 
 export const sellerWithdrawFunds = async (
-  values: z.infer<typeof WithdrawalSchema>
+  values: z.infer<typeof WithdrawalSchema>,
+  path: string
 ) => {
   try {
     const currentUser = await getCurrentUser();
@@ -596,10 +599,12 @@ export const sellerWithdrawFunds = async (
         bank,
         description,
         channel: "transfer",
-        reference: Date.now().toString(),
+        reference: `W${Date.now()}`,
+        userId: currentUser.id,
       },
     });
 
+    revalidatePath(path);
     return { success: "Withdrawal submitted successfuly" };
   } catch (error) {
     console.log(error);

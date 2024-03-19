@@ -214,7 +214,7 @@ model Transaction {
   id                 String  @id @default(cuid())
   channel            String
   reference          String
-  orderNumber        String
+  orderNumber        String?
   amount             String
   isRefund           Boolean @default(false)
   date               DateTime    @default(now())

@@ -13,6 +13,7 @@ import {
   sendOrderPaymentEmailToBuyer,
   sendOrderPaymentEmailToSeller,
 } from "../helpers/mail";
+import { revalidatePath } from "next/cache";
 
 export const getPlaceOrderData = async (sellerId: string) => {
   try {
@@ -325,6 +326,63 @@ export const getPurchaseAnalytics = async () => {
     const branchServiced = countUniqueSellers(orders);
 
     return { volumes, amountSpent, branchServiced };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const confirmOrderDelivery = async (orderId: string, path: string) => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const order = await db.order.findUnique({ where: { id: orderId } });
+    if (!order) {
+      return { error: "Order doesn't exist!" };
+    }
+
+    if (order.buyerId !== currentUser.id || order.isdeliveryConfirmed) {
+      return { error: "Action not allowed!" };
+    }
+
+    // get seller wallet
+    const sellerWallet = await db.wallet.findUnique({
+      where: { userId: order.sellerId },
+    });
+    if (!sellerWallet) {
+      return { error: "Problem finding seller wallet!" };
+    }
+
+    await db.order.update({
+      where: { id: orderId },
+      data: { isdeliveryConfirmed: true },
+    });
+
+    const sellerCredit = Number(order.totalRate) + Number(order.deliveryCharge);
+    const newSellerBalance = Number(sellerWallet.balance) + sellerCredit;
+
+    await db.wallet.update({
+      where: { userId: order.sellerId },
+      data: {
+        balance: newSellerBalance.toString(),
+      },
+    });
+
+    await db.transaction.create({
+      data: {
+        channel: "dieselng",
+        reference: `T${Date.now()}`,
+        orderNumber: order.orderNumber,
+        amount: sellerCredit.toString(),
+        category: "settlement",
+        sellerId: order.sellerId,
+      },
+    });
+
+    revalidatePath(path);
   } catch (error) {
     console.log(error);
     return { error: "Something went wrong!" };

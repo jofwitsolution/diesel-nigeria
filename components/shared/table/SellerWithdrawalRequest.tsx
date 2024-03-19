@@ -15,7 +15,7 @@ import SearchBox from "../search/SearchBox";
 import { fuzzyFilter } from "./helper";
 import { sellerWithdrawalColumns } from "./table-columns";
 import { WithdrawalRequest } from "@prisma/client";
-import Filter from "../Filter";
+// import Filter from "../Filter";
 
 interface Props {
   withdrawals: WithdrawalRequest[];
@@ -52,7 +52,7 @@ const SellerWithdrawalRequest = ({ withdrawals }: Props) => {
             <h2 className="px-2 font-medium">Withdrawals</h2>
             <div className="flex w-full items-center justify-between gap-6 px-2">
               <div className="flex items-center gap-3">
-                <Filter />
+                {/* <Filter /> */}
                 <div
                   className={`flex h-[2.375rem] items-center rounded-[5px] bg-gray-200 pl-1`}
                 >

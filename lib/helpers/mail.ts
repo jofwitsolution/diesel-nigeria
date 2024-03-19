@@ -293,3 +293,28 @@ export const sendDocumentRejectedEmail = async ({
           `,
   });
 };
+
+export const sendWithdrawalTransferEmail = async ({
+  email,
+  businessName,
+  amount,
+}: {
+  email: string;
+  businessName: string;
+  amount: string;
+}) => {
+  await resend.emails.send({
+    from: dieselngEmail,
+    to: email,
+    subject: `Successful Withdrawal.`,
+    html: `
+    <p>Dear ${businessName}</p>
+    <p>Your withdrawal request was successfully processed.</p>
+    <br/>
+    <p>The amount of ${formatPrice(Number(amount))} has been transfered to your bank account.</p>
+    
+    <br/>
+    <p>Thank you</p>
+          `,
+  });
+};

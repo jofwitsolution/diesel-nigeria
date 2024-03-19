@@ -45,7 +45,7 @@ const SettledTransactions = ({
                 </div>
                 <div className="flex flex-col gap-1">
                   <span className="line-clamp-1 text-[0.875rem] font-semibold">
-                    {transaction?.buyer.businessName ??
+                    {transaction?.buyer?.businessName ??
                       transaction?.seller.businessName}
                   </span>
 

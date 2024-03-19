@@ -23,6 +23,7 @@ import { Input } from "@/components/ui/input";
 import { WithdrawalSchema } from "@/lib/validations";
 import { sellerWithdrawFunds } from "@/lib/actions/seller.action";
 import LoaderOverlay from "@/components/LoaderOverlay";
+import { usePathname } from "next/navigation";
 
 interface Props {
   balance: number;
@@ -39,6 +40,8 @@ const SellerAccountManagement = ({
   accountNumber,
   bank,
 }: Props) => {
+  const pathname = usePathname();
+
   const [isWithdrawDialogOpen, setWithdrawDialogOpen] = useState(false);
   const [isSuccessDialogOpen, setSuccessDialogOpen] = useState(false);
   const [error, setError] = useState<string | undefined>("");
@@ -62,7 +65,7 @@ const SellerAccountManagement = ({
     setFormValues(values);
 
     startTransition(() => {
-      sellerWithdrawFunds(values).then((data) => {
+      sellerWithdrawFunds(values, pathname).then((data) => {
         setError(data.error);
         setSuccess(data.success);
 
@@ -90,7 +93,11 @@ const SellerAccountManagement = ({
           </div>
           <div>
             <Button
-              onClick={() => setWithdrawDialogOpen(true)}
+              onClick={() => {
+                setWithdrawDialogOpen(true);
+                setError("");
+                setSuccess("");
+              }}
               className="h-[2.375rem] border border-primary-500 px-6 font-[700] text-primary-500 active:bg-primary-100"
             >
               Withdraw Funds
@@ -266,7 +273,9 @@ const SellerAccountManagement = ({
           </div>
         </div>
       </DialogWrapper>
-      {isPending && <LoaderOverlay type="cliploader" size={40} />}
+      {isPending && (
+        <LoaderOverlay type="cliploader" size={40} text="Please wait..." />
+      )}
       <DialogWrapper
         dialogState={isSuccessDialogOpen}
         handleDialogState={() => {

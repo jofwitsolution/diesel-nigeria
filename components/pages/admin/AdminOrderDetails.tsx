@@ -161,7 +161,7 @@ const AdminOrderDetails = ({ order }: Props) => {
                 </span>
 
                 <div className="text-[0.875rem] font-medium">
-                  {order.isDeliveryConfirmed ? (
+                  {order.isdeliveryConfirmed ? (
                     <span className="inline-block rounded bg-primary-100 p-2 font-bold uppercase text-white">
                       Confirmed
                     </span>

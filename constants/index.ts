@@ -135,12 +135,17 @@ export const adminNavLinks: DashboardNavLinks[] = [
   //   isBottom: false,
   // },
   {
+    route: "/admin/withdrawals",
+    label: "Withdrawals",
+    icon: "/images/icons/transaction.svg",
+    isBottom: false,
+  },
+  {
     route: "/admin/transactions",
     label: "Transactions",
     icon: "/images/icons/transaction.svg",
     isBottom: false,
   },
-
   {
     route: "/admin/analytics",
     label: "Analytics",
