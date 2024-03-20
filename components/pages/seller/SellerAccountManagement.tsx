@@ -153,7 +153,6 @@ const SellerAccountManagement = ({
           setWithdrawDialogOpen(!isWithdrawDialogOpen);
         }}
         title="Withdraw Funds"
-        customClose={true}
         containerStyle="max-w-[24.75rem]"
       >
         <div className="mx-auto w-full xs:w-[20.75rem]">

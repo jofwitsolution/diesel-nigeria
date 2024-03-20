@@ -273,3 +273,26 @@ export const WithdrawalSchema = z.object({
       message: "You must enter a description",
     }),
 });
+
+export const RequestReversalSchema = z.object({
+  reason: z.string({ invalid_type_error: "Enter bank name" }).min(3, {
+    message: "Select reason for request",
+  }),
+  description: z.string({ invalid_type_error: "Enter bank name" }).min(3, {
+    message: "Describe reason",
+  }),
+  accountNumber: z
+    .string({ invalid_type_error: "Enter account number" })
+    .min(10, {
+      message: "Invalid account number",
+    })
+    .max(10, {
+      message: "Invalid account number",
+    }),
+  bank: z.string({ invalid_type_error: "Enter bank name" }).min(3, {
+    message: "Enter a valid bank",
+  }),
+  accountName: z.string({ invalid_type_error: "Enter account name" }).min(5, {
+    message: "Enter a valid name",
+  }),
+});

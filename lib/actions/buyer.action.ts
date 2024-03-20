@@ -7,15 +7,21 @@ import {
   BuyerBusinessInfoSchema,
   BuyerVerificationDocSchema,
   PlaceOrderSchema,
+  RequestReversalSchema,
 } from "../validations";
 import { countUniqueSellers, generateOrderNumber } from "../helpers/order";
 import {
+  sendOrderCancelledEmailToBuyer,
+  sendOrderCancelledEmailToSeller,
   sendOrderCreatedEmailToAdmin,
   sendOrderCreatedEmailToBuyer,
   sendOrderCreatedEmailToSeller,
   sendOrderPaymentEmailToAdmin,
   sendOrderPaymentEmailToBuyer,
   sendOrderPaymentEmailToSeller,
+  sendReversalReqEmailToAdmin,
+  sendReversalReqEmailToBuyer,
+  sendReversalReqEmailToSeller,
 } from "../helpers/mail";
 import { revalidatePath } from "next/cache";
 import { cloudinary } from "../helpers/cloudinary";
@@ -394,6 +400,67 @@ export const confirmOrderDelivery = async (orderId: string, path: string) => {
   }
 };
 
+export const cancelOrder = async (orderId: string, path: string) => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const order = await db.order.findUnique({
+      where: { id: orderId },
+      include: {
+        buyer: {
+          select: {
+            businessName: true,
+            email: true,
+          },
+        },
+        seller: {
+          select: {
+            businessName: true,
+            email: true,
+          },
+        },
+      },
+    });
+    if (!order) {
+      return { error: "Order doesn't exist!" };
+    }
+
+    // Exit if buyer has paid or buyer doesn't own the order or order is not a pending order
+    if (
+      order.buyerId !== currentUser.id ||
+      order.status !== "pending" ||
+      order.isBuyerPaid
+    ) {
+      return { error: "Action not allowed!" };
+    }
+
+    await db.order.update({
+      where: { id: orderId },
+      data: { status: "cancelled" },
+    });
+
+    await sendOrderCancelledEmailToBuyer({
+      email: order.buyer.email,
+      buyerName: order.buyer.businessName,
+      orderNumber: order.orderNumber,
+    });
+
+    await sendOrderCancelledEmailToSeller({
+      email: order.seller.email,
+      buyerName: order.seller.businessName,
+      orderNumber: order.orderNumber,
+    });
+
+    revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
 export const buyerUpdateBusinessInfo = async (
   values: z.infer<typeof BuyerBusinessInfoSchema>,
   imageData: string | ArrayBuffer | null,
@@ -519,6 +586,103 @@ export const buyerUploadVerificationDoc = async (
 
     revalidatePath(path);
     return { success: "Document uploaded successfuly" };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const requestForReversal = async (
+  values: z.infer<typeof RequestReversalSchema>,
+  orderId: string,
+  path: string
+) => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const fields = RequestReversalSchema.safeParse(values);
+
+    if (!fields.success) {
+      return { error: "Invalid fields." };
+    }
+
+    const { accountName, accountNumber, bank, reason, description } =
+      fields.data;
+
+    const order = await db.order.findUnique({
+      where: { id: orderId },
+      include: {
+        buyer: {
+          select: {
+            businessName: true,
+            email: true,
+          },
+        },
+        seller: {
+          select: {
+            businessName: true,
+            email: true,
+          },
+        },
+      },
+    });
+    if (!order) {
+      return { error: "Invalid order!" };
+    }
+
+    // If it's not a paid order or order status is not pending or order doesn't belong to current user
+    if (
+      !order.isBuyerPaid ||
+      order.status !== "pending" ||
+      order.buyerId !== currentUser.id
+    ) {
+      return { error: "Action not allowed!" };
+    }
+
+    const existingReversal = await db.reversal.findFirst({
+      where: { userId: currentUser.id, status: "pending" },
+    });
+    if (existingReversal) {
+      return { error: "You have a pending reversal request!" };
+    }
+
+    await db.reversal.create({
+      data: {
+        orderNumber: order.orderNumber,
+        amount: order.amount,
+        userId: currentUser.id,
+        channel: "transfer",
+        reference: `R${Date.now()}`,
+        reason,
+        description,
+        bank,
+        accountName,
+        accountNumber,
+      },
+    });
+
+    await sendReversalReqEmailToBuyer({
+      email: order.buyer.email,
+      businessName: order.buyer.businessName,
+      orderNumber: order.orderNumber,
+    });
+
+    await sendReversalReqEmailToSeller({
+      email: order.seller.email,
+      sellerName: order.seller.businessName,
+      buyerName: order.buyer.businessName,
+      orderNumber: order.orderNumber,
+    });
+
+    await sendReversalReqEmailToAdmin({
+      buyerName: order.buyer.businessName,
+      orderNumber: order.orderNumber,
+    });
+
+    revalidatePath(path);
   } catch (error) {
     console.log(error);
     return { error: "Something went wrong!" };

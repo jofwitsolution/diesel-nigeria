@@ -1,40 +1,20 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import React from "react";
 import { Order } from "@prisma/client";
 import Image from "next/image";
 import { formatDate, formatPrice, getTimeOfDay } from "@/lib/utils";
 import { statusBg } from "@/styles/utils";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import DialogWrapper from "@/components/shared/dialog/DialogWrapper";
-import { confirmOrderDelivery } from "@/lib/actions/buyer.action";
-import { usePathname } from "next/navigation";
-import { toast } from "sonner";
-import LoaderOverlay from "@/components/LoaderOverlay";
+import RequestReversal from "./RequestReversal";
+import CancelOrder from "./CancelOrder";
+import ConfirmDelivery from "./ConfirmDelivery";
 
 interface Props {
   order: Order;
 }
 
 const BuyerOrderDetails = ({ order }: Props) => {
-  const pathname = usePathname();
-  const [isConfirmDeliveryDialogOpen, setConfirmDeliveryDialogOpen] =
-    useState(false);
-  const [isPending, startTransition] = useTransition();
-
-  const handleConfirmDelivery = () => {
-    startTransition(() => {
-      confirmOrderDelivery(order.id, pathname).then((data) => {
-        if (data?.error) {
-          toast.error(data?.error);
-        } else {
-          setConfirmDeliveryDialogOpen(false);
-          toast.success("Delivery confirmed");
-        }
-      });
-    });
-  };
   return (
     <>
       <div className="w-full rounded-md bg-light-900 px-2 py-3 md:p-6 lg:px-10">
@@ -165,54 +145,14 @@ const BuyerOrderDetails = ({ order }: Props) => {
               </div>
             </div>
           </div>
-          <div className="mt-10">
-            {order.isBuyerPaid && order.status !== "delivered" ? (
-              <Button className="border border-primary-500 hover:bg-red-100">
-                Request Reversal
-              </Button>
-            ) : null}
-            {!order.isdeliveryConfirmed && order.status === "delivered" ? (
-              <Button
-                onClick={() => setConfirmDeliveryDialogOpen(true)}
-                className="border border-primary-500 hover:bg-red-100"
-              >
-                Confirm Delivery
-              </Button>
-            ) : null}
+          <div className="mt-10 space-x-3">
+            <RequestReversal order={order} />
+            <CancelOrder order={order} />
+            <ConfirmDelivery order={order} />
           </div>
           <div className="mb-6 w-full border" />
         </div>
       </div>
-      <DialogWrapper
-        title="Delivery Confirmation"
-        customClose
-        handleDialogState={() =>
-          setConfirmDeliveryDialogOpen(!isConfirmDeliveryDialogOpen)
-        }
-        dialogState={isConfirmDeliveryDialogOpen}
-        containerStyle="max-sm:w-[18.75rem] sm:max-w-[24.375rem]"
-      >
-        <div className="space-y-6">
-          <div>
-            <p>Only confirm the delivery if your order has been delivered.</p>
-            <p className="mt-1">
-              Do not click confirm if you are yet to receive your order.
-            </p>
-          </div>
-          <div>
-            <Button
-              disabled={isPending}
-              onClick={handleConfirmDelivery}
-              className="h-[2.2rem] w-full bg-primary-400 px-2 text-light-900 hover:bg-primary-500"
-            >
-              Confirm
-            </Button>
-          </div>
-        </div>
-      </DialogWrapper>
-      {isPending && (
-        <LoaderOverlay type="cliploader" size={45} text="Please wait..." />
-      )}
     </>
   );
 };

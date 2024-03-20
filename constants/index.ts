@@ -199,3 +199,34 @@ export const userFilters = [
     value: "suspended",
   },
 ];
+
+export const reversalReasons = [
+  {
+    id: "1",
+    value: "The market price is not stable.",
+  },
+  {
+    id: "2",
+    value: "No feedback from Seller.",
+  },
+  {
+    id: "3",
+    value: "Increase in price.",
+  },
+  {
+    id: "4",
+    value: "Decrease in price of diesel",
+  },
+  {
+    id: "5",
+    value: "Seller location is too far from my branch.",
+  },
+  {
+    id: "6",
+    value: "I prefer not to say.",
+  },
+  {
+    id: "7",
+    value: "Others",
+  },
+];

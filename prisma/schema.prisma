@@ -129,6 +129,7 @@ model User {
   buyerTransactions  Transaction[] @relation("TransactionToBuyer")
   sellerTransactions  Transaction[] @relation("TransactionToSeller")
   withdrawalRequests  WithdrawalRequest[]
+  reversals           Reversal[]
 
   updatedAt     DateTime    @updatedAt
 }
@@ -246,6 +247,26 @@ model WithdrawalRequest {
 
   // Foreign keys
   userId              String?
+}
+
+model Reversal {
+  id                 String  @id @default(cuid())
+  channel            String
+  reference          String
+  orderNumber        String
+  amount             String
+  reason             String
+  description        String    @default("Funds withdrawn into the account")
+  bank               String
+  accountNumber      String
+  accountName        String
+  status             WithdrawalStatus @default(pending)
+  date               DateTime    @default(now())
+
+  user               User?        @relation(fields: [userId], references: [id])
+
+  // Foreign keys
+  userId             String?
 }
 
 model Wallet {

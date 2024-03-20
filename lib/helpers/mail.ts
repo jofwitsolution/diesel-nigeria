@@ -318,3 +318,131 @@ export const sendWithdrawalTransferEmail = async ({
           `,
   });
 };
+
+export const sendReversalReqEmailToBuyer = async ({
+  email,
+  businessName,
+  orderNumber,
+}: {
+  email: string;
+  businessName: string;
+  orderNumber: string;
+}) => {
+  await resend.emails.send({
+    from: dieselngEmail,
+    to: email,
+    subject: `Reversal Request for Order ${orderNumber}.`,
+    html: `
+    <p>Dear ${businessName}</p>
+    <p>You have requested for a reversal of payment for Order ${orderNumber}.</p>
+    <br/>
+    <p>If you didn't make this request please contact dieselng support now.</p>
+    
+    <br/>
+    <p>Thank you</p>
+          `,
+  });
+};
+
+export const sendReversalReqEmailToSeller = async ({
+  email,
+  sellerName,
+  buyerName,
+  orderNumber,
+}: {
+  email: string;
+  sellerName: string;
+  buyerName: string;
+  orderNumber: string;
+}) => {
+  await resend.emails.send({
+    from: dieselngEmail,
+    to: email,
+    subject: `Reversal Requested for Order ${orderNumber}.`,
+    html: `
+    <p>Dear ${sellerName}</p>
+    <p>${buyerName} has requested a reversal of payment for Order ${orderNumber}.</p>
+    <br/>
+    <p>Please do not process the order.</p>
+    
+    <br/>
+    <p>Thank you</p>
+          `,
+  });
+};
+
+export const sendReversalReqEmailToAdmin = async ({
+  buyerName,
+  orderNumber,
+}: {
+  buyerName: string;
+  orderNumber: string;
+}) => {
+  await resend.emails.send({
+    from: dieselngEmail,
+    to: dieselngAdminEmail,
+    subject: `Reversal Requested for Order ${orderNumber}.`,
+    html: `
+    <p>Dear Admin</p>
+    <br/>
+    <p>${buyerName} has requested a reversal of payment for Order ${orderNumber}.</p>
+    <br/>
+    <p>Please verify the status of the order before granting the request.</p>
+    
+    <br/>
+    <p>Thank you</p>
+          `,
+  });
+};
+
+export const sendOrderCancelledEmailToSeller = async ({
+  email,
+  sellerName,
+  buyerName,
+  orderNumber,
+}: {
+  email: string;
+  sellerName: string;
+  buyerName: string;
+  orderNumber: string;
+}) => {
+  await resend.emails.send({
+    from: dieselngEmail,
+    to: email,
+    subject: `Order ${orderNumber} Cancelled.`,
+    html: `
+    <p>Dear ${sellerName}</p>
+    <p>${buyerName} has cancelled the Order ${orderNumber}.</p>
+    <br/>
+    <p>Please do not process the order.</p>
+    
+    <br/>
+    <p>Thank you</p>
+          `,
+  });
+};
+
+export const sendOrderCancelledEmailToBuyer = async ({
+  email,
+  buyerName,
+  orderNumber,
+}: {
+  email: string;
+  buyerName: string;
+  orderNumber: string;
+}) => {
+  await resend.emails.send({
+    from: dieselngEmail,
+    to: email,
+    subject: `Order ${orderNumber} Cancelled.`,
+    html: `
+    <p>Dear ${buyerName}</p>
+    <p>You have cancelled your Order ${orderNumber}.</p>
+    <br/>
+    <p>If you didn't make this request please contact dieselng support now.</p>
+    
+    <br/>
+    <p>Thank you</p>
+          `,
+  });
+};
