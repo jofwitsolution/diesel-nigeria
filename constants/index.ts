@@ -44,12 +44,12 @@ export const buyerNavLinks: DashboardNavLinks[] = [
     icon: "/images/icons/tanker-truck.svg",
     isBottom: false,
   },
-  {
-    route: "/buyer/analytics",
-    label: "Analytics",
-    icon: "/images/icons/analytics.svg",
-    isBottom: false,
-  },
+  // {
+  //   route: "/buyer/analytics",
+  //   label: "Analytics",
+  //   icon: "/images/icons/analytics.svg",
+  //   isBottom: false,
+  // },
   {
     route: "/buyer/settings",
     label: "Settings",
@@ -83,12 +83,12 @@ export const sellerNavLinks: DashboardNavLinks[] = [
     icon: "/images/icons/cart.svg",
     isBottom: false,
   },
-  {
-    route: "/seller/analytics",
-    label: "Analytics",
-    icon: "/images/icons/analytics.svg",
-    isBottom: false,
-  },
+  // {
+  //   route: "/seller/analytics",
+  //   label: "Analytics",
+  //   icon: "/images/icons/analytics.svg",
+  //   isBottom: false,
+  // },
   {
     route: "/seller/settings",
     label: "Settings",
@@ -146,12 +146,12 @@ export const adminNavLinks: DashboardNavLinks[] = [
     icon: "/images/icons/transaction.svg",
     isBottom: false,
   },
-  {
-    route: "/admin/analytics",
-    label: "Analytics",
-    icon: "/images/icons/analytics.svg",
-    isBottom: false,
-  },
+  // {
+  //   route: "/admin/analytics",
+  //   label: "Analytics",
+  //   icon: "/images/icons/analytics.svg",
+  //   isBottom: false,
+  // },
   {
     route: "/admin/disputes",
     label: "Disputes",
