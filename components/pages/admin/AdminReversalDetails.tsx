@@ -2,7 +2,6 @@
 
 import React from "react";
 import { Reversal } from "@prisma/client";
-import Image from "next/image";
 import { formatDate, formatPrice, getTimeOfDay } from "@/lib/utils";
 import { statusBg } from "@/styles/utils";
 import RejectReversal from "./RejectReversal";

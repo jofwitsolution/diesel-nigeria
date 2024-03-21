@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { PaystackButton } from "react-paystack";
 import { Order as OrderModel } from "@prisma/client";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { formatDate, formatPriceNGN, getTimeOfDay } from "@/lib/utils";
 import { useCurrentUser } from "@/hooks/user";
 
@@ -170,9 +170,9 @@ const CurrentOrder = ({ order }: Props) => {
       <div className="mt-10 flex flex-wrap justify-between gap-8 max-xs:justify-center md:mt-20">
         {!order?.isBuyerPaid && (
           <>
-            <Button className="border border-primary-500 font-medium hover:bg-primary-100">
+            {/* <Button className="border border-primary-500 font-medium hover:bg-primary-100">
               Edit your Order
-            </Button>
+            </Button> */}
             <PaystackButton
               {...componentProps}
               className="rounded-md bg-primary-500 px-3 font-medium text-light-900 active:bg-primary-100"
