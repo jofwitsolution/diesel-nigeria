@@ -24,6 +24,7 @@ import { FormError } from "./FormError";
 import { login } from "@/lib/actions/auth.action";
 import Social from "./Social";
 import AuthDialog from "../auth/AuthDialog";
+import Link from "next/link";
 
 const SignInForm = () => {
   const searchParams = useSearchParams();
@@ -123,6 +124,14 @@ const SignInForm = () => {
                   </FormItem>
                 )}
               />
+              <div className="flex justify-end">
+                <Link
+                  href="/auth/forgot-password"
+                  className="text-[0.875rem] hover:underline"
+                >
+                  Forgot password?
+                </Link>
+              </div>
             </div>
             <FormError message={error || urlError} />
             <FormSuccess message={success} />

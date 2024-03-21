@@ -4,11 +4,14 @@ import * as z from "zod";
 import bcrypt from "bcryptjs";
 import {
   BusinessProfileSchema,
+  forgotPasswordSchema,
   IndividualSignUpSchema,
   LoginSchema,
+  NewPasswordSchema,
 } from "../validations";
 import {
   getLoginRoute,
+  getPasswordResetTokenByToken,
   getUserByEmail,
   getVerificationTokenByToken,
 } from "../helpers/user";
@@ -16,8 +19,11 @@ import { signIn, signOut } from "@/auth";
 import { AuthError } from "next-auth";
 import { db } from "../db";
 import { cloudinary } from "../helpers/cloudinary";
-import { generateVerificationToken } from "../helpers/token";
-import { sendVerificationEmail } from "../helpers/mail";
+import {
+  generatePasswordResetToken,
+  generateVerificationToken,
+} from "../helpers/token";
+import { sendPasswordResetEmail, sendVerificationEmail } from "../helpers/mail";
 
 export const registerIndividual = async (
   values: z.infer<typeof IndividualSignUpSchema>
@@ -199,37 +205,42 @@ export const checkExistingUser = async (email: string) => {
 };
 
 export const newVerification = async (token: string) => {
-  const existingToken = await getVerificationTokenByToken(token);
+  try {
+    const existingToken = await getVerificationTokenByToken(token);
 
-  if (!existingToken) {
-    return { error: "Token does not exist!" };
+    if (!existingToken) {
+      return { error: "Token does not exist!" };
+    }
+
+    const hasExpired = new Date(existingToken.expires) < new Date();
+
+    if (hasExpired) {
+      return { error: "Token has expired!" };
+    }
+
+    const existingUser = await getUserByEmail(existingToken.email);
+
+    if (!existingUser) {
+      return { error: "Email does not exist!" };
+    }
+
+    await db.user.update({
+      where: { id: existingUser.id },
+      data: {
+        emailVerified: new Date(),
+        email: existingToken.email,
+      },
+    });
+
+    await db.verificationToken.delete({
+      where: { id: existingToken.id },
+    });
+
+    return { success: "Email verified!" };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
   }
-
-  const hasExpired = new Date(existingToken.expires) < new Date();
-
-  if (hasExpired) {
-    return { error: "Token has expired!" };
-  }
-
-  const existingUser = await getUserByEmail(existingToken.email);
-
-  if (!existingUser) {
-    return { error: "Email does not exist!" };
-  }
-
-  await db.user.update({
-    where: { id: existingUser.id },
-    data: {
-      emailVerified: new Date(),
-      email: existingToken.email,
-    },
-  });
-
-  await db.verificationToken.delete({
-    where: { id: existingToken.id },
-  });
-
-  return { success: "Email verified!" };
 };
 
 interface OAuthParams {
@@ -253,5 +264,91 @@ export const OAuthLogin = async ({ provider, callbackUrl }: OAuthParams) => {
     }
 
     throw error;
+  }
+};
+
+export const forgotPassword = async (
+  values: z.infer<typeof forgotPasswordSchema>
+) => {
+  try {
+    const validatedFields = forgotPasswordSchema.safeParse(values);
+
+    if (!validatedFields.success) {
+      return { error: "Invalid emaiL!" };
+    }
+
+    const { email } = validatedFields.data;
+
+    const existingUser = await getUserByEmail(email);
+
+    if (!existingUser) {
+      return { error: "Email not found!" };
+    }
+
+    const passwordResetToken = await generatePasswordResetToken(email);
+    await sendPasswordResetEmail(
+      passwordResetToken.email,
+      passwordResetToken.token
+    );
+
+    return { success: "Reset email sent!" };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const newPassword = async (
+  values: z.infer<typeof NewPasswordSchema>,
+  token?: string | null
+) => {
+  try {
+    if (!token) {
+      return { error: "Missing token!" };
+    }
+
+    const validatedFields = NewPasswordSchema.safeParse(values);
+
+    if (!validatedFields.success) {
+      return { error: "Invalid fields!" };
+    }
+
+    const { password } = validatedFields.data;
+
+    const existingToken = await getPasswordResetTokenByToken(token);
+
+    if (!existingToken) {
+      return { error: "Invalid token!" };
+    }
+
+    const hasExpired = new Date(existingToken.expires) < new Date();
+
+    if (hasExpired) {
+      return { error: "Token has expired!" };
+    }
+
+    const existingUser = await getUserByEmail(existingToken.email);
+
+    if (!existingUser) {
+      return { error: "Email does not exist!" };
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await db.user.update({
+      where: { id: existingUser.id },
+      data: { password: hashedPassword },
+    });
+
+    await db.passwordResetToken.delete({
+      where: { id: existingToken.id },
+    });
+
+    return { success: "Password updated!" };
+  } catch (error) {
+    console.log(error);
+    return {
+      error: "Something went wrong!",
+    };
   }
 };

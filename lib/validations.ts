@@ -9,6 +9,29 @@ export const LoginSchema = z.object({
   }),
 });
 
+export const forgotPasswordSchema = z.object({
+  email: z.string().email({
+    message: "Email is required",
+  }),
+});
+
+export const NewPasswordSchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, {
+        message: "Password cannot be less than 8 char.",
+      })
+      .max(20, {
+        message: "Password cannot exceed 20 char.",
+      }),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"], // path of error
+  });
+
 export const IndividualSignUpSchema = z
   .object({
     name: z
