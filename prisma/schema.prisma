@@ -25,6 +25,7 @@ enum OrderStatus {
   progress
   failed
   cancelled
+  reversed
 }
 
 enum WithdrawalStatus {
@@ -177,7 +178,7 @@ model Order {
   deliveryCharge        String
   serviceCharge         String
   amount                String
-  orderNumber           String
+  orderNumber           String      @unique
   orderDate             DateTime    @default(now())
   updatedAt             DateTime    @updatedAt
   expectedDeliveryDate  DateTime

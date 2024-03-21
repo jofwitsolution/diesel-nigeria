@@ -26,6 +26,11 @@ import {
 import { revalidatePath } from "next/cache";
 import { cloudinary } from "../helpers/cloudinary";
 
+const dieselngWalletId = process.env.DIESELNG_WALLET_ID;
+if (!dieselngWalletId) {
+  throw Error(`Environment variable "DIESELNG_WALLET_ID" is undefined`);
+}
+
 export const getPlaceOrderData = async (sellerId: string) => {
   try {
     const currentUser = await getCurrentUser();
@@ -174,11 +179,6 @@ export const createOrder = async (
 };
 
 export const verifyOrderPayment = async (reference: string) => {
-  const dieselngWalletId = process.env.DIESELNG_WALLET_ID;
-  if (!dieselngWalletId) {
-    return { error: "No diesel wallet id present" };
-  }
-
   try {
     const currentUser = await getCurrentUser();
     if (!currentUser) {

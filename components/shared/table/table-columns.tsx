@@ -1,7 +1,12 @@
 import Image from "next/image";
 import { createColumnHelper } from "@tanstack/react-table";
 import { formatDate, formatPrice, getTimeOfDay } from "@/lib/utils";
-import { Order, Transaction, WithdrawalRequest } from "@prisma/client";
+import {
+  Order,
+  Reversal,
+  Transaction,
+  WithdrawalRequest,
+} from "@prisma/client";
 import { statusBg } from "@/styles/utils";
 import TransactionActionMenu from "../menubar/TransactionActionMenu";
 import AdminWithdrawalActionMenu from "../menubar/AdminWithdrawalActionMenu";
@@ -9,6 +14,7 @@ import AdminWithdrawalActionMenu from "../menubar/AdminWithdrawalActionMenu";
 const orderColumnHelper = createColumnHelper<Order>();
 const transactionColumnHelper = createColumnHelper<Transaction>();
 const withdrawalColumnHelper = createColumnHelper<WithdrawalRequest>();
+const reversalColumnHelper = createColumnHelper<Reversal>();
 
 export const buyerOrderColumns = [
   orderColumnHelper.accessor((row) => row.seller, {
@@ -458,5 +464,58 @@ export const allWithdrawalColumns = [
       );
     },
     header: () => <span className="invisible">Action</span>,
+  }),
+];
+
+export const adminReversalColumns = [
+  reversalColumnHelper.accessor("user.businessName", {
+    id: "businessName",
+    header: "Buyer",
+    cell: (info) => {
+      const businessName = info.getValue() as string;
+
+      return businessName;
+    },
+  }),
+  reversalColumnHelper.accessor("date", {
+    id: "dateTime",
+    cell: (info) => {
+      const date = formatDate(info.getValue());
+      const time = getTimeOfDay(info.getValue());
+
+      return (
+        <span className="flex flex-col">
+          <span className="font-medium">{date}</span>
+          <span className="">{time}</span>
+        </span>
+      );
+    },
+    header: "Date, time",
+  }),
+  reversalColumnHelper.accessor("reference", {
+    id: "reference",
+    header: "Reference",
+    cell: (info) => info.getValue(),
+  }),
+  reversalColumnHelper.accessor("orderNumber", {
+    id: "orderNumber",
+    header: "Order Number",
+    cell: (info) => info.getValue(),
+  }),
+  reversalColumnHelper.accessor("amount", {
+    id: "amount",
+    header: "Amount",
+    cell: (info) => formatPrice(Number(info.getValue())),
+  }),
+  reversalColumnHelper.accessor("status", {
+    id: "status",
+    header: "Status",
+    cell: (info) => (
+      <span
+        className={`${statusBg(info.getValue())} rounded p-1 font-[700] capitalize`}
+      >
+        {info.getValue()}
+      </span>
+    ),
   }),
 ];

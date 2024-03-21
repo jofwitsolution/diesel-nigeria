@@ -446,3 +446,53 @@ export const sendOrderCancelledEmailToBuyer = async ({
           `,
   });
 };
+
+export const sendReversalRejectedEmailToBuyer = async ({
+  email,
+  buyerName,
+  orderNumber,
+}: {
+  email: string;
+  buyerName: string;
+  orderNumber: string;
+}) => {
+  await resend.emails.send({
+    from: dieselngEmail,
+    to: email,
+    subject: `Reversal Request Rejected.`,
+    html: `
+    <p>Dear ${buyerName}</p>
+    <p>Your request for a reversal for Order ${orderNumber} has been rejected.</p>
+    <br/>
+    <p>This could be because your order is in progress or delivered.</p>
+    
+    <br/>
+    <p>Thank you</p>
+          `,
+  });
+};
+
+export const sendReversalTransferEmailToBuyer = async ({
+  email,
+  businessName,
+  amount,
+}: {
+  email: string;
+  businessName: string;
+  amount: string;
+}) => {
+  await resend.emails.send({
+    from: dieselngEmail,
+    to: email,
+    subject: `Successful Reversal.`,
+    html: `
+    <p>Dear ${businessName}</p>
+    <p>Your reversal request was successfully processed.</p>
+    <br/>
+    <p>The amount of ${formatPrice(Number(amount))} has been transfered to your bank account.</p>
+    
+    <br/>
+    <p>Regards Diesel NG</p>
+          `,
+  });
+};
