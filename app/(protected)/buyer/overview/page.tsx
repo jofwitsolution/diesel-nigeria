@@ -18,7 +18,7 @@ const OverviewPage = async () => {
       </div>
       <div className="hidden max-w-[28.0625rem] space-y-6 xl:block">
         <div className="flex justify-end">
-          <Link href="#">
+          <Link href="/buyer/sellers">
             <Button className="bg-primary-500 px-[2.5625rem] py-[0.5625rem] text-light-900 hover:bg-primary-400">
               Buy Deisel
             </Button>

@@ -257,8 +257,8 @@ export const PlaceOrderSchema = z.object({
     .string({
       required_error: "Quantity is required.",
     })
-    .min(1, {
-      message: "Quantity is required.",
+    .min(1000, {
+      message: "Minimum order is 1000 litres.",
     }),
   deliveryDate: z
     .date({

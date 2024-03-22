@@ -34,3 +34,16 @@ export function countUniqueBuyers(orders: Object[]) {
   });
   return uniqueBuyers.size;
 }
+
+export function calculateOrderCost(productPrice: string, quantity: string) {
+  const deliveryChargePerLitre = 10; // 10 Naira per litre
+
+  const totalRate = Number(productPrice) * Number(quantity); // price per litre * number of litres
+  const deliveryCharge = deliveryChargePerLitre * Number(quantity);
+
+  const serviceCharge = (totalRate + deliveryCharge) * (1 / 100); // 1% of total rate and delivery charge
+
+  const amount = totalRate + serviceCharge + deliveryCharge;
+
+  return { amount, totalRate, deliveryCharge, serviceCharge };
+}

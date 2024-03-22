@@ -9,7 +9,11 @@ import {
   PlaceOrderSchema,
   RequestReversalSchema,
 } from "../validations";
-import { countUniqueSellers, generateOrderNumber } from "../helpers/order";
+import {
+  calculateOrderCost,
+  countUniqueSellers,
+  generateOrderNumber,
+} from "../helpers/order";
 import {
   sendOrderCancelledEmailToBuyer,
   sendOrderCancelledEmailToSeller,
@@ -94,6 +98,9 @@ export const createOrder = async (
       message,
     } = fields.data;
 
+    if (Number(quantity) < 1000) {
+      return { error: "Minimum order is 1000 litres" };
+    }
     const product = await db.product.findUnique({ where: { id: productId } });
     if (product) {
       if (Number(quantity) > Number(product.numberInStock)) {
@@ -109,10 +116,10 @@ export const createOrder = async (
 
     // Generate the order number
     const orderNumber = await generateOrderNumber();
-    const totalRate = Number(product.price) * Number(quantity); // price per litre * number of litres
-    const serviceCharge = 5000;
-    const deliveryCharge = 100000;
-    const amount = totalRate + serviceCharge + deliveryCharge;
+
+    // Calculate order cost
+    const { amount, totalRate, deliveryCharge, serviceCharge } =
+      calculateOrderCost(product.price, quantity);
 
     const order = await db.order.create({
       data: {
@@ -372,7 +379,8 @@ export const confirmOrderDelivery = async (orderId: string, path: string) => {
       data: { isdeliveryConfirmed: true },
     });
 
-    const sellerCredit = Number(order.totalRate) + Number(order.deliveryCharge);
+    const totalRate = Number(order.totalRate);
+    const sellerCredit = totalRate - totalRate * (0.5 / 100); // total rate minus 0.5% of the total rate
     const newSellerBalance = Number(sellerWallet.balance) + sellerCredit;
 
     await db.wallet.update({

@@ -1,10 +1,11 @@
 "use client";
 
-import Image from "next/image";
+// import Image from "next/image";
 import React from "react";
 import DBMobileNav from "./DBMobileNav";
 import { useCurrentRole } from "@/hooks/user";
 import { User } from "@prisma/client";
+import Novu from "@/providers/Novu";
 
 interface Props {
   user: User;
@@ -21,12 +22,13 @@ const DBNavbar = ({ user }: Props) => {
             {role}- Dashboard
           </h1>
           <div className="flex gap-[1.5rem]">
-            <Image
+            {/* <Image
               src="/images/icons/bell.svg"
               width={20}
               height={20}
               alt="notification bell"
-            />
+            /> */}
+            <Novu />
             <DBMobileNav user={user} />
           </div>
         </div>

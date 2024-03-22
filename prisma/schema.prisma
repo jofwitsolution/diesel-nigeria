@@ -318,3 +318,12 @@ model PasswordResetToken {
 
   @@unique([email, token])
 }
+
+model Settings {
+  id String @id @default(cuid())
+  
+  minOrderableLitre                         String    @default("1000")
+  serviceChargePerLitre                     String    @default("10")
+  percentageServiceCharge                   String    @default("1")
+  percentageRateCharge                      String    @default("0.5")
+}
