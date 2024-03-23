@@ -21,7 +21,7 @@ const DBNavbar = ({ user }: Props) => {
           <h1 className="font-semibold capitalize md:text-[1.125rem]">
             {role}- Dashboard
           </h1>
-          <div className="flex gap-[1.5rem]">
+          <div className="flex items-center gap-[1.5rem]">
             {/* <Image
               src="/images/icons/bell.svg"
               width={20}

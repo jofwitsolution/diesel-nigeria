@@ -19,6 +19,7 @@ import {
 import { countUniqueBuyers } from "../helpers/order";
 import { getJanuary1stOfCurrentYear } from "../utils";
 import { getUserById } from "../helpers/user";
+import { updateNovuSubscriber } from "../helpers/novu";
 
 export const sellerUpdateBusinessInfo = async (
   values: z.infer<typeof SellerBusinessInfoSchema>,
@@ -79,6 +80,8 @@ export const sellerUpdateBusinessInfo = async (
         businessDescription,
       },
     });
+
+    await updateNovuSubscriber(user!);
 
     revalidatePath(path);
     return { success: "Changes saved successfuly" };

@@ -9,7 +9,6 @@ export async function createNovuSubscriber(user: User) {
   try {
     await novu.subscribers.identify(user.id, {
       email: user.email, // optional
-      firstName: user.businessName!, // optional
       lastName: user.businessName!, // optional
       phone: user.phoneNumber!, // optional
       avatar: "", // optional
@@ -30,10 +29,9 @@ export async function updateNovuSubscriber(user: User) {
   try {
     await novu.subscribers.update(user.id, {
       email: user.email, // optional
-      firstName: user.businessName!, // optional
       lastName: user.businessName!, // optional
       phone: user.phoneNumber!, // optional
-      avatar: "", // optional
+      avatar: user?.avatar?.url ?? "", // optional
       data: { businessName: user.businessName!, rcNumber: user.rcNumber! }, // optional
     });
 
@@ -58,6 +56,26 @@ export async function triggerNotification(user: User) {
       payload: {
         lastName: user.businessName!,
       },
+    });
+  } catch (error) {
+    if (error?.response) {
+      console.log(error.response.data.message);
+      console.log(error.response.data.statusCode);
+    }
+  }
+}
+
+export async function triggerNovu(
+  subscriberId: string,
+  workflowId: string,
+  payload: {}
+) {
+  try {
+    await novu.trigger(workflowId, {
+      to: {
+        subscriberId,
+      },
+      payload,
     });
   } catch (error) {
     if (error?.response) {

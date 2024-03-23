@@ -16,6 +16,7 @@ import {
 } from "../helpers/mail";
 import { getCurrentUser } from "../helpers/auth";
 import { revalidatePath } from "next/cache";
+import { createNovuSubscriber } from "../helpers/novu";
 
 const dieselngWalletId = process.env.DIESELNG_WALLET_ID;
 if (!dieselngWalletId) {
@@ -54,7 +55,7 @@ export const addNewSeller = async (values: z.infer<typeof NewSellerSchema>) => {
     const password = generatePassword(12);
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await db.user.create({
+    const newUser = await db.user.create({
       data: {
         name: businessName,
         email,
@@ -67,9 +68,12 @@ export const addNewSeller = async (values: z.infer<typeof NewSellerSchema>) => {
       },
     });
 
+    // Subscribe new user for in app notification
+    await createNovuSubscriber(newUser);
+
     await db.wallet.create({
       data: {
-        userId: user.id,
+        userId: newUser.id,
       },
     });
 

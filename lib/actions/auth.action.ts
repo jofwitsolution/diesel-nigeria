@@ -24,6 +24,7 @@ import {
   generateVerificationToken,
 } from "../helpers/token";
 import { sendPasswordResetEmail, sendVerificationEmail } from "../helpers/mail";
+import { createNovuSubscriber } from "../helpers/novu";
 
 export const registerIndividual = async (
   values: z.infer<typeof IndividualSignUpSchema>
@@ -44,9 +45,12 @@ export const registerIndividual = async (
       return { error: "Email already in use!" };
     }
 
-    await db.user.create({
+    const newUser = await db.user.create({
       data: { name, email, password: hashedPassword, businessName: name },
     });
+
+    // Subscribe new user for in app notification
+    await createNovuSubscriber(newUser);
 
     const verificationToken = await generateVerificationToken(email);
     await sendVerificationEmail(
@@ -100,7 +104,7 @@ export const registerOrganization = async (
       return { error: "Email already in use!" };
     }
 
-    const user = await db.user.create({
+    const newUser = await db.user.create({
       data: {
         name,
         email,
@@ -112,6 +116,9 @@ export const registerOrganization = async (
       },
     });
 
+    // Subscribe new user for in app notification
+    await createNovuSubscriber(newUser);
+
     const result = await cloudinary.uploader.upload(fileData as string, {
       // resource_type: "raw",
       folder: "documents",
@@ -122,7 +129,7 @@ export const registerOrganization = async (
       data: {
         url: result.url,
         public_id: result.public_id,
-        userId: user.id,
+        userId: newUser.id,
       },
     });
 

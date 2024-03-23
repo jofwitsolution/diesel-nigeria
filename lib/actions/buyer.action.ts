@@ -29,6 +29,8 @@ import {
 } from "../helpers/mail";
 import { revalidatePath } from "next/cache";
 import { cloudinary } from "../helpers/cloudinary";
+import { triggerNovu, updateNovuSubscriber } from "../helpers/novu";
+import { formatPrice } from "../utils";
 
 const dieselngWalletId = process.env.DIESELNG_WALLET_ID;
 if (!dieselngWalletId) {
@@ -153,12 +155,6 @@ export const createOrder = async (
       },
     });
 
-    await db.orderTracking.create({
-      data: {
-        orderId: order.id,
-      },
-    });
-
     await sendOrderCreatedEmailToBuyer({
       email: order.email,
       amount: order.amount,
@@ -176,6 +172,18 @@ export const createOrder = async (
       orderNumber: order.orderNumber,
       quantity: order.quantity,
       businessName: order.businessName,
+    });
+
+    await triggerNovu(order.buyerId, "you-placed-an-order", {
+      businessName,
+      orderNumber,
+      amount: formatPrice(amount),
+    });
+    await triggerNovu(order.sellerId, "new-order", {
+      businessName,
+      orderNumber,
+      quantity,
+      deliveryLocation,
     });
 
     return { orderId: order.id, success: "Order created successfuly" };
@@ -528,6 +536,8 @@ export const buyerUpdateBusinessInfo = async (
         businessDescription,
       },
     });
+
+    await updateNovuSubscriber(user!);
 
     revalidatePath(path);
     return { success: "Changes saved successfuly" };
