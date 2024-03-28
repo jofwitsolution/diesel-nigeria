@@ -3,7 +3,6 @@ import Link from "next/link";
 import React from "react";
 import { getTopSellers } from "@/lib/actions/user.action";
 import { formatPrice } from "@/lib/utils";
-import { table } from "console";
 
 const sellers = [
   {
