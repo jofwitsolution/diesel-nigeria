@@ -20,6 +20,7 @@ const PaymentChart: React.FC = ({ chartData }) => {
 
       const ctx = chartRef.current.getContext("2d");
       if (ctx) {
+        chartRef.current.style.width = "100%";
         chartInstance.current = new Chart(ctx, {
           type: "line",
           data: {

@@ -75,7 +75,7 @@ const AddSellerForm = ({ dialogState, handleDialogState }: Props) => {
         <DialogOverlay className="z-[1300]">
           <DialogContent className="DialogContent z-[1500] max-w-[29.375rem] rounded-md bg-white py-8">
             <DialogHeader className="border-b pb-2">
-              <DialogTitle>Add New Seller</DialogTitle>
+              <DialogTitle>Add Seller</DialogTitle>
             </DialogHeader>
             <Form {...form}>
               <form

@@ -29,7 +29,7 @@ const AccountTabs = ({
 }: Props) => {
   return (
     <div>
-      <Tabs defaultValue="overview" className="1332px:w-[67.125rem]">
+      <Tabs defaultValue="overview" className="">
         <TabsList className="xs:w-full lg:w-[45rem]">
           <TabsTrigger
             value="overview"

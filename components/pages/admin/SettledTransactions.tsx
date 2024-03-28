@@ -25,7 +25,7 @@ const SettledTransactions = ({
           transactions.map((transaction) => (
             <div
               key={transaction.id}
-              className="flex items-center justify-between gap-6 rounded-md bg-[#F1F3F9] px-2 py-3 xs:px-4"
+              className="flex items-center justify-between gap-6 rounded-md bg-[#F9FAFB] px-2 py-3 xs:px-4"
             >
               <div className="flex items-center gap-3">
                 <div

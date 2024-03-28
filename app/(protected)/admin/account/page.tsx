@@ -13,7 +13,7 @@ const AccountPage = async () => {
 
   return (
     <div className="space-y-6">
-      <div className="max-w-[69.125rem]">
+      <div className="">
         <div className="flex flex-col gap-2">
           <span className="font-medium md:text-[1.25rem]">Transactions</span>
           <span className="text-[0.875rem]">

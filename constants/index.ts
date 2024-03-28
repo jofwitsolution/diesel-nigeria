@@ -137,7 +137,7 @@ export const adminNavLinks: DashboardNavLinks[] = [
   {
     route: "/admin/withdrawals",
     label: "Withdrawals",
-    icon: "/images/icons/transaction.svg",
+    icon: "/images/icons/withdraw.svg",
     isBottom: false,
   },
   {
