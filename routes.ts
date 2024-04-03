@@ -8,6 +8,8 @@ export const publicRoutes = [
   "/about",
   "/market",
   "/contact",
+  "/privacy",
+  "/terms",
   "/auth/new-verification",
 ];
 

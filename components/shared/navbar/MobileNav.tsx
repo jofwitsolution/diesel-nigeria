@@ -70,7 +70,10 @@ const MobileNav = () => {
           {useCurrentUser() && (
             <>
               <SheetClose asChild>
-                <Link href={getLoginRoute(role as string)!} className="mb-6">
+                <Link
+                  href={getLoginRoute(role as string)!}
+                  className="mb-6 inline-block"
+                >
                   <Button className="flex justify-between gap-[0.63rem] rounded-[5px] bg-primary-500 pb-[0.5625rem] pl-[0.6875rem] pr-[4.6875rem] pt-[0.6875rem]">
                     <Image
                       src="/images/icons/menu-grid.svg"

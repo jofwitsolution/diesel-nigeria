@@ -179,7 +179,7 @@ export const createOrder = async (
       orderNumber,
       amount: formatPrice(amount),
     });
-    await triggerNovu(order.sellerId, "new-order", {
+    await triggerNovu(order.sellerId, "you-have-an-order", {
       businessName,
       orderNumber,
       quantity,

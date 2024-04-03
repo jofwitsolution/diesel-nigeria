@@ -22,12 +22,6 @@ const DBNavbar = ({ user }: Props) => {
             {role}- Dashboard
           </h1>
           <div className="flex items-center gap-[1.5rem]">
-            {/* <Image
-              src="/images/icons/bell.svg"
-              width={20}
-              height={20}
-              alt="notification bell"
-            /> */}
             <Novu />
             <DBMobileNav user={user} />
           </div>

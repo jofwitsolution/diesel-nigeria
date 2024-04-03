@@ -143,8 +143,8 @@ const Footer = () => {
               <div className="">2024© DieselNg. All rights reserved.</div>
               <div className="text-[0.86rem]">
                 <Link href="#">DIESELNG</Link> |
-                <Link href="#"> Terms & Conditions with Disclaimer</Link> |
-                <Link href="#"> Privacy Policy</Link> |
+                <Link href="/terms"> Terms & Conditions with Disclaimer</Link> |
+                <Link href="/privacy"> Privacy Policy</Link> |
                 <Link href="#"> Recruitment</Link>
               </div>
             </div>
