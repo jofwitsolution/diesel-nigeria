@@ -19,11 +19,8 @@ const Pricing = async () => {
           Find the best price that suits your needs
         </span>
         <p className="mt-[1rem] max-w-[67.875rem] text-center md:text-[1.25rem] md:leading-[1.9rem] ">
-          After an order is received, our Matrix API can optimize the matching
-          of delivery resources with actual delivery locations at scale. This
-          capability is primarily leveraged by on-demand delivery companies, who
-          appreciate the ability to understand traffic pattern impact on
-          resource matching challenges.
+          Once your order is confirmed, our advanced supply-chain and
+          navigational system ensures you take delivery of your diesel, fast.
         </p>
       </div>
 

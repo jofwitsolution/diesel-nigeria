@@ -100,6 +100,13 @@ export const createOrder = async (
       message,
     } = fields.data;
 
+    const seller = await db.user.findUnique({
+      where: { id: sellerId, role: "seller" },
+    });
+    if (!seller || seller.isSuspended || !seller.isVerifiedSeller) {
+      return { error: "Invalid Seller!" };
+    }
+
     if (Number(quantity) < 1000) {
       return { error: "Minimum order is 1000 litres" };
     }

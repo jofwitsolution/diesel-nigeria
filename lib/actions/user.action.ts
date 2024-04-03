@@ -85,7 +85,7 @@ export const getVerifiedSellers = async () => {
         isVerifiedSeller: true,
         isSuspended: false,
         emailVerified: { not: null },
-        // products: { some: {} }, // Check if the products array has at least one item
+        products: { some: {} }, // Check if the products array has at least one item
       },
       select: {
         avatar: true,
