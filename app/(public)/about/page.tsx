@@ -1,4 +1,4 @@
-import Businesses from "@/components/shared/Businesses";
+// import Businesses from "@/components/shared/Businesses";
 import ContactBoard from "@/components/shared/ContactBoard";
 import Image from "next/image";
 import React from "react";

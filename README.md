@@ -14,8 +14,6 @@ pnpm dev
 bun dev
 ```
 
-address: www.namesilo.com/domainconnect
-hostname: \_domainconnect
 #openssl rand -hex 32
 
 # npx prisma migrate reset: to reset db
