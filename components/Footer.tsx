@@ -1,10 +1,22 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { toast } from "sonner";
 
 const Footer = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!e.target?.email.value) {
+      toast.error("Invalid Email!");
+    } else {
+      toast.success("Subscribed successfully");
+    }
+  };
   return (
     <footer className="bg-black">
       <div className="max-width">
@@ -127,16 +139,24 @@ const Footer = () => {
                   Subscribe to our E-newsletter
                 </span>
               </div>
-              <div className="flex h-[1.8rem] w-full gap-2 sm:h-[2.5rem] sm:w-[70%] sm:gap-[1rem]">
+              <form
+                onSubmit={handleSubmit}
+                className="flex h-[1.8rem] w-full gap-2 sm:h-[2.5rem] sm:w-[70%] sm:gap-[1rem]"
+              >
                 <Input
                   type="email"
                   placeholder="E-mail"
+                  name="email"
+                  required
                   className="h-full w-[80%] rounded-none border-none bg-[#2B2B2B] text-light-900"
                 />
-                <Button className="h-full w-[20%] rounded-none bg-primary-500 font-fraunces text-[0.6rem] hover:bg-primary-400 sm:text-[0.85rem]">
+                <Button
+                  type="submit"
+                  className="h-full w-[20%] rounded-none bg-primary-500 font-fraunces text-[0.6rem] hover:bg-primary-400 sm:text-[0.85rem]"
+                >
                   Subcribe
                 </Button>
-              </div>
+              </form>
             </div>
 
             <div className="mt-12 flex flex-col-reverse items-center gap-y-10 text-light-500 md:mt-16 md:flex-row md:justify-between">

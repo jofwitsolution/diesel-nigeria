@@ -147,7 +147,7 @@ const Page = () => {
             </div>
           </div>
         </section>
-        <section className="padding-top padding-bottom">
+        {/* <section className="padding-top padding-bottom">
           <h4 className="mx-auto mb-8 max-w-[50.25rem] text-center font-fraunces text-[1.5rem] md:mb-[3.25rem] md:text-[3rem] md:leading-[3.25rem] ">
             Numbers matter & here numbers speak for themselves
           </h4>
@@ -165,9 +165,9 @@ const Page = () => {
               <span className="">Consumers serviced</span>
             </div>
           </div>
-        </section>
+        </section> */}
       </div>
-      <Businesses />
+      {/* <Businesses /> */}
       <ContactBoard />
     </>
   );
