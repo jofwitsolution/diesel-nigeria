@@ -106,7 +106,7 @@ model User {
   rcNumber      String?   @default("")
   address       String?   @default("")
   state         String?   @default("")
-  phoneNumber   String?   @unique @default("")
+  phoneNumber   String?   @default("")
   businessDescription String? @default("")
   isVerifiedSeller  Boolean @default(false)
   isVerifiedBuyer  Boolean @default(false)
