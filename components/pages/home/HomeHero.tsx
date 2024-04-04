@@ -28,9 +28,8 @@ const HomeHero = async () => {
             </span>
 
             <p className="mx-auto max-w-[44.9375rem] text-center text-[1.125rem] sm:text-light-500">
-              Experience the power of real-time purchases, track your deliveries
-              seamlessly and bring efficiency to your corporate diesel
-              consumptions
+              Bridging the Information and logistical gap between AGO suppliers
+              and the consumers, with accuracy and efficiency
             </p>
 
             <Link href="/market" className="sm:hidden">
