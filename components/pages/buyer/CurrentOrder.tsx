@@ -84,7 +84,7 @@ const CurrentOrder = ({ order }: Props) => {
               />
               90%
             </span>
-            <span className="flex items-center gap-2">
+            {/* <span className="flex items-center gap-2">
               <Image
                 src="/images/icons/clock-dark.svg"
                 width={14}
@@ -92,7 +92,7 @@ const CurrentOrder = ({ order }: Props) => {
                 alt="time"
               />
               within 30&apos;
-            </span>
+            </span> */}
           </div>
         </div>
 
@@ -175,7 +175,7 @@ const CurrentOrder = ({ order }: Props) => {
             </Button> */}
             <PaystackButton
               {...componentProps}
-              className="rounded-md bg-primary-500 px-3 font-medium text-light-900 active:bg-primary-100"
+              className="rounded-md bg-primary-500 p-3 font-medium text-light-900 active:bg-primary-100"
             />
           </>
         )}

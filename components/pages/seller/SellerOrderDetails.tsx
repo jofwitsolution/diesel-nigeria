@@ -193,18 +193,21 @@ const SellerOrderDetails = ({ order }: Props) => {
                     >
                       Delivered
                     </label>
-                    <Checkbox
-                      id="delivered"
-                      onCheckedChange={(checked) => {
-                        setOrderStatus("delivered");
+                    <span className="flex items-center gap-1">
+                      <Checkbox
+                        id="delivered"
+                        onCheckedChange={(checked) => {
+                          setOrderStatus("delivered");
 
-                        // if checked open dialog
-                        if (checked) {
-                          setIsDialogOpen(true);
-                        }
-                      }}
-                      checked={orderStatus === "delivered"}
-                    />
+                          // if checked open dialog
+                          if (checked) {
+                            setIsDialogOpen(true);
+                          }
+                        }}
+                        checked={orderStatus === "delivered"}
+                      />
+                      <span className="font-medium">?</span>
+                    </span>
                   </div>
                 )}
               </div>
