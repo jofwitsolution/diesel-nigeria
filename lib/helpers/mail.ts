@@ -20,10 +20,15 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
   const resetLink = `${domain}/auth/new-password?token=${token}`;
 
   await resend.emails.send({
-    from: dieselngEmail,
+    from: `Diesel NG <${dieselngEmail}>`,
     to: email,
     subject: "Reset your password",
-    html: `<p>Click <a href="${resetLink}">here</a> to reset password.</p>`,
+    html: `
+          <h1>Password Reset</h1>
+          <p>Click <a href="${resetLink}">here</a> to reset password.</p>
+          <br />
+          <p>Regards Diesel NG</p>
+          `,
   });
 };
 
@@ -31,16 +36,23 @@ export const sendVerificationEmail = async (email: string, token: string) => {
   const confirmLink = `${domain}/auth/new-verification?token=${token}`;
 
   await resend.emails.send({
-    from: dieselngEmail,
+    from: `Diesel NG <${dieselngEmail}>`,
     to: email,
     subject: "Confirm your email",
-    html: `<p>Click <a href="${confirmLink}">here</a> to confirm email.</p>`,
+    html: `
+      <h1>Email Verification</h1>
+      <p>You need to verify your email address before you can log in to Diesel NG.</p>
+      <br />    
+      <p>Click <a href="${confirmLink}">here</a> to confirm your email.</p>
+      <br />
+      <p>Regards Diesel NG</p>
+          `,
   });
 };
 
 export const sendNewSellerEmail = async (email: string, password: string) => {
   await resend.emails.send({
-    from: dieselngEmail,
+    from: `Diesel NG <${dieselngEmail}>`,
     to: email,
     subject: "Welcome to Diesel NG",
     html: `
@@ -48,6 +60,7 @@ export const sendNewSellerEmail = async (email: string, password: string) => {
     <p>You can log in with your email address and the following password; </p>
     <p>${password}</p>
     <p>Please, make sure you change your password.</p>
+    <br />
     <p>Thank you</p>
           `,
   });
@@ -60,7 +73,7 @@ export const sendOrderCreatedEmailToBuyer = async ({
   businessName,
 }: OrderCreatedToBuyer) => {
   await resend.emails.send({
-    from: dieselngEmail,
+    from: `Diesel NG <${dieselngEmail}>`,
     to: email,
     subject: `You placed an Order ${orderNumber}`,
     html: `
@@ -84,7 +97,7 @@ export const sendOrderCreatedEmailToSeller = async ({
   businessName,
 }: OrderCreatedToSeller) => {
   await resend.emails.send({
-    from: dieselngEmail,
+    from: `Diesel NG <${dieselngEmail}>`,
     to: email,
     subject: `New order ${orderNumber} arrival.`,
     html: `
@@ -106,7 +119,7 @@ export const sendOrderCreatedEmailToAdmin = async ({
   businessName,
 }: OrderCreatedToAdmin) => {
   await resend.emails.send({
-    from: dieselngEmail,
+    from: `Diesel NG <${dieselngEmail}>`,
     to: dieselngAdminEmail,
     subject: `New order ${orderNumber} arrival.`,
     html: `
@@ -127,7 +140,7 @@ export const sendOrderPaymentEmailToBuyer = async ({
   businessName,
 }: OrderPaymentToBuyer) => {
   await resend.emails.send({
-    from: dieselngEmail,
+    from: `Diesel NG <${dieselngEmail}>`,
     to: email,
     subject: `Order Payment of ${formatPrice(Number(amount))} received`,
     html: `
@@ -151,7 +164,7 @@ export const sendOrderPaymentEmailToSeller = async ({
   businessName,
 }: OrderPaymentToSeller) => {
   await resend.emails.send({
-    from: dieselngEmail,
+    from: `Diesel NG <${dieselngEmail}>`,
     to: email,
     subject: `Payment received for order ${orderNumber}.`,
     html: `
@@ -173,7 +186,7 @@ export const sendOrderPaymentEmailToAdmin = async ({
   businessName,
 }: OrderPaymentToAdmin) => {
   await resend.emails.send({
-    from: dieselngEmail,
+    from: `Diesel NG <${dieselngEmail}>`,
     to: dieselngAdminEmail,
     subject: `Payment received for order ${orderNumber}.`,
     html: `
@@ -194,7 +207,7 @@ export const sendOrderInProgressEmailToBuyer = async ({
   businessName,
 }: OrderStatusToBuyer) => {
   await resend.emails.send({
-    from: dieselngEmail,
+    from: `Diesel NG <${dieselngEmail}>`,
     to: email,
     subject: `Order ${orderNumber}, in progress.`,
     html: `
@@ -213,7 +226,7 @@ export const sendOrderDeliveredEmailToBuyer = async ({
   businessName,
 }: OrderStatusToBuyer) => {
   await resend.emails.send({
-    from: dieselngEmail,
+    from: `Diesel NG <${dieselngEmail}>`,
     to: email,
     subject: `Order ${orderNumber}, delivered.`,
     html: `
@@ -234,7 +247,7 @@ export const sendOrderDeliveredEmailToAdmin = async ({
   businessName: string;
 }) => {
   await resend.emails.send({
-    from: dieselngEmail,
+    from: `Diesel NG <${dieselngEmail}>`,
     to: dieselngAdminEmail,
     subject: `Order ${orderNumber}, delivered.`,
     html: `
@@ -255,7 +268,7 @@ export const sendDocumentVerifiedEmail = async ({
   businessName: string;
 }) => {
   await resend.emails.send({
-    from: dieselngEmail,
+    from: `Diesel NG <${dieselngEmail}>`,
     to: email,
     subject: `Successful Document Verification.`,
     html: `
@@ -278,7 +291,7 @@ export const sendDocumentRejectedEmail = async ({
   description: string;
 }) => {
   await resend.emails.send({
-    from: dieselngEmail,
+    from: `Diesel NG <${dieselngEmail}>`,
     to: email,
     subject: `Unsuccessful Verification.`,
     html: `
@@ -304,7 +317,7 @@ export const sendWithdrawalTransferEmail = async ({
   amount: string;
 }) => {
   await resend.emails.send({
-    from: dieselngEmail,
+    from: `Diesel NG <${dieselngEmail}>`,
     to: email,
     subject: `Successful Withdrawal.`,
     html: `
@@ -329,7 +342,7 @@ export const sendReversalReqEmailToBuyer = async ({
   orderNumber: string;
 }) => {
   await resend.emails.send({
-    from: dieselngEmail,
+    from: `Diesel NG <${dieselngEmail}>`,
     to: email,
     subject: `Reversal Request for Order ${orderNumber}.`,
     html: `
@@ -356,7 +369,7 @@ export const sendReversalReqEmailToSeller = async ({
   orderNumber: string;
 }) => {
   await resend.emails.send({
-    from: dieselngEmail,
+    from: `Diesel NG <${dieselngEmail}>`,
     to: email,
     subject: `Reversal Requested for Order ${orderNumber}.`,
     html: `
@@ -379,7 +392,7 @@ export const sendReversalReqEmailToAdmin = async ({
   orderNumber: string;
 }) => {
   await resend.emails.send({
-    from: dieselngEmail,
+    from: `Diesel NG <${dieselngEmail}>`,
     to: dieselngAdminEmail,
     subject: `Reversal Requested for Order ${orderNumber}.`,
     html: `
@@ -407,7 +420,7 @@ export const sendOrderCancelledEmailToSeller = async ({
   orderNumber: string;
 }) => {
   await resend.emails.send({
-    from: dieselngEmail,
+    from: `Diesel NG <${dieselngEmail}>`,
     to: email,
     subject: `Order ${orderNumber} Cancelled.`,
     html: `
@@ -432,7 +445,7 @@ export const sendOrderCancelledEmailToBuyer = async ({
   orderNumber: string;
 }) => {
   await resend.emails.send({
-    from: dieselngEmail,
+    from: `Diesel NG <${dieselngEmail}>`,
     to: email,
     subject: `Order ${orderNumber} Cancelled.`,
     html: `
@@ -457,7 +470,7 @@ export const sendReversalRejectedEmailToBuyer = async ({
   orderNumber: string;
 }) => {
   await resend.emails.send({
-    from: dieselngEmail,
+    from: `Diesel NG <${dieselngEmail}>`,
     to: email,
     subject: `Reversal Request Rejected.`,
     html: `
@@ -482,7 +495,7 @@ export const sendReversalTransferEmailToBuyer = async ({
   amount: string;
 }) => {
   await resend.emails.send({
-    from: dieselngEmail,
+    from: `Diesel NG <${dieselngEmail}>`,
     to: email,
     subject: `Successful Reversal.`,
     html: `
