@@ -13,6 +13,8 @@ import {
   getLoginRoute,
   getPasswordResetTokenByToken,
   getUserByEmail,
+  getUserByPhoneNumber,
+  getUserByRcNumber,
   getVerificationTokenByToken,
 } from "../helpers/user";
 import { signIn, signOut } from "@/auth";
@@ -98,10 +100,17 @@ export const registerOrganization = async (
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const existingUser = await getUserByEmail(email);
-
-    if (existingUser) {
+    const emailExist = await getUserByEmail(email);
+    if (emailExist) {
       return { error: "Email already in use!" };
+    }
+    const rcNumberExist = await getUserByRcNumber(rcNumber);
+    if (rcNumberExist) {
+      return { error: "RC number already in use!" };
+    }
+    const phoneExist = await getUserByPhoneNumber(phoneNumber);
+    if (phoneExist) {
+      return { error: "Phone number already in use!" };
     }
 
     const newUser = await db.user.create({

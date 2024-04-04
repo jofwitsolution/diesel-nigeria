@@ -103,7 +103,7 @@ model User {
   role          UserRole @default(buyer)
   emailVerified DateTime?
   businessName  String?   @unique @default("")
-  rcNumber      String?   @unique @default("")
+  rcNumber      String?   @default("")
   address       String?   @default("")
   state         String?   @default("")
   phoneNumber   String?   @unique @default("")

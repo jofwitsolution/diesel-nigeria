@@ -4,7 +4,11 @@ import * as z from "zod";
 import bcrypt from "bcryptjs";
 import { NewSellerSchema } from "../validations";
 import { db } from "../db";
-import { getUserByEmail, getUserById } from "../helpers/user";
+import {
+  getUserByEmail,
+  getUserById,
+  getUserByPhoneNumber,
+} from "../helpers/user";
 import { generatePassword, getJanuary1stOfCurrentYear } from "../utils";
 import { generateVerificationToken } from "../helpers/token";
 import {
@@ -47,7 +51,7 @@ export const addNewSeller = async (values: z.infer<typeof NewSellerSchema>) => {
     if (rcNumberExist) {
       return { error: "Rc Number already in use!" };
     }
-    const phoneExist = await getUserByEmail(phoneNumber);
+    const phoneExist = await getUserByPhoneNumber(phoneNumber);
     if (phoneExist) {
       return { error: "Phone number already in use!" };
     }
