@@ -51,13 +51,19 @@ function CertificateInput({
             {isDragActive ? (
               <p>Drop the file here ...</p>
             ) : (
-              <div className="flex w-full flex-col items-center gap-4">
+              <div className="flex w-full flex-col items-center gap-1">
                 <Image
                   src="/images/icons/upload.svg"
                   width={68}
                   height={59}
                   alt="upload"
                 />
+                <p className="text-[0.75rem]">
+                  Only PDF is accepted{" "}
+                  <span className="font-medium text-primary-500">
+                    (max: 5MB)
+                  </span>
+                </p>
                 <p>
                   Drag and drop file, or{" "}
                   <span className="font-medium text-primary-500 underline">

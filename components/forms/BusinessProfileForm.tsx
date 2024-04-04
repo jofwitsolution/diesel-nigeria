@@ -53,9 +53,6 @@ const BusinessProfileForm = ({ signupData }: Props) => {
   const onSubmit = async (values: z.infer<typeof BusinessProfileSchema>) => {
     setError("");
     setSuccess("");
-    // console.log(values);
-    // console.log(fileData);
-    // console.log(signupData);
 
     startTransition(() => {
       registerOrganization(fileData, values, signupData).then((data) => {

@@ -49,6 +49,10 @@ function FileInput({ handleFileData, isDisabled }: Props) {
               height={59}
               alt="upload"
             />
+            <p className="text-[0.75rem]">
+              Only PDF is accepted{" "}
+              <span className="font-medium text-primary-500">(max: 5MB)</span>
+            </p>
             <p>
               Drag and drop file, or{" "}
               <span className="font-medium text-primary-500 underline">
