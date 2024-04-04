@@ -33,7 +33,7 @@ export const buyerOrderColumns = [
             width={31}
             height={31}
             alt="icon"
-            className="w-[20px] xs:w-[initial]"
+            className="w-[25px]"
           />
           <span className="">{seller.businessName}</span>
         </div>
@@ -116,7 +116,7 @@ export const sellerOrderColumns = [
             width={31}
             height={31}
             alt="icon"
-            className="w-[20px] xs:w-[initial]"
+            className="w-[25px]"
           />{" "}
           <span className="">{buyer.businessName}</span>
         </div>

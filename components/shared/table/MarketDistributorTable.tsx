@@ -37,7 +37,7 @@ const columns = [
             width={31}
             height={31}
             alt="icon"
-            className="w-[20px] xs:w-[initial]"
+            className="w-[25px]"
           />{" "}
           <span className="line-clamp-1">{seller.businessName}</span>
         </div>
