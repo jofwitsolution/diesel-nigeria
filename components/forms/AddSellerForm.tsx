@@ -27,6 +27,7 @@ import { FormError } from "./FormError";
 import { FormSuccess } from "./FormSuccess";
 import { addNewSeller } from "@/lib/actions/admin.action";
 import LoaderOverlay from "../LoaderOverlay";
+import { usePathname } from "next/navigation";
 
 interface Props {
   dialogState: boolean;
@@ -34,6 +35,8 @@ interface Props {
 }
 
 const AddSellerForm = ({ dialogState, handleDialogState }: Props) => {
+  const pathname = usePathname();
+
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
@@ -54,12 +57,14 @@ const AddSellerForm = ({ dialogState, handleDialogState }: Props) => {
     setSuccess("");
 
     startTransition(() => {
-      addNewSeller(values).then((data) => {
+      addNewSeller(values, pathname).then((data) => {
         setError(data.error);
         setSuccess(data.success);
 
         if (data.success) {
           form.reset();
+          setError("");
+          setSuccess("");
           handleDialogState();
           toast.success("New Seller", {
             description: "Seller added successfuly.",

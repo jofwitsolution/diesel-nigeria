@@ -8,6 +8,7 @@ import {
   getUserByEmail,
   getUserById,
   getUserByPhoneNumber,
+  getUserByRcNumber,
 } from "../helpers/user";
 import { generatePassword, getJanuary1stOfCurrentYear } from "../utils";
 import { generateVerificationToken } from "../helpers/token";
@@ -27,7 +28,10 @@ if (!dieselngWalletId) {
   throw Error(`Environment variable "DIESELNG_WALLET_ID" is undefined`);
 }
 
-export const addNewSeller = async (values: z.infer<typeof NewSellerSchema>) => {
+export const addNewSeller = async (
+  values: z.infer<typeof NewSellerSchema>,
+  path: string
+) => {
   try {
     const currentUser = await getCurrentUser();
     if (!currentUser) {
@@ -43,13 +47,13 @@ export const addNewSeller = async (values: z.infer<typeof NewSellerSchema>) => {
     const { businessName, rcNumber, email, address, phoneNumber } =
       newSellerFields.data;
 
+    const rcNumberExist = await getUserByRcNumber(rcNumber);
+    if (rcNumberExist) {
+      return { error: "Rc Number already in use!" };
+    }
     const emailExist = await getUserByEmail(email);
     if (emailExist) {
       return { error: "Email already in use!" };
-    }
-    const rcNumberExist = await getUserByEmail(rcNumber);
-    if (rcNumberExist) {
-      return { error: "Rc Number already in use!" };
     }
     const phoneExist = await getUserByPhoneNumber(phoneNumber);
     if (phoneExist) {
@@ -88,6 +92,7 @@ export const addNewSeller = async (values: z.infer<typeof NewSellerSchema>) => {
     );
     await sendNewSellerEmail(email, password);
 
+    revalidatePath(path);
     return { success: "Seller added successfully." };
   } catch (error) {
     console.log(error);

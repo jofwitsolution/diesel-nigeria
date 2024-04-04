@@ -9,8 +9,11 @@ import Filter from "@/components/shared/Filter";
 import AdminSellersTable from "@/components/shared/table/AdminSellersTable";
 import AddSellerForm from "@/components/forms/AddSellerForm";
 import { userFilters } from "@/constants";
+import { useRouter } from "next/navigation";
 
 const Sellers = ({ sellers }) => {
+  const router = useRouter();
+
   const [addSellerDialog, setAddSellerDialog] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterTerm, setFilterTerm] = useState("All");
@@ -57,7 +60,10 @@ const Sellers = ({ sellers }) => {
               />{" "}
               <span>Add New Seller</span>
             </Button>
-            <Button className="space-x-2 px-6 font-[600] shadow-sm max-xs:px-3">
+            <Button
+              onClick={() => router.refresh()}
+              className="space-x-2 px-6 font-[600] shadow-sm active:bg-gray-50 max-xs:px-3"
+            >
               <Image
                 src="/images/icons/refresh.svg"
                 width={16.67}
