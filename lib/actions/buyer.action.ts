@@ -219,7 +219,7 @@ export const verifyOrderPayment = async (reference: string) => {
     );
 
     const { data } = await verifRes.json();
-    console.log(data);
+    // console.log(data);
     if (data?.status !== "success") {
       return { error: `Payment unsuccessful` };
     }
@@ -247,7 +247,9 @@ export const verifyOrderPayment = async (reference: string) => {
     }
 
     // data.amount is divided by 100 to convert from paystack amount to normal amount
-    if (Number(order.amount) !== Number(data.amount) / 100) {
+    const amountPaid = Number(data.amount) / 100;
+
+    if (Number(order.amount) !== amountPaid) {
       return { error: `Payment cannot be less than the expected amount` };
     }
 
@@ -284,7 +286,7 @@ export const verifyOrderPayment = async (reference: string) => {
 
     // Convert balance to number and add the amount
     const updatedBalance = (
-      parseFloat(dieselngWallet.balance) + parseFloat(data.amount)
+      parseFloat(dieselngWallet.balance) + amountPaid
     ).toString();
 
     await db.wallet.update({
