@@ -31,6 +31,7 @@ import { revalidatePath } from "next/cache";
 import { cloudinary } from "../helpers/cloudinary";
 import { triggerNovu, updateNovuSubscriber } from "../helpers/novu";
 import { formatPrice } from "../utils";
+import { getUserByRcNumber } from "../helpers/user";
 
 const dieselngWalletId = process.env.DIESELNG_WALLET_ID;
 if (!dieselngWalletId) {
@@ -572,6 +573,11 @@ export const buyerUploadVerificationDoc = async (
     }
 
     const { rcNumber } = fields.data;
+
+    const rcNumberExist = await getUserByRcNumber(rcNumber!);
+    if (rcNumberExist) {
+      return { error: "Rc Number already in use!" };
+    }
 
     const user = await db.user.update({
       where: { id: currentUser?.id },

@@ -44,7 +44,7 @@ export const addNewSeller = async (
       return { error: "Invalid fields." };
     }
 
-    const { businessName, rcNumber, email, address, phoneNumber } =
+    const { businessName, rcNumber, email, address, phoneNumber, state } =
       newSellerFields.data;
 
     const rcNumberExist = await getUserByRcNumber(rcNumber);
@@ -72,6 +72,7 @@ export const addNewSeller = async (
         rcNumber,
         address,
         phoneNumber,
+        state,
         role: "seller",
       },
     });

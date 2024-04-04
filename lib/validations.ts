@@ -125,6 +125,9 @@ export const NewSellerSchema = z.object({
   phoneNumber: z.string().min(1, {
     message: "Please input phone number.",
   }),
+  state: z.string().min(2, {
+    message: "State is required.",
+  }),
 });
 
 export const BranchSchema = z.object({
@@ -257,8 +260,8 @@ export const PlaceOrderSchema = z.object({
     .string({
       required_error: "Quantity is required.",
     })
-    .min(1000, {
-      message: "Minimum order is 1000 litres.",
+    .min(2, {
+      message: "Quantity is required.",
     }),
   deliveryDate: z
     .date({

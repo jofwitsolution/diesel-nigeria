@@ -28,7 +28,7 @@ const SellerDetails = ({ seller }: Props) => {
           <span className="">{seller.businessName}</span>
           <span className="">RC {seller.rcNumber}</span>
         </div>
-        <div className="flex items-center gap-3">
+        {/* <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
             <Image
               src="/images/icons/distance.svg"
@@ -47,7 +47,7 @@ const SellerDetails = ({ seller }: Props) => {
             />
             within 30&apos;
           </div>
-        </div>
+        </div> */}
         <div className="flex flex-col items-center gap-2 max-sm:hidden">
           <Image
             src="/images/icons/tag.svg"

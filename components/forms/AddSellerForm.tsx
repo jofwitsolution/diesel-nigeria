@@ -49,6 +49,7 @@ const AddSellerForm = ({ dialogState, handleDialogState }: Props) => {
       email: "",
       address: "",
       phoneNumber: "",
+      state: "",
     },
   });
 
@@ -185,6 +186,27 @@ const AddSellerForm = ({ dialogState, handleDialogState }: Props) => {
                             {...field}
                             disabled={isPending}
                             placeholder="Enter address"
+                            type="text"
+                            className="w-full rounded-[4px] border-[#9EA2B3]"
+                          />
+                        </FormControl>
+                        <FormMessage className="text-red-400 max-xs:text-[0.7rem]" />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="state"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-[0.875rem] text-[#151515]">
+                          State
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            disabled={isPending}
+                            placeholder="Enter state"
                             type="text"
                             className="w-full rounded-[4px] border-[#9EA2B3]"
                           />
