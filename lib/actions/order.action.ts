@@ -323,6 +323,7 @@ export const verifyOrderPayment = async (reference: string) => {
     await db.order.update({
       where: { id: order.id },
       data: {
+        paidOn: new Date(),
         isBuyerPaid: true,
         channel: data?.channel,
       },

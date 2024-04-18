@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import JSPDF from "jspdf";
 import Image from "next/image";
 import html2canvas from "html2canvas";
-import { formatPrice } from "@/lib/utils";
+import { formatDate, formatPrice, getTimeOfDay } from "@/lib/utils";
 import { Order } from "@prisma/client";
+import { statusBg } from "@/styles/utils";
 
 const OrderDetailsDownload = ({ order }: { order: Order }) => {
   const contentRef = useRef(null);
@@ -54,9 +55,9 @@ const OrderDetailsDownload = ({ order }: { order: Order }) => {
 
       {/* Dialog */}
       {isDialogOpen && (
-        <div className="fixed inset-0 z-[1300] flex h-screen items-center justify-center bg-[rgba(0,0,0,0.6)]">
+        <div className="fixed inset-0 z-[1300] flex h-screen items-center justify-center overflow-auto bg-[rgba(0,0,0,0.6)]">
           <div
-            className={`z-[1500] mx-auto rounded-[8px] bg-white p-0 pb-8 max-sm:w-[18.75rem] sm:w-[24.375rem]`}
+            className={`z-[1500] mx-auto rounded-[8px] bg-white p-0 pb-8 max-sm:w-full sm:w-[30.375rem]`}
           >
             <div className="float-right px-2 py-1">
               <Button
@@ -118,6 +119,62 @@ const OrderDetailsDownload = ({ order }: { order: Order }) => {
                       className={`text-[0.55rem] ${order?.buyer?.rcNumber ? "visible" : "invisible"}`}
                     >
                       RC Number: {order?.buyer?.rcNumber}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex justify-between gap-6 border-b py-1">
+                  <span>Order Number</span>
+                  <div className="flex flex-col text-right">
+                    <span className="font-semibold">{order?.orderNumber}</span>
+                  </div>
+                </div>
+                <div className="flex justify-between gap-6 border-b py-1">
+                  <span>Created On</span>
+                  <div className="flex flex-col text-right">
+                    <span className="font-semibold">
+                      {formatDate(order.orderDate!)}
+                    </span>
+                    <span className={`text-[0.55rem]`}>
+                      {getTimeOfDay(order.orderDate!)}
+                    </span>
+                  </div>
+                </div>
+                {order.isBuyerPaid && (
+                  <div className="flex justify-between gap-6 border-b py-1">
+                    <span>Paid On</span>
+                    <div className="flex flex-col text-right">
+                      <span className="font-semibold">
+                        {formatDate(order.paidOn!)}
+                      </span>
+                      <span className={`text-[0.55rem]`}>
+                        {getTimeOfDay(order.paidOn!)}
+                      </span>
+                    </div>
+                  </div>
+                )}
+                <div className="flex justify-between gap-6 border-b py-1">
+                  <span>Delivery Expected</span>
+                  <div className="flex flex-col text-right">
+                    <span className="font-semibold">
+                      {formatDate(order.expectedDeliveryDate!)}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex justify-between gap-6 border-b py-1">
+                  <span>Order Status</span>
+                  <div className="flex flex-col text-right">
+                    <span
+                      className={`${statusBg(order?.status)} rounded p-1 font-semibold capitalize`}
+                    >
+                      {order?.status}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex justify-between gap-6 border-b py-1">
+                  <span>Quantity</span>
+                  <div className="flex flex-col text-right">
+                    <span className="font-semibold">
+                      {order?.quantity} Litres
                     </span>
                   </div>
                 </div>

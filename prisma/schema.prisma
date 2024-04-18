@@ -188,6 +188,7 @@ model Order {
   expectedDeliveryDate  DateTime
   status                OrderStatus @default(pending)
   deliveryLocation      String
+  paidOn                DateTime?
   isBuyerPaid           Boolean      @default(false)
   isSellerCredited      Boolean      @default(false)
   isdeliveryConfirmed   Boolean      @default(false)
