@@ -131,6 +131,24 @@ export const NewSellerSchema = z.object({
 });
 
 export const BranchSchema = z.object({
+  name: z.string({
+    required_error: "Branch name is required",
+  }),
+  state: z.string({
+    required_error: "State is required",
+  }),
+  email: z.string().email({
+    message: "Email is required",
+  }),
+  address: z.string().min(3, {
+    message: "Address is required.",
+  }),
+  phoneNumber: z.string().min(10, {
+    message: "Please input phone number.",
+  }),
+});
+
+export const BranchUpdateSchema = z.object({
   state: z.string({
     required_error: "State is required",
   }),
@@ -147,15 +165,24 @@ export const BranchSchema = z.object({
 
 export const ProductSchema = z.object({
   isAvailable: z.boolean(),
-  density: z.string({
-    required_error: "Velocity cannot be empty",
-  }),
-  price: z.string({
-    required_error: "Price cannot be empty",
-  }),
-  numberInStock: z.string({
-    required_error: "Enter a valid volume",
-  }),
+  density: z.coerce
+    .number({
+      required_error: "Velocity cannot be empty",
+      invalid_type_error: "Velocity must be a number",
+    })
+    .positive("Invalid velocity"),
+  price: z.coerce
+    .number({
+      required_error: "Price cannot be empty",
+      invalid_type_error: "Price must be a number",
+    })
+    .positive("Invalid price"),
+  numberInStock: z.coerce
+    .number({
+      required_error: "Litre cannot be empty",
+      invalid_type_error: "Litre must be a number",
+    })
+    .positive("Invalid litre"),
 });
 
 export const SellerBusinessInfoSchema = z.object({
@@ -256,13 +283,12 @@ export const PlaceOrderSchema = z.object({
     .min(3, {
       message: "Select diesel density.",
     }),
-  quantity: z
-    .string({
-      required_error: "Quantity is required.",
+  quantity: z.coerce
+    .number({
+      required_error: "Quantity is required",
+      invalid_type_error: "Quantity must be a number",
     })
-    .min(2, {
-      message: "Quantity is required.",
-    }),
+    .positive("Invalid quantity"),
   deliveryDate: z
     .date({
       required_error: "Delivery date is a required field.",
@@ -279,9 +305,12 @@ export const PlaceOrderSchema = z.object({
 });
 
 export const WithdrawalSchema = z.object({
-  amount: z.string({ invalid_type_error: "Enter withdraw amount" }).min(1, {
-    message: "Invalid amount",
-  }),
+  amount: z.coerce
+    .number({
+      required_error: "Amount is required",
+      invalid_type_error: "Amount must be a number",
+    })
+    .positive("Invalid amount"),
   accountNumber: z
     .string({ invalid_type_error: "Enter account number" })
     .min(10, {

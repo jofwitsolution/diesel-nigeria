@@ -27,7 +27,7 @@ import {
 import { formatPrice } from "@/lib/utils";
 import DateInput from "../ui/date-input";
 import LoaderOverlay from "../LoaderOverlay";
-import { createOrder } from "@/lib/actions/buyer.action";
+import { createOrder } from "@/lib/actions/order.action";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
@@ -38,6 +38,7 @@ interface Props {
     email: string;
     branches: {
       id: string;
+      name: string;
       state: string;
       address: string;
     }[];
@@ -70,7 +71,7 @@ const PlaceOrderForm = ({ buyerData, sellerData }: Props) => {
       deliveryLocation: "",
       branch: "",
       product: "",
-      quantity: "",
+      quantity: 1,
       deliveryDate: new Date(),
       message: "",
     },
@@ -95,7 +96,7 @@ const PlaceOrderForm = ({ buyerData, sellerData }: Props) => {
     });
   };
 
-  const isValidQuantity = (productId: string, quantity: string) => {
+  const isValidQuantity = (productId: string, quantity: number) => {
     const product = sellerData.products.find(
       (product) => product.id === productId
     );
@@ -231,7 +232,7 @@ const PlaceOrderForm = ({ buyerData, sellerData }: Props) => {
                             key={branch.id}
                             value={branch.id}
                           >
-                            {branch.address} | {branch.state}
+                            {branch.name} | {branch.address}
                           </SelectItem>
                         ))}
                       </SelectContent>

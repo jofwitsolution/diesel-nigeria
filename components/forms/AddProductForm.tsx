@@ -29,7 +29,7 @@ import { Switch } from "../ui/switch";
 import { FormError } from "./FormError";
 import { FormSuccess } from "./FormSuccess";
 import LoaderOverlay from "../LoaderOverlay";
-import { addNewProduct } from "@/lib/actions/seller.action";
+import { addNewProduct } from "@/lib/actions/product.action";
 
 interface Props {
   addDialogState: boolean;

@@ -9,7 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import DialogWrapper from "@/components/shared/dialog/DialogWrapper";
 import { Button } from "@/components/ui/button";
 import LoaderOverlay from "@/components/LoaderOverlay";
-import { sellerUpdateOrderStatus } from "@/lib/actions/seller.action";
+import { sellerUpdateOrderStatus } from "@/lib/actions/order.action";
 import { toast } from "sonner";
 import { usePathname } from "next/navigation";
 

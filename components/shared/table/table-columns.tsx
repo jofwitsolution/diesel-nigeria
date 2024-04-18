@@ -366,13 +366,11 @@ export const allTransactionColumns = [
     header: "Amount",
     cell: (info) => formatPrice(Number(info.getValue())),
   }),
-  transactionColumnHelper.accessor("buyerId", {
+  transactionColumnHelper.accessor("userId", {
     id: "businessName",
     header: "Business Name",
     cell: (info) => {
-      const user = info.row.original?.buyer
-        ? info.row.original?.buyer
-        : info.row.original?.seller;
+      const user = info.row.original?.user;
 
       return user.businessName;
     },

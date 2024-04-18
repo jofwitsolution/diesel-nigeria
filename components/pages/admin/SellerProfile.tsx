@@ -55,7 +55,7 @@ const SellerProfile = ({ seller }: Props) => {
           toast.error(data?.error);
         } else {
           setRejected(false);
-          toast.success("Verification document approved");
+          toast.success("Verification document rejected");
         }
       });
     });

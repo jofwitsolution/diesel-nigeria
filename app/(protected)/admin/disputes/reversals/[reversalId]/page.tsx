@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import DBSkeleton from "@/components/DBSkeleton";
 import AdminOrderDetails from "@/components/pages/admin/AdminOrderDetails";
-import { getSingleReversal } from "@/lib/actions/other.actions";
+import { getSingleReversal } from "@/lib/actions/reversal.action";
 import AdminReversalDetails from "@/components/pages/admin/AdminReversalDetails";
 
 const Page = async ({ params }: { params: { reversalId: string } }) => {

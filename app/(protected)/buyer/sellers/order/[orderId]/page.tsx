@@ -7,7 +7,7 @@ const Page = async ({ params }: { params: { orderId: string } }) => {
   const result = await getOrder(params.orderId);
 
   return (
-    <div className="max-w-[68.0625rem] space-y-6">
+    <div className="max-w-[68.0625rem]">
       {result?.order && <CurrentOrder order={result?.order} />}
       {result?.error ? (
         <DBSkeleton message={result?.error} />

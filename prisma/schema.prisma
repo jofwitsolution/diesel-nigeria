@@ -126,9 +126,8 @@ model User {
   products      Product[]
   accounts      Account[]
   buyerOrders   Order[] @relation("OrderToBuyer")
-  sellerOrders   Order[] @relation("OrderToSeller")
-  buyerTransactions  Transaction[] @relation("TransactionToBuyer")
-  sellerTransactions  Transaction[] @relation("TransactionToSeller")
+  sellerOrders  Order[] @relation("OrderToSeller")
+  transactions  Transaction[]
   withdrawalRequests  WithdrawalRequest[]
   reversals           Reversal[]
 
@@ -137,6 +136,7 @@ model User {
 
 model Branch {
   id            String        @id @default(cuid())
+  name          String        @unique
   state         String
   address       String
   email         String
@@ -145,6 +145,8 @@ model Branch {
   orders        Order[]
 
   user          User          @relation(fields: [userId], references: [id])
+
+  transactions  Transaction[]
 
   // Foreign key
   userId      String
@@ -155,13 +157,13 @@ model Branch {
 
 model Product {
   id            String        @id @default(cuid())
-  price         String
+  price         Int
   description   String?
   isAvailable   Boolean
-  numberInStock String
+  numberInStock Int
 
   seller        User          @relation(fields: [sellerId], references: [id])
-  density       String
+  density       Float
 
   // Foreign key
   sellerId      String
@@ -173,11 +175,13 @@ model Product {
 
 model Order {
   id                    String      @id @default(cuid())
-  quantity              String
-  totalRate             String
-  deliveryCharge        String
-  serviceCharge         String
-  amount                String
+  densityValue          Float
+  quantity              Int
+  pricePerLitre         Int
+  totalRate             Int
+  deliveryCharge        Int
+  serviceCharge         Int
+  amount                Int
   orderNumber           String      @unique
   orderDate             DateTime    @default(now())
   updatedAt             DateTime    @updatedAt
@@ -216,28 +220,27 @@ model Transaction {
   id                 String  @id @default(cuid())
   channel            String
   reference          String
-  orderNumber        String?
-  amount             String
+  orderNumber        String?  @default("none")
+  amount             Int
   isRefund           Boolean @default(false)
   date               DateTime    @default(now())
   category           TransactionCategory
 
-  buyer                 User?        @relation("TransactionToBuyer", fields: [buyerId], references: [id])
-  seller                User?        @relation("TransactionToSeller", fields: [sellerId], references: [id])
-
+  user                 User?        @relation(fields: [userId], references: [id])
+  deliveryBranch       Branch?     @relation(fields: [deliveryBranchId], references: [id])
+  
   // Foreign keys
-  buyerId               String?
-  sellerId              String?
+  userId                String?
+  deliveryBranchId      String?
 
-  @@index([buyerId])
-  @@index([sellerId])
+  @@index([userId])
 }
 
 model WithdrawalRequest {
   id                 String  @id @default(cuid())
   channel            String
   reference          String
-  amount             String
+  amount             Int
   description        String    @default("Funds withdrawn into the account")
   bank               String
   accountNumber      String
@@ -255,7 +258,7 @@ model Reversal {
   channel            String
   reference          String
   orderNumber        String
-  amount             String
+  amount             Int
   reason             String
   description        String    @default("Funds withdrawn into the account")
   bank               String
@@ -272,7 +275,7 @@ model Reversal {
 
 model Wallet {
   id                 String     @id @default(cuid())
-  balance            String    @default("0")
+  balance            Int    @default(0)
 
   user               User?          @relation(fields: [userId], references: [id])
 
@@ -322,8 +325,8 @@ model PasswordResetToken {
 model Settings {
   id String @id @default(cuid())
   
-  minOrderableLitre                         String    @default("1000")
-  serviceChargePerLitre                     String    @default("10")
-  percentageServiceCharge                   String    @default("1")
-  percentageRateCharge                      String    @default("0.5")
+  minOrderableLitre                         Int    @default(1000)
+  serviceChargePerLitre                     Int    @default(10)
+  percentageServiceCharge                   Float    @default(1)
+  percentageRateCharge                      Float    @default(0.5)
 }

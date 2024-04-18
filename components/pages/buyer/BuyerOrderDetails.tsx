@@ -9,6 +9,7 @@ import Link from "next/link";
 import RequestReversal from "./RequestReversal";
 import CancelOrder from "./CancelOrder";
 import ConfirmDelivery from "./ConfirmDelivery";
+import OrderDetailsDownload from "@/components/shared/html-pdf/OrderDetailsDownload";
 
 interface Props {
   order: Order;
@@ -18,19 +19,23 @@ const BuyerOrderDetails = ({ order }: Props) => {
   return (
     <>
       <div className="w-full rounded-md bg-light-900 px-2 py-3 md:p-6 lg:px-10">
-        <div className="flex items-center gap-2 rounded-md bg-light-900 px-2 py-3 max-xs:hidden">
-          <Image
-            src={
-              order?.seller.avatar
-                ? order.seller.avatar.url
-                : "/images/icons/db-left-avatar.svg"
-            }
-            width={40}
-            height={30}
-            alt={order?.seller.businessName}
-            className=""
-          />
-          {order?.seller.businessName}
+        <div className="flex justify-between">
+          <div className="flex items-center gap-2 rounded-md bg-light-900 px-2 py-3 max-xs:hidden">
+            <Image
+              src={
+                order?.seller.avatar
+                  ? order.seller.avatar.url
+                  : "/images/icons/db-left-avatar.svg"
+              }
+              width={40}
+              height={30}
+              alt={order?.seller.businessName}
+              className=""
+            />
+            {order?.seller.businessName}
+          </div>
+
+          <OrderDetailsDownload order={order} />
         </div>
         <div className="my-6 w-full border" />
         <div className="flex w-full flex-col gap-6">

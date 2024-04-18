@@ -4,7 +4,7 @@ import DBSkeleton from "@/components/DBSkeleton";
 import { getOrders, getUser } from "@/lib/actions/user.action";
 import AccountStatusBadge from "@/components/shared/badge/AccountStatusBadge";
 import BuyerPageTabs from "@/components/pages/admin/BuyerPageTabs";
-import { adminGetBuyerOverview } from "@/lib/actions/other.actions";
+import { adminGetBuyerOverview } from "@/lib/actions/admin.action";
 
 const Page = async ({ params }: { params: { buyerId: string } }) => {
   const buyerResult = await getUser(params.buyerId);

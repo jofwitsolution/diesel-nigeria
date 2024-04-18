@@ -30,7 +30,7 @@ import { FormError } from "./FormError";
 import { FormSuccess } from "./FormSuccess";
 import LoaderOverlay from "../LoaderOverlay";
 import { Product } from "@prisma/client";
-import { updateProduct } from "@/lib/actions/seller.action";
+import { updateProduct } from "@/lib/actions/product.action";
 
 interface Props {
   updateDialogState: boolean;
@@ -151,6 +151,7 @@ const UpdateProductForm = ({
                             disabled={isPending}
                             placeholder="Enter Velocity"
                             type="number"
+                            datatype="number"
                             className="w-full rounded-[4px] border-[#9EA2B3]"
                           />
                         </FormControl>

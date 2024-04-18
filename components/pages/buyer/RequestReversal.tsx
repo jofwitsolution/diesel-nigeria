@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/select";
 import { reversalReasons } from "@/constants";
 import { Textarea } from "@/components/ui/textarea";
-import { requestForReversal } from "@/lib/actions/buyer.action";
+import { requestForReversal } from "@/lib/actions/reversal.action";
 
 interface Props {
   order: Order;

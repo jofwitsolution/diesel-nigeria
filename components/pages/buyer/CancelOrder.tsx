@@ -6,7 +6,7 @@ import { Order } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import LoaderOverlay from "@/components/LoaderOverlay";
 import DialogWrapper from "@/components/shared/dialog/DialogWrapper";
-import { cancelOrder } from "@/lib/actions/buyer.action";
+import { cancelOrder } from "@/lib/actions/order.action";
 import { toast } from "sonner";
 
 interface Props {

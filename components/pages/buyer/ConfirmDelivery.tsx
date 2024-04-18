@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import DialogWrapper from "@/components/shared/dialog/DialogWrapper";
 import LoaderOverlay from "@/components/LoaderOverlay";
 import { usePathname } from "next/navigation";
-import { confirmOrderDelivery } from "@/lib/actions/buyer.action";
+import { buyerConfirmOrderDelivery } from "@/lib/actions/order.action";
 import { toast } from "sonner";
 
 interface Props {
@@ -21,7 +21,7 @@ const ConfirmDelivery = ({ order }: Props) => {
 
   const handleConfirmDelivery = () => {
     startTransition(() => {
-      confirmOrderDelivery(order.id, pathname).then((data) => {
+      buyerConfirmOrderDelivery(order.id, pathname).then((data) => {
         if (data?.error) {
           toast.error(data?.error);
         } else {

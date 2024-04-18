@@ -20,6 +20,11 @@ import BranchActionMenu from "../menubar/BranchActionMenu";
 const columnHelper = createColumnHelper<Branch>();
 
 const columns = [
+  columnHelper.accessor((row) => row.name, {
+    id: "name",
+    cell: (info) => info.getValue(),
+    header: () => "Name",
+  }),
   columnHelper.accessor((row) => row.address, {
     id: "address",
     cell: (info) => info.getValue(),

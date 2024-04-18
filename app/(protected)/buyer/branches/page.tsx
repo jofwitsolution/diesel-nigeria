@@ -2,7 +2,7 @@ import React from "react";
 import BranchTopLayout from "@/components/pages/buyer/BranchTopLayout";
 import BuyerBranches from "@/components/shared/table/BuyerBranches";
 import { getCurrentUser } from "@/lib/helpers/auth";
-import { getUserBranches } from "@/lib/actions/user.action";
+import { getUserBranches } from "@/lib/actions/branch.action";
 
 const Page = async () => {
   const currentUser = await getCurrentUser();

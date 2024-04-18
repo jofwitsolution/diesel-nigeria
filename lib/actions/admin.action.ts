@@ -17,6 +17,7 @@ import {
   sendDocumentVerifiedEmail,
   sendNewSellerEmail,
   sendVerificationEmail,
+  sendWelcomeEmail,
   sendWithdrawalTransferEmail,
 } from "../helpers/mail";
 import { getCurrentUser } from "../helpers/auth";
@@ -28,6 +29,9 @@ if (!dieselngWalletId) {
   throw Error(`Environment variable "DIESELNG_WALLET_ID" is undefined`);
 }
 
+/*
+ ** Create Seller
+ */
 export const addNewSeller = async (
   values: z.infer<typeof NewSellerSchema>,
   path: string
@@ -87,6 +91,7 @@ export const addNewSeller = async (
     });
 
     const verificationToken = await generateVerificationToken(email);
+    await sendWelcomeEmail(newUser.email, newUser.businessName!);
     await sendVerificationEmail(
       verificationToken.email,
       verificationToken.token
@@ -101,6 +106,7 @@ export const addNewSeller = async (
   }
 };
 
+// Admin verify seller doc
 export const verifySeller = async (id: string) => {
   try {
     const currentUser = await getCurrentUser();
@@ -131,6 +137,7 @@ export const verifySeller = async (id: string) => {
   }
 };
 
+// Admin verify buyer doc
 export const verifyBuyer = async (id: string) => {
   try {
     const currentUser = await getCurrentUser();
@@ -917,17 +924,15 @@ export const confirmFundTransfer = async (
       return { error: "Seller wallet not found!" };
     }
 
-    const newSellerBalance = (
-      Number(sellerWallet.balance) - Number(withdrawalRequest.amount)
-    ).toString();
+    const newSellerBalance =
+      Number(sellerWallet.balance) - Number(withdrawalRequest.amount);
     await db.wallet.update({
       where: { userId: withdrawalRequest.userId as string },
       data: { balance: newSellerBalance },
     });
 
-    const newDieselngBalance = (
-      Number(dieselngWallet.balance) - Number(withdrawalRequest.amount)
-    ).toString();
+    const newDieselngBalance =
+      Number(dieselngWallet.balance) - Number(withdrawalRequest.amount);
     await db.wallet.update({
       where: { id: dieselngWallet.id },
       data: { balance: newDieselngBalance },
@@ -945,7 +950,7 @@ export const confirmFundTransfer = async (
         orderNumber: "",
         amount: withdrawalRequest.amount,
         category: "withdrawal",
-        sellerId: withdrawalRequest.userId,
+        userId: withdrawalRequest.userId,
       },
     });
 
@@ -989,6 +994,123 @@ export const rejectWithdrawal = async (withdrawalId: string, path: string) => {
     });
 
     revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const adminGetSellerOverview = async (sellerId: string) => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const products = await db.product.findMany({
+      where: { sellerId },
+    });
+
+    const orders = await db.order.findMany({
+      where: { sellerId },
+    });
+
+    const transactions = await db.transaction.findMany({
+      where: { userId: sellerId, category: "withdrawal" },
+    });
+
+    const totalLitres = products.reduce(
+      (a, product) => a + Number(product.numberInStock),
+      0
+    );
+
+    const completedOrders = orders.reduce((a, order) => {
+      if (order.status === "delivered") {
+        return a + 1;
+      } else {
+        return a;
+      }
+    }, 0);
+
+    const pendingOrders = orders.reduce((a, order) => {
+      if (order.status === "pending") {
+        return a + 1;
+      } else {
+        return a;
+      }
+    }, 0);
+
+    const transactionsAmount = transactions.reduce(
+      (a, transaction) => a + Number(transaction.amount),
+      0
+    );
+
+    const priceAlert = products[0] ? products[0].price : 0;
+
+    return {
+      priceAlert: Number(priceAlert),
+      totalProducts: products.length,
+      totalOrders: orders.length,
+      totalLitres,
+      transactionsAmount,
+      totalTransactions: transactions.length,
+      completedOrders,
+      pendingOrders,
+    };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const adminGetBuyerOverview = async (buyerId: string) => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const branches = await db.branch.findMany({
+      where: { userId: buyerId },
+    });
+
+    const orders = await db.order.findMany({
+      where: { buyerId },
+    });
+
+    const transactions = await db.transaction.findMany({
+      where: { userId: buyerId },
+    });
+
+    const completedOrders = orders.reduce((a, order) => {
+      if (order.status === "delivered") {
+        return a + 1;
+      } else {
+        return a;
+      }
+    }, 0);
+
+    const pendingOrders = orders.reduce((a, order) => {
+      if (order.status === "pending") {
+        return a + 1;
+      } else {
+        return a;
+      }
+    }, 0);
+
+    const transactionsAmount = transactions.reduce(
+      (a, transaction) => a + Number(transaction.amount),
+      0
+    );
+
+    return {
+      totalBranches: branches.length,
+      totalOrders: orders.length,
+      transactionsAmount,
+      totalTransactions: transactions.length,
+      completedOrders,
+      pendingOrders,
+    };
   } catch (error) {
     console.log(error);
     return { error: "Something went wrong!" };

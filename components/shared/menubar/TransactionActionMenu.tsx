@@ -124,9 +124,7 @@ const TransactionActionMenu = ({
                 <div className="flex items-center justify-between">
                   <span className="font-medium">Name</span>
                   <span className="font-semibold text-black">
-                    {transaction?.buyer
-                      ? transaction?.buyer?.businessName
-                      : transaction?.seller?.businessName}
+                    {transaction?.user?.businessName}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">

@@ -1,6 +1,6 @@
 import React from "react";
 import DisputeTabs from "@/components/pages/admin/DisputeTabs";
-import { getAllReversals } from "@/lib/actions/other.actions";
+import { getAllReversals } from "@/lib/actions/reversal.action";
 
 const Page = async () => {
   const reversalResult = await getAllReversals();

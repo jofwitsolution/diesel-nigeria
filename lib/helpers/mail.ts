@@ -16,6 +16,29 @@ const domain = process.env.NEXT_PUBLIC_APP_URL;
 const dieselngEmail = process.env.DIESELNG_EMAIL as string;
 const dieselngAdminEmail = process.env.DIESELNG_ADMIN_EMAIL as string;
 
+export const sendWelcomeEmail = async (email: string, businessName: string) => {
+  await resend.emails.send({
+    from: `Diesel NG <${dieselngEmail}>`,
+    to: email,
+    subject: "Welcome to Diesel NG - Your Platform for Diesel Trading!",
+    html: `
+          <p>Dear ${businessName}</p>
+          <p>
+          Welcome to Diesel NG, your premier platform for buying and selling diesel in Nigeria! 
+          We're thrilled to have you join our community of diesel traders. Whether you're 
+          looking to purchase diesel for your business or sell your surplus stock, Diesel NG 
+          is here to simplify and streamline your transactions. Explore our user-friendly 
+          interface, browse listings, and start trading diesel effortlessly. If you have any 
+          questions or need assistance, feel free to reach out to our support team. We wish 
+          you success in your diesel trading journey with Diesel NG!
+          </p>
+          <br />
+          <p>Best Regards,</p>
+          <p>Diesel NG Team</p>
+          `,
+  });
+};
+
 export const sendPasswordResetEmail = async (email: string, token: string) => {
   const resetLink = `${domain}/auth/new-password?token=${token}`;
 
@@ -27,7 +50,8 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
           <h1>Password Reset</h1>
           <p>Click <a href="${resetLink}">here</a> to reset password.</p>
           <br />
-          <p>Regards Diesel NG</p>
+          <p>Best Regards,</p>
+          <p>Diesel NG</p>
           `,
   });
 };
@@ -45,7 +69,7 @@ export const sendVerificationEmail = async (email: string, token: string) => {
       <br />    
       <p>Click <a href="${confirmLink}">here</a> to confirm your email.</p>
       <br />
-      <p>Regards Diesel NG</p>
+      <p>Diesel NG Team</p>
           `,
   });
 };
@@ -54,14 +78,15 @@ export const sendNewSellerEmail = async (email: string, password: string) => {
   await resend.emails.send({
     from: `Diesel NG <${dieselngEmail}>`,
     to: email,
-    subject: "Welcome to Diesel NG",
+    subject: "Information about your account",
     html: `
-    <h1>Welcome to Diesel Nigeria.</h1>
+    <h1>Your Diesel Nigeria Login Details.</h1>
     <p>You can log in with your email address and the following password; </p>
     <p>${password}</p>
     <p>Please, make sure you change your password.</p>
     <br />
     <p>Thank you</p>
+    <p>Diesel NG Team</p>
           `,
   });
 };
@@ -307,6 +332,27 @@ export const sendDocumentRejectedEmail = async ({
   });
 };
 
+export const sendWithdrawalRequestEmailToAdmin = async ({
+  businessName,
+  amount,
+}: {
+  businessName: string;
+  amount: string;
+}) => {
+  await resend.emails.send({
+    from: `Diesel NG <${dieselngEmail}>`,
+    to: dieselngAdminEmail,
+    subject: `New Withdrawal Request.`,
+    html: `
+    <p>${businessName} has submitted a withdrawal request of ${formatPrice(Number(amount))}.</p>
+    <p>Process the request as soon as possible.</p>
+    <br/>
+    <p>Thank you</p>
+    <p>Diesel NG</p>
+          `,
+  });
+};
+
 export const sendWithdrawalTransferEmail = async ({
   email,
   businessName,
@@ -328,6 +374,7 @@ export const sendWithdrawalTransferEmail = async ({
     
     <br/>
     <p>Thank you</p>
+    <p>Diesel NG</p>
           `,
   });
 };

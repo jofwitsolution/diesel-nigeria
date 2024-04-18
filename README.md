@@ -1,4 +1,27 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Full Stack Diesel Market Place + Dashboard: Next.js 14 App Router, React, Tailwind, Prisma, PostgreSQL, Cloudinary, Resend, Paystack, Novu 2024
+
+This is a repository for a full stack Diesel Market Place + Dashboard: Next.js 14 App Router React, Tailwind, Prisma, PostgreSQL, Cloudinary, Resend, Paystack, Novu 2024
+
+# REQUIREMENTS
+
+- Prisma supported postgresql database
+- Cloudinary for document upload
+- Resend for handling emails
+- OAuth with Google Client Provider
+- Paystack for payment gateway
+- Novu for handling in-app notifications
+
+# KEY FEATURES
+
+- Admin Dashboard
+- Seller Dashboard
+- Buyer Dashboard
+
+### Prerequisites
+
+**Node version 14.x**
+
+### Cloning the repository
 
 ## Getting Started
 
@@ -16,6 +39,8 @@ bun dev
 
 #openssl rand -hex 32
 
+KEY PRISMA COMMANDS:
+
 # npx prisma migrate reset: to reset db
 
 # start prisma
@@ -27,8 +52,6 @@ bun dev
 # npx prisma db push
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 

@@ -35,7 +35,7 @@ export function countUniqueBuyers(orders: Object[]) {
   return uniqueBuyers.size;
 }
 
-export function calculateOrderCost(productPrice: string, quantity: string) {
+export function calculateOrderCost(productPrice: number, quantity: number) {
   const deliveryChargePerLitre = 10; // 10 Naira per litre
 
   const totalRate = Number(productPrice) * Number(quantity); // price per litre * number of litres

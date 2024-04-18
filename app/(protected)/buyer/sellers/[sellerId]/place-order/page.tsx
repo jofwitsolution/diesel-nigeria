@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { getPlaceOrderData } from "@/lib/actions/buyer.action";
+import { getPlaceOrderData } from "@/lib/actions/order.action";
 import PlaceOrderForm from "@/components/forms/PlaceOrderForm";
 import DBSkeleton from "@/components/DBSkeleton";
 import { Button } from "@/components/ui/button";

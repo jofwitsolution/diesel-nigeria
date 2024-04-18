@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import LoaderOverlay from "@/components/LoaderOverlay";
 import DialogWrapper from "@/components/shared/dialog/DialogWrapper";
 import { toast } from "sonner";
-import { rejectReversal } from "@/lib/actions/other.actions";
+import { rejectReversal } from "@/lib/actions/reversal.action";
 
 interface Props {
   reversal: Reversal;

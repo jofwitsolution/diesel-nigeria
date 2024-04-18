@@ -25,9 +25,14 @@ import {
   generatePasswordResetToken,
   generateVerificationToken,
 } from "../helpers/token";
-import { sendPasswordResetEmail, sendVerificationEmail } from "../helpers/mail";
+import {
+  sendPasswordResetEmail,
+  sendVerificationEmail,
+  sendWelcomeEmail,
+} from "../helpers/mail";
 import { createNovuSubscriber } from "../helpers/novu";
 
+// Create Individual Buyer
 export const registerIndividual = async (
   values: z.infer<typeof IndividualSignUpSchema>
 ) => {
@@ -55,6 +60,7 @@ export const registerIndividual = async (
     await createNovuSubscriber(newUser);
 
     const verificationToken = await generateVerificationToken(email);
+    await sendWelcomeEmail(newUser.email, newUser.businessName!);
     await sendVerificationEmail(
       verificationToken.email,
       verificationToken.token
@@ -67,6 +73,7 @@ export const registerIndividual = async (
   }
 };
 
+// Create Organization Buyer
 export const registerOrganization = async (
   fileData: string | ArrayBuffer | null,
   businessProfile: z.infer<typeof BusinessProfileSchema>,
@@ -143,6 +150,7 @@ export const registerOrganization = async (
     });
 
     const verificationToken = await generateVerificationToken(email);
+    await sendWelcomeEmail(newUser.email, newUser.businessName!);
     await sendVerificationEmail(
       verificationToken.email,
       verificationToken.token

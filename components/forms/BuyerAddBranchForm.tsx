@@ -27,7 +27,7 @@ import { Button } from "../ui/button";
 import { FormError } from "./FormError";
 import { FormSuccess } from "./FormSuccess";
 import LoaderOverlay from "../LoaderOverlay";
-import { addBranch } from "@/lib/actions/user.action";
+import { addBranch } from "@/lib/actions/branch.action";
 
 interface Props {
   dialogState: boolean;
@@ -44,6 +44,7 @@ const BuyerAddBranchForm = ({ dialogState, handleDialogState }: Props) => {
   const form = useForm<z.infer<typeof BranchSchema>>({
     resolver: zodResolver(BranchSchema),
     defaultValues: {
+      name: "",
       state: "",
       address: "",
       email: "",
@@ -85,6 +86,27 @@ const BuyerAddBranchForm = ({ dialogState, handleDialogState }: Props) => {
                 className="mx-auto w-[90%] space-y-5 xs:w-[25rem]"
               >
                 <div className="w-full space-y-3">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-[0.875rem] text-[#151515]">
+                          Branch Name
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            disabled={isPending}
+                            placeholder="Enter name"
+                            type="text"
+                            className="w-full rounded-[4px] border-[#9EA2B3]"
+                          />
+                        </FormControl>
+                        <FormMessage className="text-red-400 max-xs:text-[0.7rem]" />
+                      </FormItem>
+                    )}
+                  />
                   <FormField
                     control={form.control}
                     name="state"

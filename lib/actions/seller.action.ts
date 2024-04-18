@@ -4,22 +4,17 @@ import * as z from "zod";
 import { revalidatePath } from "next/cache";
 import {
   BankDetailsSchema,
-  ProductSchema,
   SellerBusinessInfoSchema,
   WithdrawalSchema,
 } from "../validations";
 import { getCurrentUser } from "../helpers/auth";
 import { cloudinary } from "../helpers/cloudinary";
 import { db } from "../db";
-import {
-  sendOrderDeliveredEmailToAdmin,
-  sendOrderDeliveredEmailToBuyer,
-  sendOrderInProgressEmailToBuyer,
-} from "../helpers/mail";
+import { sendWithdrawalRequestEmailToAdmin } from "../helpers/mail";
 import { countUniqueBuyers } from "../helpers/order";
-import { getJanuary1stOfCurrentYear } from "../utils";
+import { formatPrice, getJanuary1stOfCurrentYear } from "../utils";
 import { getUserById } from "../helpers/user";
-import { updateNovuSubscriber } from "../helpers/novu";
+import { triggerNovu, updateNovuSubscriber } from "../helpers/novu";
 
 export const sellerUpdateBusinessInfo = async (
   values: z.infer<typeof SellerBusinessInfoSchema>,
@@ -205,165 +200,6 @@ export const sellerUpdateBankDetails = async (
   }
 };
 
-export const addNewProduct = async (
-  values: z.infer<typeof ProductSchema>,
-  path: string
-) => {
-  try {
-    const currentUser = await getCurrentUser();
-    if (!currentUser) {
-      return { error: "Unauthenticated" };
-    }
-
-    const fields = ProductSchema.safeParse(values);
-
-    if (!fields.success) {
-      return { error: "Invalid fields." };
-    }
-
-    const { isAvailable, price, density, numberInStock } = fields.data;
-
-    await db.product.create({
-      data: {
-        isAvailable,
-        price,
-        density,
-        numberInStock,
-        sellerId: currentUser.id as string,
-      },
-    });
-
-    revalidatePath(path);
-    return { success: "Product added successfuly" };
-  } catch (error) {
-    console.log(error);
-    return { error: "Something went wrong!" };
-  }
-};
-
-export const updateProduct = async (
-  values: z.infer<typeof ProductSchema>,
-  productId: string,
-  path: string
-) => {
-  try {
-    const currentUser = await getCurrentUser();
-    if (!currentUser) {
-      return { error: "Unauthenticated" };
-    }
-
-    const fields = ProductSchema.safeParse(values);
-
-    if (!fields.success) {
-      return { error: "Invalid fields." };
-    }
-
-    const { isAvailable, price, density, numberInStock } = fields.data;
-
-    await db.product.update({
-      where: { id: productId },
-      data: {
-        isAvailable,
-        price,
-        density,
-        numberInStock,
-      },
-    });
-
-    revalidatePath(path);
-    return { success: "Product added successfuly" };
-  } catch (error) {
-    console.log(error);
-    return { error: "Something went wrong!" };
-  }
-};
-
-export const getSellerProducts = async () => {
-  try {
-    const currentUser = await getCurrentUser();
-    if (!currentUser) {
-      return { error: "Unauthenticated" };
-    }
-
-    const products = await db.product.findMany({
-      where: { sellerId: currentUser?.id },
-    });
-
-    return { products };
-  } catch (error) {
-    console.log(error);
-    return { error: "Something went wrong!" };
-  }
-};
-
-export const sellerUpdateOrderStatus = async (
-  orderId: string,
-  status: string,
-  pathname: string
-) => {
-  try {
-    const currentUser = await getCurrentUser();
-    if (!currentUser) {
-      return { error: "Unauthenticated" };
-    }
-
-    const order = await db.order.findUnique({
-      where: { sellerId: currentUser?.id, id: orderId },
-    });
-    if (!order) {
-      return { error: "Order not found" };
-    }
-
-    if (
-      !order.isBuyerPaid ||
-      order.status === "delivered" ||
-      order.status === "cancelled"
-    ) {
-      return { error: "This action cannot be performed" };
-    }
-
-    await db.order.update({
-      where: { sellerId: currentUser?.id, id: orderId },
-      data: {
-        status,
-      },
-    });
-
-    // await db.orderTracking.update({
-    //   where: { orderId },
-    //   data: {
-    //     [status]: true,
-    //   },
-    // });
-
-    if (status === "progress") {
-      await sendOrderInProgressEmailToBuyer({
-        orderNumber: order.orderNumber,
-        email: order.email,
-        businessName: order.businessName,
-      });
-    }
-
-    if (status === "delivered") {
-      await sendOrderDeliveredEmailToBuyer({
-        orderNumber: order.orderNumber,
-        email: order.email,
-        businessName: order.businessName,
-      });
-      await sendOrderDeliveredEmailToAdmin({
-        orderNumber: order.orderNumber,
-        businessName: order.businessName,
-      });
-    }
-
-    revalidatePath(pathname);
-    return { success: "Order updated successfuly" };
-  } catch (error) {
-    console.log(error);
-    return { error: "Something went wrong!" };
-  }
-};
-
 export const getSellerOverview = async () => {
   try {
     const currentUser = await getCurrentUser();
@@ -449,7 +285,7 @@ export const getSalesAnalytics = async () => {
     });
 
     const volumes = orders.reduce((a, order) => a + Number(order.quantity), 0);
-    const sales = orders.reduce((a, order) => a + parseFloat(order.amount), 0);
+    const sales = orders.reduce((a, order) => a + order.amount, 0);
     const buyersServiced = countUniqueBuyers(orders);
 
     return { volumes, sales, buyersServiced };
@@ -471,7 +307,7 @@ export const getSellerWalletData = async () => {
       where: { userId: currentUser.id },
     });
     const transactions = await db.transaction.findMany({
-      where: { sellerId: currentUser.id },
+      where: { userId: currentUser.id },
     });
 
     const totalPayment = transactions.reduce((a, transaction) => {
@@ -495,8 +331,8 @@ export const getSellerWalletData = async () => {
       balance: wallet?.balance,
       totalPayment,
       totalWithdrawal,
-      accountNumber: user.accountNumber as string,
-      bank: user.bank as string,
+      accountNumber: user?.accountNumber as string,
+      bank: user?.bank as string,
     };
   } catch (error) {
     console.log(error);
@@ -515,7 +351,7 @@ export const getPaymentOverview = async () => {
 
     const payments = await db.transaction.findMany({
       where: {
-        sellerId: currentUser.id,
+        userId: currentUser.id,
         category: "settlement",
         date: { gte: january1stOfCurrentYear },
       },
@@ -576,6 +412,9 @@ export const sellerWithdrawFunds = async (
 
     const wallet = await db.wallet.findUnique({
       where: { userId: currentUser.id },
+      include: {
+        user: true,
+      },
     });
     if (!wallet) {
       return { error: "No wallet found!" };
@@ -606,6 +445,20 @@ export const sellerWithdrawFunds = async (
         userId: currentUser.id,
       },
     });
+
+    const businessName = wallet.user?.businessName!;
+    // send email to admin
+    await sendWithdrawalRequestEmailToAdmin({
+      businessName,
+      amount,
+    });
+    const admin = await db.user.findFirst({ where: { role: "admin" } });
+    if (admin) {
+      await triggerNovu(admin.id, "new-withdrawal-request", {
+        businessName,
+        amount: formatPrice(Number(amount)),
+      });
+    }
 
     revalidatePath(path);
     return { success: "Withdrawal submitted successfuly" };

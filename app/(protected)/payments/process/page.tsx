@@ -1,6 +1,6 @@
 import React from "react";
 import PaymentProcess from "@/components/PaymentProcess";
-import { verifyOrderPayment } from "@/lib/actions/buyer.action";
+import { verifyOrderPayment } from "@/lib/actions/order.action";
 
 interface URLProps {
   params: { orderId: string };
