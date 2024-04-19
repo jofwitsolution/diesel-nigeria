@@ -13,6 +13,7 @@ import Pagination from "./Pagination";
 import { fuzzyFilter } from "./helper";
 import Link from "next/link";
 import BuyersActionMenu from "../menubar/BuyersActionMenu";
+import ExportAs from "../ExportAs";
 
 const columnHelper = createColumnHelper<User>();
 
@@ -124,6 +125,10 @@ const AdminBuyersTable = ({ buyers, currentFilter }: Props) => {
     <div className="w-full rounded-md bg-light-900 py-4">
       <div className="mb-4 flex w-full items-center justify-between px-3">
         <span className="font-semibold">Buyers</span>
+        <ExportAs
+          fileName="dieselng-buyers"
+          rows={table.getFilteredRowModel().rows}
+        />
       </div>
       <div className="w-full">
         <table className="w-full text-[0.55rem] text-[#5F6D7E] xs:text-[0.8125rem]">

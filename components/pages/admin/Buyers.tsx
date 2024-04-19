@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import Search from "@/components/shared/search/Search";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import ExportAs from "@/components/shared/ExportAs";
 import Filter from "@/components/shared/Filter";
 import AdminBuyersTable from "@/components/shared/table/AdminBuyersTable";
 import { userFilters } from "@/constants";
@@ -42,7 +41,7 @@ const Buyers = ({ buyers }) => {
               handleFilter={handleFilter}
               filterTerm={filterTerm}
             />
-            <ExportAs />
+
             <Button className="space-x-2 px-6 font-[600] shadow-sm max-xs:px-3">
               <Image
                 src="/images/icons/refresh.svg"

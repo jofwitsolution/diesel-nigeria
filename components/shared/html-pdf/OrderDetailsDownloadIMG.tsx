@@ -55,24 +55,19 @@ const OrderDetailsDownloadIMG = ({ order }: { order: Order }) => {
               >
                 <Image
                   src="/images/icons/cancel.svg"
-                  width={14}
-                  height={14}
+                  width={18}
+                  height={18}
                   alt="cancel"
                 />
               </Button>
             </div>
-            <Button
-              className="ml-1 mt-1 text-[0.75rem] text-red-400 underline"
-              onClick={handleDownload}
-            >
-              Download Image
-            </Button>
+
             <div
               id="pdf-content"
               className="w-full"
               style={{ width: "100%", padding: "0 10px 0 10px" }}
             >
-              <div className="px-2 py-[1rem] text-[0.75rem]">
+              <div className="px-2 py-[2.3rem] text-[0.75rem]">
                 <div className="flex items-center justify-between">
                   <Image
                     src="/images/icons/site-logo.svg"
@@ -85,8 +80,10 @@ const OrderDetailsDownloadIMG = ({ order }: { order: Order }) => {
                   </h1>
                 </div>
                 <div className="my-3 flex flex-col items-center gap-2">
-                  <span className="font-semibold">Order Amount</span>
-                  <span className="text-[0.9rem] font-bold">
+                  <span className="text-[0.85rem] font-semibold">
+                    Order Amount
+                  </span>
+                  <span className="text-[1rem] font-bold">
                     {formatPrice(order?.amount)}
                   </span>
                 </div>
@@ -145,7 +142,7 @@ const OrderDetailsDownloadIMG = ({ order }: { order: Order }) => {
                   </div>
                 )}
                 <div className="flex justify-between gap-6 border-b py-1">
-                  <span>Delivery Expected</span>
+                  <span>Expected Delivery Date</span>
                   <div className="flex flex-col text-right">
                     <span className="font-semibold">
                       {formatDate(order.expectedDeliveryDate!)}
@@ -170,7 +167,47 @@ const OrderDetailsDownloadIMG = ({ order }: { order: Order }) => {
                     </span>
                   </div>
                 </div>
+                <div className="flex justify-between gap-6 border-b py-1">
+                  <span>Price/litre</span>
+                  <div className="flex flex-col text-right">
+                    <span className="font-semibold">
+                      {formatPrice(order?.pricePerLitre)}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex justify-between gap-6 border-b py-1">
+                  <span>Total Rate</span>
+                  <div className="flex flex-col text-right">
+                    <span className="font-semibold">
+                      {formatPrice(order?.totalRate)}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex justify-between gap-6 border-b py-1">
+                  <span>Service Charge</span>
+                  <div className="flex flex-col text-right">
+                    <span className="font-semibold">
+                      {formatPrice(order?.serviceCharge)}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex justify-between gap-6 border-b py-1">
+                  <span>Delivery Charge</span>
+                  <div className="flex flex-col text-right">
+                    <span className="font-semibold">
+                      {formatPrice(order?.deliveryCharge)}
+                    </span>
+                  </div>
+                </div>
               </div>
+            </div>
+            <div className="flex w-full justify-center">
+              <Button
+                className="ml-1 mt-1 text-[0.75rem] text-red-400 underline"
+                onClick={handleDownload}
+              >
+                Download Image
+              </Button>
             </div>
           </div>
         </div>

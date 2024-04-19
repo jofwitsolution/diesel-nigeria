@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import Search from "@/components/shared/search/Search";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import ExportAs from "@/components/shared/ExportAs";
 import Filter from "@/components/shared/Filter";
 import AdminSellersTable from "@/components/shared/table/AdminSellersTable";
 import AddSellerForm from "@/components/forms/AddSellerForm";
@@ -47,7 +46,7 @@ const Sellers = ({ sellers }) => {
               handleFilter={handleFilter}
               filterTerm={filterTerm}
             />
-            <ExportAs />
+
             <Button
               onClick={() => setAddSellerDialog(true)}
               className="space-x-2 bg-primary-500 px-6 font-[600] text-light-900 max-xs:px-3"
