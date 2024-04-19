@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Image from "next/image";
 import html2canvas from "html2canvas";
-import JSPDF from "jspdf";
 import { Transaction } from "@prisma/client";
 import {
   Menubar,

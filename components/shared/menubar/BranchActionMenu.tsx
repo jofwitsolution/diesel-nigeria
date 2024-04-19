@@ -30,7 +30,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { FormError } from "@/components/forms/FormError";
 import { FormSuccess } from "@/components/forms/FormSuccess";
-import { updateBranch } from "@/lib/actions/user.action";
+import { updateBranch } from "@/lib/actions/branch.action";
 
 const BranchActionMenu = ({ branch }: { branch: Branch }) => {
   const pathname = usePathname();
