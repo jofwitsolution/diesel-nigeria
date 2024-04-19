@@ -9,7 +9,7 @@ import Link from "next/link";
 import RequestReversal from "./RequestReversal";
 import CancelOrder from "./CancelOrder";
 import ConfirmDelivery from "./ConfirmDelivery";
-import OrderDetailsDownload from "@/components/shared/html-pdf/OrderDetailsDownload";
+import OrderDetailsDownloadIMG from "@/components/shared/html-pdf/OrderDetailsDownloadIMG";
 
 interface Props {
   order: Order;
@@ -35,7 +35,7 @@ const BuyerOrderDetails = ({ order }: Props) => {
             {order?.seller.businessName}
           </div>
 
-          <OrderDetailsDownload order={order} />
+          <OrderDetailsDownloadIMG order={order} />
         </div>
         <div className="my-6 w-full border" />
         <div className="flex w-full flex-col gap-6">

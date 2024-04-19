@@ -552,16 +552,7 @@ export const getAllTransactions = async (
         date: orderBy,
       },
       include: {
-        seller: {
-          select: {
-            avatar: true,
-            businessName: true,
-            rcNumber: true,
-            id: true,
-            address: true,
-          },
-        },
-        buyer: {
+        user: {
           select: {
             avatar: true,
             businessName: true,

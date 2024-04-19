@@ -1,48 +1,36 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import JSPDF from "jspdf";
 import Image from "next/image";
 import html2canvas from "html2canvas";
 import { formatDate, formatPrice, getTimeOfDay } from "@/lib/utils";
 import { Order } from "@prisma/client";
 import { statusBg } from "@/styles/utils";
+import { saveAs } from "file-saver";
 
-const OrderDetailsDownload = ({ order }: { order: Order }) => {
-  const contentRef = useRef(null);
+const OrderDetailsDownloadIMG = ({ order }: { order: Order }) => {
   const [isDialogOpen, setDialogOpen] = useState(false);
 
-  const handleDownloadPDF = () => {
+  const handleDownload = () => {
     const input = document.getElementById("pdf-content");
-    // Specify the id of the element you want to convert to PDF
-    html2canvas(input).then((canvas) => {
+    // Specify the id of the element you want to convert to Image
+    html2canvas(input, { scale: 1.3 }).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
-      const pdf = new JSPDF({
-        format: "a4",
-        unit: "px",
-      });
-      pdf.setFont("Inter-Regular", "normal");
-      pdf.addImage(imgData, "PNG", 0, 0);
-      pdf.save(`$order-reciept.pdf`);
+
+      // Convert Base64 string to Blob
+      const byteCharacters = atob(imgData.split(",")[1]);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: "image/png" });
+
+      // Trigger download
+      saveAs(blob, `order_${order.orderNumber}_details.png`);
     });
   };
-
-  // const handleDownloadPDF = () => {
-  //   const doc = new JSPDF({
-  //     format: "a4",
-  //     unit: "px",
-  //   });
-
-  //   // Adding the fonts.
-  //   doc.setFont("Inter-Regular", "normal");
-
-  //   doc.html(contentRef.current, {
-  //     async callback(doc) {
-  //       await doc.save("document");
-  //     },
-  //   });
-  // };
 
   return (
     <div>
@@ -50,14 +38,14 @@ const OrderDetailsDownload = ({ order }: { order: Order }) => {
         onClick={() => setDialogOpen(true)}
         className="text-[0.75rem] underline"
       >
-        Download PDF
+        Download
       </Button>
 
       {/* Dialog */}
       {isDialogOpen && (
         <div className="fixed inset-0 z-[1300] flex h-screen items-center justify-center overflow-auto bg-[rgba(0,0,0,0.6)]">
           <div
-            className={`z-[1500] mx-auto rounded-[8px] bg-white p-0 pb-8 max-sm:w-full sm:w-[30.375rem]`}
+            className={`z-[1500] mx-auto bg-white p-0 pb-8 max-sm:size-full sm:w-[30.375rem]`}
           >
             <div className="float-right px-2 py-1">
               <Button
@@ -75,11 +63,15 @@ const OrderDetailsDownload = ({ order }: { order: Order }) => {
             </div>
             <Button
               className="ml-1 mt-1 text-[0.75rem] text-red-400 underline"
-              onClick={handleDownloadPDF}
+              onClick={handleDownload}
             >
-              Download
+              Download Image
             </Button>
-            <div id="pdf-content" ref={contentRef}>
+            <div
+              id="pdf-content"
+              className="w-full"
+              style={{ width: "100%", padding: "0 10px 0 10px" }}
+            >
               <div className="px-2 py-[1rem] text-[0.75rem]">
                 <div className="flex items-center justify-between">
                   <Image
@@ -187,4 +179,4 @@ const OrderDetailsDownload = ({ order }: { order: Order }) => {
   );
 };
 
-export default OrderDetailsDownload;
+export default OrderDetailsDownloadIMG;

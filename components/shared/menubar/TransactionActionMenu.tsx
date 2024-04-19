@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/menubar";
 import { Button } from "@/components/ui/button";
 import { formatDate, formatPrice, getTimeOfDay } from "@/lib/utils";
+import { saveAs } from "file-saver";
 
 const TransactionActionMenu = ({
   transaction,
@@ -22,14 +23,22 @@ const TransactionActionMenu = ({
 }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const handleDownloadPDF = () => {
+  const handleDownload = () => {
     const input = document.getElementById("pdf-content");
-    // Specify the id of the element you want to convert to PDF
-    html2canvas(input).then((canvas) => {
+
+    html2canvas(input, { scale: 1.3 }).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
-      const pdf = new JSPDF();
-      pdf.addImage(imgData, "PNG", 0, 0);
-      pdf.save(`${transaction.reference}-reciept.pdf`);
+      // Convert Base64 string to Blob
+      const byteCharacters = atob(imgData.split(",")[1]);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: "image/png" });
+
+      // Trigger download
+      saveAs(blob, `${transaction.reference}-reciept.png`);
     });
   };
 
@@ -143,7 +152,7 @@ const TransactionActionMenu = ({
             </div>
             <div className="flex justify-center">
               <Button
-                onClick={handleDownloadPDF}
+                onClick={handleDownload}
                 className="bg-primary-500 text-light-900 active:bg-primary-400"
               >
                 Download
