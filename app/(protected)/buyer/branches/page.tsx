@@ -13,7 +13,7 @@ const Page = async () => {
   }
 
   return (
-    <div className="max-w-[63.25rem]">
+    <div className="max-w-[88.25rem]">
       <BranchTopLayout />
       <BuyerBranches branches={result?.branches ?? []} />
     </div>

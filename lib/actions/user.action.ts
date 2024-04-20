@@ -271,21 +271,12 @@ export const getTransactions = async (
     }
 
     const query = {
-      where: { OR: [{ buyerId: userId }, { sellerId: userId }] },
+      where: { userId },
       orderBy: {
         date: orderBy,
       },
       include: {
-        seller: {
-          select: {
-            avatar: true,
-            businessName: true,
-            rcNumber: true,
-            id: true,
-            address: true,
-          },
-        },
-        buyer: {
+        user: {
           select: {
             avatar: true,
             businessName: true,

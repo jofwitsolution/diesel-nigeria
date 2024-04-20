@@ -34,7 +34,7 @@ const PurchaseAnalytics = async () => {
         <div className="flex justify-between">
           <div className="flex items-center gap-2">
             <span className="inline-block size-[10px] rounded-full bg-yellow-500"></span>
-            <span className="text-[#808494]">Branch Serviced :</span>
+            <span className="text-[#808494]">Sellers Serviced :</span>
           </div>
           <div>
             <span className="font-semibold">{result?.branchServiced ?? 0}</span>

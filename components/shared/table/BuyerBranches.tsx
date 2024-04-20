@@ -16,6 +16,7 @@ import SearchBox from "../search/SearchBox";
 import { fuzzyFilter } from "./helper";
 import { useSearchParams } from "next/navigation";
 import BranchActionMenu from "../menubar/BranchActionMenu";
+import Link from "next/link";
 
 const columnHelper = createColumnHelper<Branch>();
 
@@ -138,7 +139,12 @@ const BuyerBranches = ({ branches }: { branches: Branch[] }) => {
               >
                 {row.getVisibleCells().map((cell) => (
                   <td key={cell.id} className="dist-table-style">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    <Link href={`/buyer/branches/${row.original.id}/details`}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </Link>
                   </td>
                 ))}
               </tr>

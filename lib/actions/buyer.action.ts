@@ -18,14 +18,14 @@ if (!dieselngWalletId) {
   throw Error(`Environment variable "DIESELNG_WALLET_ID" is undefined`);
 }
 
-export const getPurchaseAnalytics = async () => {
+export const getPurchaseAnalytics = async (deliveryBranchId?: string) => {
   try {
     const currentUser = await getCurrentUser();
     if (!currentUser) {
       return { error: "Unauthenticated" };
     }
 
-    const orders = await db.order.findMany({
+    const query = {
       where: { buyerId: currentUser.id, status: "delivered" },
       include: {
         seller: {
@@ -48,7 +48,13 @@ export const getPurchaseAnalytics = async () => {
         product: true,
         deliveryBranch: true,
       },
-    });
+    };
+
+    if (deliveryBranchId) {
+      query.where.deliveryBranchId = deliveryBranchId;
+    }
+
+    const orders = await db.order.findMany(query);
 
     const volumes = orders.reduce((a, order) => a + Number(order.quantity), 0);
     const amountSpent = orders.reduce((a, order) => a + order.amount, 0);
@@ -193,6 +199,57 @@ export const buyerUploadVerificationDoc = async (
 
     revalidatePath(path);
     return { success: "Document uploaded successfuly" };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
+
+export const getBuyerOverview = async (branchId?: string) => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const query = {
+      where: { buyerId: currentUser.id },
+    };
+    if (branchId) {
+      query.where.deliveryBranchId = branchId;
+    }
+    const orders = await db.order.findMany(query);
+
+    const totalLitres = orders.reduce((a, order) => {
+      if (order.status === "delivered") {
+        return a + Number(order.quantity);
+      } else {
+        return a;
+      }
+    }, 0);
+
+    const completedOrders = orders.reduce((a, order) => {
+      if (order.status === "delivered") {
+        return a + 1;
+      } else {
+        return a;
+      }
+    }, 0);
+
+    const pendingOrders = orders.reduce((a, order) => {
+      if (order.status === "pending") {
+        return a + 1;
+      } else {
+        return a;
+      }
+    }, 0);
+
+    return {
+      totalOrders: orders.length,
+      totalLitres,
+      completedOrders,
+      pendingOrders,
+    };
   } catch (error) {
     console.log(error);
     return { error: "Something went wrong!" };

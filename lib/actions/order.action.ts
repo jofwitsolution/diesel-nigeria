@@ -573,3 +573,70 @@ export const cancelOrder = async (orderId: string, path: string) => {
     return { error: "Something went wrong!" };
   }
 };
+
+export const getOrdersByBranch = async (
+  userId: string,
+  branchId: string,
+  orderBy: string = "desc",
+  take: null | number = null,
+  selectedDate: null | Date = null
+) => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthenticated" };
+    }
+
+    const query = {
+      where: { buyerId: userId, deliveryBranchId: branchId },
+      orderBy: {
+        orderDate: orderBy,
+      },
+      include: {
+        seller: {
+          select: {
+            avatar: true,
+            businessName: true,
+            rcNumber: true,
+            id: true,
+            address: true,
+          },
+        },
+        buyer: {
+          select: {
+            avatar: true,
+            businessName: true,
+            rcNumber: true,
+            id: true,
+            address: true,
+          },
+        },
+        product: true,
+      },
+    };
+
+    if (take !== null) {
+      query.take = take;
+    }
+
+    if (selectedDate !== null) {
+      // Calculate the start date
+      const startDate = new Date(selectedDate);
+
+      // calculate the next date
+      const endDate = new Date(
+        startDate.getFullYear(),
+        startDate.getMonth(),
+        startDate.getDate() + 1
+      );
+      query.where.orderDate = { gte: startDate, lt: endDate };
+    }
+
+    const orders = await db.order.findMany(query);
+
+    return { orders };
+  } catch (error) {
+    console.log(error);
+    return { error: "Something went wrong!" };
+  }
+};
