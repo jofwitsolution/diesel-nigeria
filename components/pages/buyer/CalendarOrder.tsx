@@ -5,11 +5,10 @@ import { Calendar } from "@/components/ui/calendar";
 import Image from "next/image";
 import { formatDate, getStartOfToday } from "@/lib/utils";
 import { statusBg } from "@/styles/utils";
-import { getOrders } from "@/lib/actions/user.action";
 import { useCurrentUser } from "@/hooks/user";
 import { Order } from "@prisma/client";
 
-const CalendarOrder = ({ todayOrders }: { todayOrders: [] }) => {
+const CalendarOrder = () => {
   const currentUser = useCurrentUser();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(false);
@@ -18,20 +17,23 @@ const CalendarOrder = ({ todayOrders }: { todayOrders: [] }) => {
   const [date, setDate] = useState<Date>(today);
 
   useEffect(() => {
-    setOrders(todayOrders);
-  }, []);
-
-  useEffect(() => {
-    const getOrdersByDay = async () => {
+    const fetchOrders = async () => {
       setLoading(true);
-      const result = await getOrders(currentUser?.id as string, "asc", 4, date);
-      if (result?.orders) {
-        setOrders(result.orders);
+      try {
+        const endPoint = `/api/v1/orders?userId=${currentUser?.id}&take=4&orderBy=asc&selectedDate=${date}`;
+        const res = await fetch(endPoint, {
+          next: { revalidate: 60 },
+        });
+        const data = await res.json();
+        setOrders(data.orders);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
-    getOrdersByDay();
+    fetchOrders();
   }, [date, currentUser]);
 
   return (

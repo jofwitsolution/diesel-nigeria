@@ -6,7 +6,6 @@ import Image from "next/image";
 import { formatDate, getTimeOfDay } from "@/lib/utils";
 import { useCurrentUser } from "@/hooks/user";
 import { Order } from "@prisma/client";
-import { getOrders } from "@/lib/actions/user.action";
 
 const CalendarOrder = () => {
   const currentUser = useCurrentUser();
@@ -17,16 +16,23 @@ const CalendarOrder = () => {
   const [date, setDate] = useState<Date>(today);
 
   useEffect(() => {
-    const getOrdersByDay = async () => {
+    const fetchOrders = async () => {
       setLoading(true);
-      const result = await getOrders(currentUser?.id as string, "asc", 4, date);
-      if (result?.orders) {
-        setOrders(result.orders);
+      try {
+        const endPoint = `/api/v1/orders?userId=${currentUser?.id}&take=4&orderBy=asc&selectedDate=${date}`;
+        const res = await fetch(endPoint, {
+          next: { revalidate: 60 },
+        });
+        const data = await res.json();
+        setOrders(data.orders);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
-    getOrdersByDay();
+    fetchOrders();
   }, [date, currentUser]);
 
   return (

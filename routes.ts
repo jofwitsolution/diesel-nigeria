@@ -18,7 +18,12 @@ export const publicRoutes = [
  * These routes require authentication
  * @type {string[]}
  */
-export const otherRoutes = ["/payments/process"];
+export const otherRoutes = [
+  "/payments/process",
+  "/api/v1/orders",
+  "/api/v1/sellers",
+  "/api/v1/buyers",
+];
 
 /**
  * An array of routes that are used for authentication
