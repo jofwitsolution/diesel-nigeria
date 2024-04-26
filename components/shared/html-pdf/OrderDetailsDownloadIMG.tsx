@@ -36,7 +36,7 @@ const OrderDetailsDownloadIMG = ({ order }: { order: Order }) => {
     <div>
       <Button
         onClick={() => setDialogOpen(true)}
-        className="text-[0.75rem] underline"
+        className="bg-primary-500 text-white"
       >
         Download
       </Button>

@@ -168,7 +168,7 @@ const SellerOrderDetails = ({ order }: Props) => {
                   <div className="flex items-center justify-between space-x-2 text-[0.875rem] md:w-[13rem]">
                     <label
                       htmlFor="progress"
-                      className="text-[#5F6D7E] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      className="cursor-pointer text-[#5F6D7E] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
                       Pick Up
                     </label>
@@ -189,7 +189,7 @@ const SellerOrderDetails = ({ order }: Props) => {
                   <div className="flex items-center justify-between space-x-2 text-[0.875rem] md:w-[13rem]">
                     <label
                       htmlFor="delivered"
-                      className="text-[#5F6D7E] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      className="cursor-pointer text-[#5F6D7E] peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
                       Delivered
                     </label>

@@ -34,8 +34,6 @@ const BuyerOrderDetails = ({ order }: Props) => {
             />
             {order?.seller.businessName}
           </div>
-
-          <OrderDetailsDownloadIMG order={order} />
         </div>
         <div className="my-6 w-full border" />
         <div className="flex w-full flex-col gap-6">
@@ -150,7 +148,8 @@ const BuyerOrderDetails = ({ order }: Props) => {
               </div>
             </div>
           </div>
-          <div className="mt-10 space-x-3">
+          <div className="mt-10 flex gap-3">
+            <OrderDetailsDownloadIMG order={order} />
             <RequestReversal order={order} />
             <CancelOrder order={order} />
             <ConfirmDelivery order={order} />
