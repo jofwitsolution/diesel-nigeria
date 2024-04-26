@@ -3,19 +3,23 @@
 import React, { useEffect, useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import Image from "next/image";
-import { formatDate } from "@/lib/utils";
+import { formatDate, getStartOfToday } from "@/lib/utils";
 import { statusBg } from "@/styles/utils";
 import { getOrders } from "@/lib/actions/user.action";
 import { useCurrentUser } from "@/hooks/user";
 import { Order } from "@prisma/client";
 
-const CalendarOrder = () => {
+const CalendarOrder = ({ todayOrders }: { todayOrders: [] }) => {
   const currentUser = useCurrentUser();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const today = new Date();
+  const today = getStartOfToday();
   const [date, setDate] = useState<Date>(today);
+
+  useEffect(() => {
+    setOrders(todayOrders);
+  }, []);
 
   useEffect(() => {
     const getOrdersByDay = async () => {
@@ -79,14 +83,14 @@ const CalendarOrder = () => {
         {orders.map((order) => (
           <div key={order.id}>
             <span className="text-[0.75rem] font-medium">
-              Payment Order {order.orderNumber}
+              Payment Order {order?.orderNumber}
             </span>
             <div className="mt-3 flex items-start justify-between gap-4 text-[0.75rem] font-medium text-[#808494]">
               <div className="">
                 <span className="flex items-center justify-center gap-[0.675rem]">
                   <Image
                     src={
-                      order.seller.avatar.url ??
+                      order?.seller?.avatar?.url ??
                       "/images/icons/db-left-avatar.svg"
                     }
                     width={27}
@@ -94,15 +98,15 @@ const CalendarOrder = () => {
                     alt="seller"
                   />
                   <span className="font-medium">
-                    {order.seller.businessName}
+                    {order?.seller?.businessName}
                   </span>
                 </span>
               </div>
-              <span>{order.seller.address}</span>
+              <span>{order?.seller?.address}</span>
               <span
-                className={`${statusBg(order.status)} rounded p-1 font-[700] capitalize`}
+                className={`${statusBg(order?.status)} rounded p-1 font-[700] capitalize`}
               >
-                {order.status}
+                {order?.status}
               </span>
             </div>
           </div>

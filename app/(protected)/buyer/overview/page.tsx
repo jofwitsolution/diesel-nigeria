@@ -6,8 +6,21 @@ import PurchaseAnalytics from "@/components/pages/buyer/PurchaseAnalytics";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import CalendarOrder from "@/components/pages/buyer/CalendarOrder";
+import { getOrders } from "@/lib/actions/user.action";
+import { getCurrentUser } from "@/lib/helpers/auth";
+import { getStartOfToday } from "@/lib/utils";
 
 const OverviewPage = async () => {
+  const currentUser = await getCurrentUser();
+  const startOfToday = getStartOfToday();
+
+  const result = await getOrders(
+    currentUser?.id as string,
+    "asc",
+    4,
+    startOfToday
+  );
+
   return (
     <div className="flex max-w-[73.125rem] gap-6">
       <div className="mx-auto space-y-6 sm:w-[38rem] md:w-[42.9375rem]">
@@ -24,7 +37,7 @@ const OverviewPage = async () => {
             </Button>
           </Link>
         </div>
-        <CalendarOrder />
+        <CalendarOrder todayOrders={result.orders ?? []} />
       </div>
     </div>
   );

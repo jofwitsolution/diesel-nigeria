@@ -23,18 +23,30 @@ const columnHelper = createColumnHelper<Branch>();
 const columns = [
   columnHelper.accessor((row) => row.name, {
     id: "name",
-    cell: (info) => info.getValue(),
+    cell: (info) => (
+      <Link href={`/buyer/branches/${info.row.original.id}/details`}>
+        {info.getValue()}
+      </Link>
+    ),
     header: () => "Name",
   }),
   columnHelper.accessor((row) => row.address, {
     id: "address",
-    cell: (info) => info.getValue(),
+    cell: (info) => (
+      <Link href={`/buyer/branches/${info.row.original.id}/details`}>
+        {info.getValue()}
+      </Link>
+    ),
     header: () => "Address",
   }),
   columnHelper.accessor("state", {
     id: "state",
     header: "State",
-    cell: (info) => info.getValue(),
+    cell: (info) => (
+      <Link href={`/buyer/branches/${info.row.original.id}/details`}>
+        {info.getValue()}
+      </Link>
+    ),
   }),
   columnHelper.accessor("email", {
     id: "email",
@@ -139,12 +151,7 @@ const BuyerBranches = ({ branches }: { branches: Branch[] }) => {
               >
                 {row.getVisibleCells().map((cell) => (
                   <td key={cell.id} className="dist-table-style">
-                    <Link href={`/buyer/branches/${row.original.id}/details`}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </Link>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}
               </tr>

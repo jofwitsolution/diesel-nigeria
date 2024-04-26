@@ -295,3 +295,15 @@ export function generateRandomCode(numDigits: number): string {
 
   return randomCode.toString();
 }
+
+export function getStartOfToday() {
+  const currentDate = new Date();
+  // Calculate the start date of today
+  const startOfToday = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate()
+  );
+
+  return startOfToday;
+}
