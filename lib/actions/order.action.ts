@@ -117,8 +117,13 @@ export const createOrder = async (
     const orderNumber = await generateOrderNumber();
 
     // Calculate order cost
-    const { amount, totalRate, deliveryCharge, serviceCharge } =
-      calculateOrderCost(product.price, quantity);
+    const {
+      amount,
+      totalRate,
+      deliveryCharge,
+      serviceCharge,
+      sellerSettlement,
+    } = calculateOrderCost(product.price, quantity);
 
     const order = await db.order.create({
       data: {
@@ -138,6 +143,7 @@ export const createOrder = async (
         serviceCharge,
         deliveryCharge,
         amount,
+        sellerSettlement,
         pricePerLitre: product.price,
         densityValue: product.density,
       },
@@ -241,8 +247,13 @@ export const validateOrder = async (orderId: string, path: string) => {
       return { isPriceChange: false };
     } else {
       // Product price has changed: recalculate order cost
-      const { amount, totalRate, deliveryCharge, serviceCharge } =
-        calculateOrderCost(product.price, order.quantity);
+      const {
+        amount,
+        totalRate,
+        deliveryCharge,
+        serviceCharge,
+        sellerSettlement,
+      } = calculateOrderCost(product.price, order.quantity);
 
       await db.order.update({
         where: { id: order.id },
@@ -252,6 +263,7 @@ export const validateOrder = async (orderId: string, path: string) => {
           totalRate,
           deliveryCharge,
           serviceCharge,
+          sellerSettlement,
         },
       });
 
@@ -484,9 +496,8 @@ export const buyerConfirmOrderDelivery = async (
       data: { isdeliveryConfirmed: true },
     });
 
-    const totalRate = Number(order.totalRate);
-    const sellerCredit = totalRate - totalRate * (0.5 / 100); // total rate minus 0.5% of the total rate
-    const newSellerBalance = Number(sellerWallet.balance) + sellerCredit;
+    const newSellerBalance =
+      Number(sellerWallet.balance) + Number(order.sellerSettlement);
 
     await db.wallet.update({
       where: { userId: order.sellerId },
@@ -500,7 +511,7 @@ export const buyerConfirmOrderDelivery = async (
         channel: "dieselng",
         reference: `T${Date.now()}`,
         orderNumber: order.orderNumber,
-        amount: sellerCredit,
+        amount: order.sellerSettlement,
         category: "settlement",
         userId: order.sellerId,
       },

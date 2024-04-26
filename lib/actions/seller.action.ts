@@ -285,7 +285,7 @@ export const getSalesAnalytics = async () => {
     });
 
     const volumes = orders.reduce((a, order) => a + Number(order.quantity), 0);
-    const sales = orders.reduce((a, order) => a + order.amount, 0);
+    const sales = orders.reduce((a, order) => a + order.sellerSettlement, 0);
     const buyersServiced = countUniqueBuyers(orders);
 
     return { volumes, sales, buyersServiced };

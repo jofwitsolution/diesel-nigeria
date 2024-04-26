@@ -181,7 +181,13 @@ model Order {
   totalRate             Int
   deliveryCharge        Int
   serviceCharge         Int
+
+  // totat cost of order
   amount                Int
+
+  // amount to be received by seller
+  sellerSettlement      Int?        @default(0)
+  
   orderNumber           String      @unique
   orderDate             DateTime    @default(now())
   updatedAt             DateTime    @updatedAt

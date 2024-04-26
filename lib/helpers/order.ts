@@ -43,7 +43,9 @@ export function calculateOrderCost(productPrice: number, quantity: number) {
 
   const serviceCharge = (totalRate + deliveryCharge) * (1 / 100); // 1% of total rate and delivery charge
 
+  const sellerSettlement = totalRate - totalRate * (0.5 / 100); // total rate minus 0.5% of the total rate
+
   const amount = totalRate + serviceCharge + deliveryCharge;
 
-  return { amount, totalRate, deliveryCharge, serviceCharge };
+  return { amount, totalRate, deliveryCharge, serviceCharge, sellerSettlement };
 }
