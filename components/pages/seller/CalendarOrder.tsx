@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import Image from "next/image";
-import { formatDate, getTimeOfDay } from "@/lib/utils";
+import { formatDate, getStartOfToday, getTimeOfDay } from "@/lib/utils";
 import { useCurrentUser } from "@/hooks/user";
 import { Order } from "@prisma/client";
 
@@ -12,7 +12,7 @@ const CalendarOrder = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const today = new Date();
+  const today = getStartOfToday();
   const [date, setDate] = useState<Date>(today);
 
   useEffect(() => {
